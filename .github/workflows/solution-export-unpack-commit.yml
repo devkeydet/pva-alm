@@ -32,7 +32,7 @@ jobs:
     env:
       RUNNER_DEBUG: 1
       solution_exported_folder: $RUNNER_TEMP/exported-temp/
-      solution_folder: $RUNNER_TEMP/unpack-temp/
+      solution_unpack_folder: $RUNNER_TEMP/unpack-temp/
 
     steps:
       - uses: actions/checkout@v2
@@ -66,4 +66,4 @@ jobs:
           git config --global user.name ${{ github.actor }}
           git add --all
           git commit -m "${{ github.event.inputs.commit_message }}"
-          git push
+          git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}"

@@ -26,11 +26,11 @@ jobs:
 
       - run: |
           echo 'environment_url=secrets.UAT_ENV'
-        if: startsWith(gitub.ref, 'refs/heads/main')
+        if: startsWith(github.ref, 'refs/heads/main')
       
       - run: |
           echo 'environment_url=secrets.PR_VALIDATION_ENV'
-        if: startsWith(gitub.ref, 'refs/heads/main') == false
+        if: startsWith(github.ref, 'refs/heads/main') == false
 
       - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@0.4.3

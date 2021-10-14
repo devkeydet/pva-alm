@@ -1,4 +1,4 @@
-name: pr-pvaalm-main-build
+name: pvaalm-pr-main-build-deploy
 # Run a build and validate deployment on pull request
 
 on:
@@ -24,9 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: ref
-        run: |
-          echo ${{ github.ref }}
+      - run: |
+          echo 'environment_url=secrets.UAT_ENV'
+        if: startsWith(gitub.ref, 'refs/heads/main')
+      
+      - run: |
+          echo 'environment_url=secrets.PR_VALIDATION_ENV'
+        if: startsWith(gitub.ref, 'refs/heads/main') == false
 
       - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@0.4.3
@@ -43,7 +47,7 @@ jobs:
       - name: import solution to pr validation
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ secrets.PR_VALIDATION_ENV }}
+          environment-url: ${{ env.environment_url }}
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}

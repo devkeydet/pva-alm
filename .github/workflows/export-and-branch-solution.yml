@@ -63,4 +63,6 @@ jobs:
 
     - name: commit changes
       run: |
+        git config --global user.name ${{ github.actor }}
         git commit -m "${{ github.event.inputs.commit_message }}"
+        git push

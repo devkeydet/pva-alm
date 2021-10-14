@@ -21,6 +21,9 @@ on:
         description: 'branch to create'
         required: true
         default: username-issuenumber
+      commit_message:
+        description: 'message to provide for the commit'
+        required: true
 
 jobs:
   export-from-dev:
@@ -28,14 +31,8 @@ jobs:
 
     env:
       RUNNER_DEBUG: 1
-      solution_exported_folder:
-        description: 'folder name for staging the exported solution'
-        required: true
-        default: out/exported-temp/
-      solution_folder:
-        description: 'staging the unpacked solution folder before check-in'
-        required: true
-        default: out/unpack-temp/
+      solution_exported_folder: out/exported-temp/
+      solution_folder: out/unpack-temp/
 
     steps:
     - uses: actions/checkout@v2
@@ -63,3 +60,7 @@ jobs:
         solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
         solution-type: 'Unmanaged'
         overwrite-files: true  
+
+    - name: commit changes
+      run: |
+        git commit -m "${{ github.event.inputs.commit_message }}"

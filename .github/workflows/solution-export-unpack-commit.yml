@@ -31,8 +31,8 @@ jobs:
 
     env:
       RUNNER_DEBUG: 1
-      solution_exported_folder: ${{env.RUNNER_TEMP}}/exported-temp/
-      solution_folder: ${{env.RUNNER_TEMP}}/unpack-temp/
+      solution_exported_folder: ${{RUNNER_TEMP}}/exported-temp/
+      solution_folder: ${{RUNNER_TEMP}}/unpack-temp/
 
     steps:
     - uses: actions/checkout@v2

@@ -47,16 +47,16 @@ jobs:
         uses: microsoft/powerplatform-actions/export-solution@0.4.3
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
-          app-id: ${{secrets.CLIENT_ID}}
+          app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
-          tenant-id: ${{secrets.TENANT_ID}}
+          tenant-id: ${{ secrets.TENANT_ID }}
           solution-name: ${{ github.event.inputs.solution_name }}
-          solution-output-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+          solution-output-file: ${{ env.solution_exported_folder }}/${{ github.event.inputs.solution_name }}.zip
 
       - name: unpack-solution action
         uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
         with:
-          solution-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+          solution-file: ${{ env.solution_exported_folder }}/${{ github.event.inputs.solution_name }}.zip
           solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
           solution-type: "Unmanaged"
           overwrite-files: true
@@ -66,4 +66,4 @@ jobs:
           git config --global user.name ${{ github.actor }}          
           git add --all
           git commit -am "${{ github.event.inputs.commit_message }}"
-          git push 
+          git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}"

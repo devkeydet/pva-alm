@@ -7,6 +7,11 @@ on:
       - main
     paths:
       - src/pvaalm/**
+  push:
+    branches:
+      - main
+    paths:
+      - src/pvaalm/**
 
 jobs:
   build-deploy-pr-validation:
@@ -19,6 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: ref
+        run: |
+          echo ${{ github.ref }}
+
       - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@0.4.3
         with:
@@ -28,7 +37,7 @@ jobs:
       
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.solution_name }}.zip
+          name: ${{ env.solution_name }}
           path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ env.solution_name }}.zip
       
       - name: import solution to pr validation

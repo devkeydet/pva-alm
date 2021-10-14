@@ -21,7 +21,11 @@ on:
         description: 'staging the unpacked solution folder before check-in'
         required: true
         default: out/unpack-temp/
-      branch_name:
+      source_branch:
+        description: 'source branch'
+        required: true
+        default: mainc
+      target_branch_name:
         description: 'branch to create'
         required: true
         default: username-issuenumber
@@ -33,9 +37,9 @@ jobs:
       RUNNER_DEBUG: 1
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        lfs: true
+    - name: initialize git
+      run: |
+        git checkout origin/${{ github.event.inputs.source_branch }} --track
 
     - name: export-solution action
       uses: microsoft/powerplatform-actions/export-solution@0.4.3
@@ -51,13 +55,8 @@ jobs:
       uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
       with:
         solution-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
-        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
+        solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
         solution-type: 'Unmanaged'
         overwrite-files: true
 
-    - name: branch-solution, prepare it for a PullRequest
-      uses: microsoft/powerplatform-actions/branch-solution@0.4.3
-      with:
-        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
-        solution-target-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
-        branch-name: ${{ github.event.inputs.branch_name }}
+    

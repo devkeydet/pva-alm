@@ -21,6 +21,10 @@ on:
         description: 'staging the unpacked solution folder before check-in'
         required: true
         default: out/unpack-temp/
+      branch_name:
+        description: 'branch to create'
+        required: true
+        default: username-issuenumber
 
 jobs:
   export-from-dev:
@@ -33,10 +37,27 @@ jobs:
       with:
         lfs: true
 
-    - name: who-am-i action
-      uses: microsoft/powerplatform-actions/who-am-i@0.4.3
+    - name: export-solution action
+      uses: microsoft/powerplatform-actions/export-solution@0.4.3
       with:
         environment-url: ${{ github.event.inputs.environment_url}}
         app-id: ${{secrets.CLIENT_ID}}
         client-secret: ${{ secrets.CLIENT_SECRET }}
         tenant-id: ${{secrets.TENANT_ID}}
+        solution-name: ${{ github.event.inputs.solution_name }}
+        solution-output-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+
+    - name: unpack-solution action
+      uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
+      with:
+        solution-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
+        solution-type: 'Unmanaged'
+        overwrite-files: true
+
+    - name: branch-solution, prepare it for a PullRequest
+      uses: microsoft/powerplatform-actions/branch-solution@0.4.3
+      with:
+        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
+        solution-target-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
+        branch-name: ${{ github.event.inputs.branch_name }}

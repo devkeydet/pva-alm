@@ -25,11 +25,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - run: |
-          echo 'environment_url=secrets.UAT_ENV'
+          echo 'environment_url=secrets.UAT_ENV' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main')
       
       - run: |
-          echo 'environment_url=secrets.PR_VALIDATION_ENV'
+          echo 'environment_url=secrets.PR_VALIDATION_ENV' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false
 
       - name: pack solution

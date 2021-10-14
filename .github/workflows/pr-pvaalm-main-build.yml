@@ -34,7 +34,7 @@ jobs:
       - name: import solution to pr validation
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ secretst.PR_VALIDATION_ENV }}
+          environment-url: ${{ secrets.PR_VALIDATION_ENV }}
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}

@@ -25,12 +25,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: set environment to pr validation
+      - name: set environment to uat
         run: |
           echo 'environment_url=${{ secrets.UAT_ENV }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main')
       
-      - name: set environment to uat
+      - name: set environment to pr validation
         run: |
           echo 'environment_url=${{ secrets.PR_VALIDATION_ENV }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false

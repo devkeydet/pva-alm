@@ -1,4 +1,4 @@
-name: pr-main-build
+name: pr-pvaalm-main-build
 # Run a build and validate deployment on pull request
 
 on:
@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - src/pvaalm
+      - src/pvaalm/**
 
 jobs:
   build-deploy-pr-validation:

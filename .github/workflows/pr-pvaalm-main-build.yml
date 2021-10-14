@@ -28,5 +28,15 @@ jobs:
       
       - uses: actions/upload-artifact@v2
         with:
-          name: drop
+          name: ${{ env.solution_name }}.zip
           path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ env.solution_name }}.zip
+      
+      - name: import solution to pr validation
+        uses: microsoft/powerplatform-actions/import-solution@0.4.3
+        with:
+          environment-url: ${{ secretst.PR_VALIDATION_ENV }}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ env.solution_name }}.zip
+          force-overwrite: true

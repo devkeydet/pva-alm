@@ -36,10 +36,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}
-
-      - name: echo runner temp directory
-        run: |
-          echo $RUNNER_TEMP
       
       - name: create new git branch
         if: github.event.inputs.branch_to_create != ''

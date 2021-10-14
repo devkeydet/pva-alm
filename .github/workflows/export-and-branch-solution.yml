@@ -43,7 +43,6 @@ jobs:
     
     - name: create new git branch
       run: |
-        git checkout origin/${{ github.event.inputs.source_branch }} --track
         git checkout -b ${{ github.event.inputs.source_branch }} ${{ github.event.inputs.branch_to_create }}
 
     - name: export-solution action

@@ -16,11 +16,11 @@ on:
 
 jobs:
   build-solution:
-    uses: devkeydet/pva-alm/tree/.github/workflows/build-solution.yml@main
+    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     with:
       solution_name: pvaalm
   
   deploy-solution:
-    uses: devkeydet/pva-alm/tree/.github/workflows/deploy-solution.yml@main
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     with:
       solution_name: pvaalm

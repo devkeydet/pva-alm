@@ -27,7 +27,7 @@ on:
 
 jobs:
   export-from-dev:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       RUNNER_DEBUG: 1
@@ -69,4 +69,4 @@ jobs:
           git config --global user.name ${{ github.actor }}          
           git add --all
           git commit -am "${{ github.event.inputs.commit_message }}"
-          git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}"
+          git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}

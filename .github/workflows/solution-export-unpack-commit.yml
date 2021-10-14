@@ -1,6 +1,6 @@
 name: solution-export-unpack-commit
 # Export solution from DEV environment
-#  unpack it and prepare, commit and push a git branch with the changes
+#  unpack it, commit and push the changes
 
 on:
   workflow_dispatch:
@@ -31,8 +31,8 @@ jobs:
 
     env:
       RUNNER_DEBUG: 1
-      solution_exported_folder: out/exported-temp/
-      solution_folder: out/unpack-temp/
+      solution_exported_folder: ${{env.RUNNER_TEMP}}/exported-temp/
+      solution_folder: ${{env.RUNNER_TEMP}}/unpack-temp/
 
     steps:
     - uses: actions/checkout@v2
@@ -64,5 +64,6 @@ jobs:
     - name: commit changes
       run: |
         git config --global user.name ${{ github.actor }}
-        git commit -am "${{ github.event.inputs.commit_message }}"
+        git add --all
+        git commit -m "${{ github.event.inputs.commit_message }}"
         git push 

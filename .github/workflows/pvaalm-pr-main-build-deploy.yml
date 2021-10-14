@@ -26,12 +26,12 @@ jobs:
 
       - name: set environment to pr validation
         run: |
-          echo 'environment_url=secrets.UAT_ENV' >> $GITHUB_ENV
+          echo 'environment_url=${{ secrets.UAT_ENV }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main')
       
       - name: set environment to uat
         run: |
-          echo 'environment_url=secrets.PR_VALIDATION_ENV' >> $GITHUB_ENV
+          echo 'environment_url=${{ secrets.PR_VALIDATION_ENV }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false
 
       - name: pack solution

@@ -24,11 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: |
+      - name: set environment to pr validation
+        run: |
           echo 'environment_url=secrets.UAT_ENV' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main')
       
-      - run: |
+      - name: set environment to uat
+        run: |
           echo 'environment_url=secrets.PR_VALIDATION_ENV' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false
 
@@ -44,7 +46,7 @@ jobs:
           name: ${{ env.solution_name }}
           path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ env.solution_name }}.zip
       
-      - name: import solution to pr validation
+      - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
           environment-url: ${{ env.environment_url }}

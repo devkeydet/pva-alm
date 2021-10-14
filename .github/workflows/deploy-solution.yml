@@ -24,6 +24,12 @@ jobs:
         run: |
           echo 'environment_url=${{ secrets.PR_VALIDATION_ENV }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false
+      
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.solution_name }}
+          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
+
          
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3

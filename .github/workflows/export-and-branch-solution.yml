@@ -66,4 +66,4 @@ jobs:
         git config --global user.name ${{ github.actor }}
         git add --all
         git commit -m "${{ github.event.inputs.commit_message }}"
-        git push
+        git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}"

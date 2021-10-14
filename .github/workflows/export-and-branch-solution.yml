@@ -12,15 +12,7 @@ on:
       environment_url:
         description: 'http endpoint of your Dataverse environment'
         required: true
-        default: 'https://[your-env].crm.dynamics.com'
-      solution_exported_folder:
-        description: 'folder name for staging the exported solution'
-        required: true
-        default: out/exported-temp/
-      solution_folder:
-        description: 'staging the unpacked solution folder before check-in'
-        required: true
-        default: out/unpack-temp/
+        default: 'https://[your-env].crm.dynamics.com'      
       source_branch:
         description: 'source branch'
         required: true
@@ -36,6 +28,14 @@ jobs:
 
     env:
       RUNNER_DEBUG: 1
+      solution_exported_folder:
+        description: 'folder name for staging the exported solution'
+        required: true
+        default: out/exported-temp/
+      solution_folder:
+        description: 'staging the unpacked solution folder before check-in'
+        required: true
+        default: out/unpack-temp/
 
     steps:
     - uses: actions/checkout@v2
@@ -54,12 +54,12 @@ jobs:
         client-secret: ${{ secrets.CLIENT_SECRET }}
         tenant-id: ${{secrets.TENANT_ID}}
         solution-name: ${{ github.event.inputs.solution_name }}
-        solution-output-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+        solution-output-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
 
     - name: unpack-solution action
       uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
       with:
-        solution-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+        solution-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
         solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
         solution-type: 'Unmanaged'
         overwrite-files: true  

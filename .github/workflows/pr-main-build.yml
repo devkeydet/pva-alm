@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - pvaalm
+      - src/pvaalm
 
 jobs:
   build-deploy-pr-validation:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Pack solution
+      - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@0.4.3
         with:
           solution-folder: src/${{ env.solution_name }}/SolutionPackage

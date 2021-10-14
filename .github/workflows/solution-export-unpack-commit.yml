@@ -6,23 +6,23 @@ on:
   workflow_dispatch:
     inputs:
       solution_name:
-        description: 'name of the Solution in Dataverse environment'
+        description: "name of the Solution in Dataverse environment"
         required: true
         default: pvaalm
       environment_url:
-        description: 'http endpoint of your Dataverse environment'
+        description: "http endpoint of your Dataverse environment"
         required: true
-        default: 'https://[your-env].crm.dynamics.com'      
+        default: "https://[your-env].crm.dynamics.com"
       source_branch:
-        description: 'source branch'
+        description: "source branch"
         required: true
         default: main
       branch_to_create:
-        description: 'branch to create'
+        description: "branch to create"
         required: true
         default: username-issuenumber
       commit_message:
-        description: 'message to provide for the commit'
+        description: "message to provide for the commit"
         required: true
 
 jobs:
@@ -31,39 +31,39 @@ jobs:
 
     env:
       RUNNER_DEBUG: 1
-      solution_exported_folder: ${{runner.temp}}/exported-temp/
-      solution_folder: ${{runner.temp}}/unpack-temp/
+      solution_exported_folder: ${{ runner.temp }}/exported-temp/
+      solution_folder: ${{ runner.temp }}/unpack-temp/
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.inputs.source_branch }}
-    
-    - name: create new git branch
-      run: |
-        git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.source_branch }}
 
-    - name: export-solution action
-      uses: microsoft/powerplatform-actions/export-solution@0.4.3
-      with:
-        environment-url: ${{ github.event.inputs.environment_url}}
-        app-id: ${{secrets.CLIENT_ID}}
-        client-secret: ${{ secrets.CLIENT_SECRET }}
-        tenant-id: ${{secrets.TENANT_ID}}
-        solution-name: ${{ github.event.inputs.solution_name }}
-        solution-output-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+      - name: create new git branch
+        run: |
+          git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
 
-    - name: unpack-solution action
-      uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
-      with:
-        solution-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
-        solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
-        solution-type: 'Unmanaged'
-        overwrite-files: true  
+      - name: export-solution action
+        uses: microsoft/powerplatform-actions/export-solution@0.4.3
+        with:
+          environment-url: ${{ github.event.inputs.environment_url}}
+          app-id: ${{secrets.CLIENT_ID}}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          tenant-id: ${{secrets.TENANT_ID}}
+          solution-name: ${{ github.event.inputs.solution_name }}
+          solution-output-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
 
-    - name: commit changes
-      run: |
-        git config --global user.name ${{ github.actor }}
-        git add --all
-        git commit -m "${{ github.event.inputs.commit_message }}"
-        git push 
+      - name: unpack-solution action
+        uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
+        with:
+          solution-file: ${{ env.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
+          solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
+          solution-type: "Unmanaged"
+          overwrite-files: true
+
+      - name: commit changes
+        run: |
+          git config --global user.name ${{ github.actor }}
+          git add --all
+          git commit -m "${{ github.event.inputs.commit_message }}"
+          git push

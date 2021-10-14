@@ -59,7 +59,7 @@ jobs:
       - name: unpack-solution action
         uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
         with:
-          solution-file: $RUNNER_TEMP/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
+          solution-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
           solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
           solution-type: "Unmanaged"
           overwrite-files: true

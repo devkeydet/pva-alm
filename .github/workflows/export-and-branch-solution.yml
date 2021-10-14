@@ -1,4 +1,4 @@
-name: export-and-branch-solution
+name: solution-export-unpack-commit
 # Export solution from DEV environment
 #  unpack it and prepare, commit and push a git branch with the changes
 
@@ -64,6 +64,5 @@ jobs:
     - name: commit changes
       run: |
         git config --global user.name ${{ github.actor }}
-        git add --all
-        git commit -m "${{ github.event.inputs.commit_message }}"
-        git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}"
+        git commit -am "${{ github.event.inputs.commit_message }}"
+        git push 

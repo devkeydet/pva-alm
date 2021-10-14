@@ -20,14 +20,7 @@ on:
       solution_folder:
         description: 'staging the unpacked solution folder before check-in'
         required: true
-        default: out/unpack-temp/
-      solution_target_folder: 
-       description: 'folder name to be created and checked in'
-       required: true
-       default: src/SolutionPackage/${{ github.event.inputs.solution_name}}
-env:
-  CLIENT_ID: ${{ secrets.CLIENT_ID }}
-  TENANT_ID: '${{ secrets.TENANT_ID }}
+        default: out/unpack-temp
 
 jobs:
   export-from-dev:
@@ -45,5 +38,5 @@ jobs:
       with:
         environment-url: ${{env.ENVIRONMENT_URL}}
         app-id: ${{env.CLIENT_ID}}
-        client-secret: ${{ secrets.PowerPlatformSPN }}
+        client-secret: ${{ secrets.CLIENT_SECRET }}
         tenant-id: ${{env.TENANT_ID}}

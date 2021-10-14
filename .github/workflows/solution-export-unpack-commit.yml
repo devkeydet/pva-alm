@@ -40,7 +40,7 @@ jobs:
 
       - name: echo runner temp directory
         run: |
-          echo ${{ env.RUNNER_TEMP }}
+          echo $RUNNER_TEMP
       
       - name: create new git branch
         run: |

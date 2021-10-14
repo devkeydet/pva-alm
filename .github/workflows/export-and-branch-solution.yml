@@ -5,34 +5,33 @@ name: export-and-branch-solution
 on:
   workflow_dispatch:
     inputs:
-      # Change this value
       solution_name:
-        description: 'name of the solution to worked on from Power Platform'
+        description: 'name of the Solution in Dataverse environment'
         required: true
-        default: ALMLab
-       #Do Not change these values
+        default: pvaalm
+      environment_url:
+        description: 'http endpoint of your Dataverse environment'
+        required: true
+        default: 'https://[your-env].crm.dynamics.com'
       solution_exported_folder:
-        description: 'folder name for staging the exported solution *do not change*'
+        description: 'folder name for staging the exported solution'
         required: true
-        default: out/exported/
+        default: out/exported-temp/
       solution_folder:
-        description: 'staging the unpacked solution folder before check-in *do not change*'
+        description: 'staging the unpacked solution folder before check-in'
         required: true
-        default: out/solutions/
+        default: out/unpack-temp/
       solution_target_folder: 
-       description: 'folder name to be created and checked in *do not change*'
+       description: 'folder name to be created and checked in'
        required: true
-       default: solutions/
+       default: src/SolutionPackage/${{ github.event.inputs.solution_name}}
 env:
-#edit your values here
-  ENVIRONMENT_URL: '<ENVIRONMENTURL>'
-  CLIENT_ID: '<APPID>'
-  TENANT_ID: '<TENANT ID>'
+  CLIENT_ID: ${{ secrets.CLIENT_ID }}
+  TENANT_ID: '${{ secrets.TENANT_ID }}
 
 jobs:
   export-from-dev:
-    runs-on: windows-latest
-    # or you can say runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     env:
       RUNNER_DEBUG: 1
 
@@ -42,36 +41,9 @@ jobs:
         lfs: true
 
     - name: who-am-i action
-      uses: microsoft/powerplatform-actions/who-am-i@0.4.0
+      uses: microsoft/powerplatform-actions/who-am-i@0.4.3
       with:
         environment-url: ${{env.ENVIRONMENT_URL}}
         app-id: ${{env.CLIENT_ID}}
         client-secret: ${{ secrets.PowerPlatformSPN }}
         tenant-id: ${{env.TENANT_ID}}
-
-
-    - name: export-solution action
-      uses: microsoft/powerplatform-actions/export-solution@0.4.0
-      with:
-        environment-url: ${{env.ENVIRONMENT_URL}}
-        app-id: ${{env.CLIENT_ID}}
-        client-secret: ${{ secrets.PowerPlatformSPN }}
-        tenant-id: ${{env.TENANT_ID}}
-        solution-name: ${{ github.event.inputs.solution_name }}
-        solution-output-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
-
-    - name: unpack-solution action
-      uses: microsoft/powerplatform-actions/unpack-solution@0.4.0
-      with:
-        solution-file: ${{ github.event.inputs.solution_exported_folder}}/${{ github.event.inputs.solution_name }}.zip
-        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
-        solution-type: 'Unmanaged'
-        overwrite-files: true
-
-    - name: branch-solution, prepare it for a PullRequest
-      uses: microsoft/powerplatform-actions/branch-solution@v0
-      with:
-        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
-        solution-target-folder: ${{ github.event.inputs.solution_target_folder}}/${{ github.event.inputs.solution_name }}
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        allow-empty-commit: true

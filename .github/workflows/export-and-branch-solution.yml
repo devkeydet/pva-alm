@@ -33,6 +33,7 @@ on:
 jobs:
   export-from-dev:
     runs-on: ubuntu-latest
+
     env:
       RUNNER_DEBUG: 1
 
@@ -43,7 +44,7 @@ jobs:
     
     - name: create new git branch
       run: |
-        git checkout -b ${{ github.event.inputs.source_branch }} ${{ github.event.inputs.branch_to_create }}
+        git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
 
     - name: export-solution action
       uses: microsoft/powerplatform-actions/export-solution@0.4.3

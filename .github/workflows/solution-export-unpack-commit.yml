@@ -54,7 +54,7 @@ jobs:
           client-secret: ${{ secrets.CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}
           solution-name: ${{ github.event.inputs.solution_name }}
-          solution-output-file: $RUNNER_TEMP/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
+          solution-output-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
 
       - name: unpack-solution action
         uses: microsoft/powerplatform-actions/unpack-solution@0.4.3

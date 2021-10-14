@@ -42,6 +42,7 @@ jobs:
           echo $RUNNER_TEMP
       
       - name: create new git branch
+        if: github.event.inputs.branch_to_create != ''
         run: |
           git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
 

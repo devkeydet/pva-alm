@@ -4,13 +4,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  echo:
+
+  set-env-var-conditionally:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'hello world'
+      - name: set environment variables conditionally
+        shell: pwsh
+        run: |
+          $ref = '${{ github.ref }}'
+          switch ( $ref )
+          {
+            'refs/heads/main'
+            {
+              echo 'environment_url=uat' >> $GITHUB_ENV
+            }
+            default
+            {
+              echo 'environment_url=pr' >> $GITHUB_ENV
+            } 
+          }
+  echo-env-var-set:
+    runs-on: ubuntu-latest
+    needs: set-env-var-conditionally
+    steps:
+      - name: echo env var set
+        run: |
+          echo '${{ env.environment_url }}'
 
   call-whoami:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
+    needs: echo-env-var-set
     secrets:      
       environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}

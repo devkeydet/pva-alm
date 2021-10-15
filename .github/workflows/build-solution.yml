@@ -18,13 +18,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: tag commit
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git config --global user.name ${{ github.actor }}
-          git pull          
-          git tag '${{ env.build_number }}' ${{ github.sha }}
-          git push
+      - name: Create tag
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/tagname",
+              sha: context.sha
+            })
 
       - name : update solution version number
         shell: pwsh

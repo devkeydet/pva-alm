@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - src/pvaalm/**
+  push:
+    branches:
+      - main
+    paths:
+      - src/pvaalm/**
 
 env:
   solution_name: pvaalm
@@ -41,6 +46,7 @@ jobs:
   deploy-solution-pr:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
+    if: needs.set-env-var-conditionally.outputs.environment == 'pr'
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
     secrets:      
@@ -52,10 +58,11 @@ jobs:
   deploy-solution-uat:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
+    if: needs.set-env-var-conditionally.outputs.environment == 'uat'
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
     secrets:      
-      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
+      environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

@@ -8,8 +8,8 @@ on:
       - src/pvaalm/**
 
 env:
-  solution_name: pvaalm
-  
+    solution_name: pvaalm
+      
 jobs:
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main

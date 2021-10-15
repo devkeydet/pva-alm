@@ -29,11 +29,7 @@ jobs:
     env:
       dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}
 
-    steps:      
-      - uses: actions/download-artifact@v2
-        with:
-          name: ${{ inputs.solution_name }}
-      
+    steps:            
       - run: |
           git fetch --all --tags
           $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}
@@ -51,6 +47,13 @@ jobs:
           workflow: ${{ inputs.solution_name }}-build-deploy.yml
           commit: ${{ env.commit }}
         if: env.deploy_to_prod
+
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ${{ inputs.solution_name }}-build-deploy.yml
+          run_number: ${{ github.run_number }}
+        if: env.deploy_to_prod != true
           
       - uses: cschleiden/replace-tokens@v1
         with:

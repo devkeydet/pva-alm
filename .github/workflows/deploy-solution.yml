@@ -35,7 +35,7 @@ jobs:
         with:
           environment-url: ${{ secrets.environment_url }}          
           tenant-id: ${{ secrets.tenant_id }}
-          app-id: ${{ inputs.client_id }}
+          app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
           force-overwrite: true

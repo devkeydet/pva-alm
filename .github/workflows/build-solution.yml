@@ -21,8 +21,8 @@ jobs:
       - name : clear out solution version number
         shell: pwsh
         run: |
-          $solutionName = '${{ github.event.inputs.solution_name }}'
-          Get-ChildItem -Path "/src/$solutionName/SolutionPackage/**/Solution.xml" | 
+          $solutionName = '${{ inputs.solution_name }}'
+          Get-ChildItem -Path "/src/" + $solutionName + "/SolutionPackage/**/Solution.xml" | 
           ForEach-Object {
                 (Get-Content $_.FullName) `
                     -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ env.build_number }}</Version>' |

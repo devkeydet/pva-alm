@@ -12,4 +12,4 @@ jobs:
 
       - run: |          
           git pull
-          git rev-list -n 1 tags/1.0.5
+          git rev-list -n 1 tags/1.0.3

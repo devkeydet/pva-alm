@@ -21,7 +21,7 @@ jobs:
       - name : update solution version number
         shell: pwsh
         run: |
-          Get-ChildItem -Path "src/${{ inputs.solution_name }}/SolutionPackage/**/Solution.xml" | 
+          Get-ChildItem -Path "src/${{ inputs.solution_name }}/SolutionPackage/Other/Solution.xml" | 
           ForEach-Object {
                 (Get-Content $_.FullName) `
                     -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ env.build_number }}</Version>' |

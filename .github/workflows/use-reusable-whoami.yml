@@ -28,7 +28,7 @@ jobs:
   call-whoami-uat:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
     needs: set-env-var-conditionally
-    if: startsWith(github.ref, 'refs/heads/main')
+    if: needs.set-env-var-conditionally.outputs.environment == 'uat'
     with: 
       environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
     secrets:      
@@ -39,7 +39,7 @@ jobs:
   
   call-whoami-pr:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
-    if: startsWith(github.ref, 'refs/heads/main') == false
+    if: needs.set-env-var-conditionally.outputs.environment == 'pr'
     needs: set-env-var-conditionally
     with: 
       environment: ${{ needs.set-env-var-conditionally.outputs.environment }}

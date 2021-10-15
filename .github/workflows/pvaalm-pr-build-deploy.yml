@@ -13,29 +13,24 @@ env:
 
 jobs:
   set-env-var-conditionally:
+    environment: foo
     runs-on: ubuntu-latest
-    steps:
-      - name: set environment variables conditionally
-        shell: pwsh
+    
+    steps: 
+      - name: uat env var
+        if: startsWith(github.ref, 'refs/heads/main')
         run: |
-          $ref = '${{ github.ref }}''
-          switch ( $ref )
-          {
-            'refs/heads/main'
-            {
-              echo 'environment_url=uat' >> $GITHUB_ENV
-            }
-            default
-            {
-              echo 'environment_url=pr' >> $GITHUB_ENV
-            } 
-          }
-  echo-env-var-set:
-    runs-on: ubuntu-latest
-    steps:
-      - name: echo env var set
+          echo "environment=uat" >> $GITHUB_ENV
+      - name: pr env var
+        if: startsWith(github.ref, 'refs/heads/main') == false
         run: |
-          echo '${{ env.environment_url }}'
+          echo "environment=pr" >> $GITHUB_ENV
+      - id: setOuput
+        run: |
+          echo "::set-output name=env::${{ env.environment }}"
+    
+    outputs:
+      environment: ${{ steps.setOuput.outputs.env }}
 
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
@@ -43,7 +38,18 @@ jobs:
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
   
-  deploy-solution:
+  deploy-solution-pr:
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    needs: build-solution
+    with:
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+    secrets:      
+      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+
+  deploy-solution-uat:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
     with:

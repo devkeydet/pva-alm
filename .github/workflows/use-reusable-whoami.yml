@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'hello world'
+
   call-whoami:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
     secrets:      

@@ -30,6 +30,8 @@ jobs:
       dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}
 
     steps:
+      - run: echo ${{ inputs.deploy_to_prod }}
+      
       - uses: actions/checkout@v2
         if: inputs.deploy_to_prod
 

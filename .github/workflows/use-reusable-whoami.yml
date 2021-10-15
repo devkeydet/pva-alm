@@ -7,8 +7,7 @@ jobs:
 
   set-env-var-conditionally:
     runs-on: ubuntu-latest
-    outputs:
-      environment_url: ${{ steps.set-output.outputs.environment_url }}
+    
     steps: 
       - name: uat env var
         if: startsWith(github.ref, 'refs/heads/main')
@@ -21,6 +20,9 @@ jobs:
       - id: set-ouput
         run: |
           echo "::set-output name=environment_url::${{ env.environment_url }}"
+    
+    outputs:
+      environment_url: ${{ steps.set-output.outputs.environment_url }}
       
   echo-env-var-set:
     runs-on: ubuntu-latest

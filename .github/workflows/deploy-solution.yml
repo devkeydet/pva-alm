@@ -8,10 +8,15 @@ on:
         type: string
     secrets:
       UAT_ENV:
+        required: true
       PR_VALIDATION_ENV:
+        required: true
       TENANT_ID:
+        required: true
       CLIENT_ID:
+        required: true
       CLIENT_SECRET:
+        required: true
 
 jobs:
   deploy-solution:

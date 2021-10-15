@@ -20,7 +20,7 @@ jobs:
   whoami:
     runs-on: ubuntu-latest
 
-    environment: ${{ inputs.environment }}
+    environment: uat
 
     steps:   
       # comment

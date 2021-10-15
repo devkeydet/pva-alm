@@ -20,11 +20,11 @@ jobs:
             'refs/heads/main'
             {
               echo 'refs/heads/main'
-              echo 'environment_url=uat' >> $Env:GITHUB_ENV
+              echo 'environment_url=uat' | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
             }
             default
             {
-              echo 'environment_url=pr' >> $Env:GITHUB_ENV
+              echo 'environment_url=pr' | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
             } 
           }
   echo-env-var-set:

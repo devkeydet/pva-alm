@@ -31,18 +31,18 @@ jobs:
 
     steps:
       - run: echo ${{ inputs.deploy_to_prod }}
-      
+
       - uses: actions/checkout@v2
-        if: inputs.deploy_to_prod
+        if: inputs.deploy_to_prod == true
 
       - run: |
           git fetch --all --tags
           $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}
           echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         shell: pwsh
-        if: inputs.deploy_to_prod
+        if: inputs.deploy_to_prod == true
       
-      - name: Download artifact
+      - name: download prod artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ${{ inputs.solution_name }}-build-deploy.yml
@@ -50,7 +50,7 @@ jobs:
           path: ${{ runner.temp }}
         if: inputs.deploy_to_prod == true
 
-      - name: Download artifact
+      - name: download workflow run artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ${{ inputs.solution_name }}-build-deploy.yml

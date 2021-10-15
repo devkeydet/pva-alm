@@ -30,7 +30,7 @@ jobs:
     needs: set-env-var-conditionally
     if: startsWith(github.ref, 'refs/heads/main')
     with: 
-      environment: uat
+      environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
     secrets:      
       environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
@@ -42,7 +42,7 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/main') == false
     needs: set-env-var-conditionally
     with: 
-      environment: pr
+      environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
     secrets:      
       environment_url: ${{ secrets.PR_VALIDATION_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}

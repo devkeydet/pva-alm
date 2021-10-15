@@ -14,13 +14,13 @@ jobs:
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     with:
-      solution_name: ${{ env.solution_name }}
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
   
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
     with:
-      solution_name: ${{ env.solution_name }}
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
     secrets:      
       environment_url: ${{ secrets.PR_VALIDATION_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}

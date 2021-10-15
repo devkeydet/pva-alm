@@ -8,7 +8,7 @@ on:
         description: 'provide the tag'
 
 jobs:
-  call-whoami-uat:
+  deploy-prod:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.

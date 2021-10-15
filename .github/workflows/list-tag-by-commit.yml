@@ -12,3 +12,4 @@ jobs:
 
       - run: |
           git fetch --all --tags
+          git rev-list -n 1 tags/1.0.5

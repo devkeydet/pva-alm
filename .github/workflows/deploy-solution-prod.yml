@@ -15,11 +15,11 @@ jobs:
         run: |
           $tag = "${{ github.event.inputs.tag }}"
           $splitArray = $tag -split "-"
-          echo "::set-output name=solution_name::$splitArray[0]"
+          $solutionName = $splitArray[0]
+          echo "::set-output name=solution_name::$solutionName"
         shell: pwsh
       - run: |
           echo "${{ steps.setOuput.outputs.solution_name }}"
-        shell: pwsh
     outputs:
       solution_name: ${{ steps.setOuput.outputs.solution_name }}
 

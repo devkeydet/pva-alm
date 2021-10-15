@@ -7,13 +7,13 @@ on:
         required: true
         type: string
     secrets:
-      ENVIRONMENT_URL:
+      environment_url:
         required: true
-      TENANT_ID:
+      tenant_id:
         required: true
-      CLIENT_ID:
+      client_id:
         required: true
-      CLIENT_SECRET:
+      client_secret:
         required: true
 
 jobs:
@@ -33,9 +33,9 @@ jobs:
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ secrets.ENVIRONMENT_URL }}          
-          tenant-id: ${{ secrets.TENANT_ID }}
+          environment-url: ${{ secrets.environment_url }}          
+          tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ inputs.client_id }}
-          client-secret: ${{ secrets.CLIENT_SECRET }}
+          client-secret: ${{ secrets.client_secret }}
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
           force-overwrite: true

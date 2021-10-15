@@ -22,7 +22,7 @@ jobs:
     with:
       solution_name: ${{ env.solution_name }}
     secrets:      
-      ENVIRONMENT_URL: ${{ secrets.UAT_ENV }}
-      TENANT_ID: ${{ secrets.TENANT_ID }}
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      environment_url: ${{ secrets.UAT_ENV }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}

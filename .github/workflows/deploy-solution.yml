@@ -24,6 +24,11 @@ jobs:
         run: |
           echo 'environment_url=${{ secrets.PR_VALIDATION_ENV }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false
+
+      - name: echo env.environment_url
+        run: |
+          echo '${{ env.environment_url }}
+        if: startsWith(github.ref, 'refs/heads/main') == false
       
       - uses: actions/download-artifact@v2
         with:
@@ -34,9 +39,9 @@ jobs:
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ env.environment_url }}
+          environment-url: ${{ secrets.PR_VALIDATION_ENV }}          
+          tenant-id: ${{ secrets.TENANT_ID }}
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
-          tenant-id: ${{ secrets.TENANT_ID }}
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
           force-overwrite: true

@@ -13,4 +13,4 @@ jobs:
         with:
           files: '["src/pvaalm/deploymentSettings.json"]'
         env:
-          dkdt_PVAMSNWeather: foo
+          dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}

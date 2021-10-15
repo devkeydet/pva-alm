@@ -1,0 +1,38 @@
+name: reusable-whoami
+
+on:
+  workflow_call:
+    secrets:
+      environment_url:
+        required: true
+      tenant_id:
+        required: true
+      client_id:
+        required: true
+      client_secret:
+        required: true
+
+jobs:
+  whoami:
+    runs-on: ubuntu-latest
+
+    env:
+      environment-url: ${{ secrets.environment_url }}          
+      tenant-id: ${{ secrets.tenant_id }}
+      app-id: ${{ inputs.client_id }}
+      client-secret: ${{ secrets.client_secret }}
+
+    steps:      
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.solution_name }}
+          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
+
+      # comment
+      - name: call whoami-action
+        uses: microsoft/powerplatform-actions/who-am-i@0.4.3
+        with:
+          environment-url: ${{ env.environment_url }}          
+          tenant-id: ${{ env.tenant_id }}
+          app-id: ${{ env.client_id }}
+          client-secret: ${{ env.client_secret }}

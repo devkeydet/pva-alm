@@ -17,12 +17,12 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/main') == false
         run: |
           echo "environment_url=uat" >> $GITHUB_ENV
-      - id: set-ouput
+      - id: setOuput
         run: |
-          echo "::set-output name=environment_url::${{ env.environment_url }}"
+          echo "::set-output name=env::${{ env.environment_url }}"
     
     outputs:
-      environment_url: ${{ steps.set-output.outputs.environment_url }}
+      environmentUrl: ${{ steps.setOuput.outputs.env }}
       
   echo-env-var-set:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: echo env var set in previous job
         run: |
-          echo '${{ needs.set-env-var-conditionally.outputs.environment_url }}'
+          echo '${{ needs.set-env-var-conditionally.outputs.environmentUrl }}'
 
   call-whoami-uat:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main

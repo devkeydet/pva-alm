@@ -1,4 +1,4 @@
-name: pvaalm-pr-build-deploy
+name: pvaalm-build-deploy
 
 on:
   pull_request:

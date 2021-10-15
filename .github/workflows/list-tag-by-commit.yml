@@ -10,5 +10,6 @@ jobs:
     steps:      
       - uses: actions/checkout@v2
       - run: |
-          git config --global user.name ${{ github.actor }}  
+          git config --global user.name ${{ github.actor }}
+          git pull
           git rev-list -n 1 tags/1.0.5

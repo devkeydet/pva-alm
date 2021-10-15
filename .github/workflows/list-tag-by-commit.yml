@@ -10,10 +10,7 @@ jobs:
     steps:      
       - uses: actions/checkout@v2
 
-      - run: |          
-          git pull
-          commit = git rev-list -n 1 tags/1.0.3
-      - run: |          
-          git pull
+      - run: |
           $commit = git rev-list -n 1 tags/1.0.3
+          $commit
         shell: pwsh

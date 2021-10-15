@@ -12,7 +12,7 @@ jobs:
       - name: uat env var
         if: startsWith(github.ref, 'refs/heads/main')
         run: |
-          echo "environment_url=${{ secrets.UAT_ENV }}" >> $GITHUB_ENV
+          echo "environment_url=uat" >> $GITHUB_ENV
       - name: pr env var
         if: startsWith(github.ref, 'refs/heads/main') == false
         run: |

@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "::set-output name=env::${{ env.environment }}"
       - run: |
-          echo "$(date +'%Y-%m-%d')"
+          echo "$(date +'%Y%m%d')"
     
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}

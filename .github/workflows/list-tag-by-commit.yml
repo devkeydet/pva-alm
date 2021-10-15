@@ -22,9 +22,3 @@ jobs:
 
       - run: |
           echo "${{ env.commit }}"
-      
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: pvaalm-build-deploy.yml
-          commit: ${{ env.commit }}

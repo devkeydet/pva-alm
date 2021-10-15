@@ -12,6 +12,8 @@ jobs:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+      deploy_to_prod: true
+      tag: ${{ github.event.inputs.tag }}
     secrets:      
       environment_url: ${{ secrets.PROD_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}

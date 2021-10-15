@@ -4,13 +4,15 @@ on:
   workflow_dispatch:
 
 jobs:
+  
   whoami:
     runs-on: ubuntu-latest
+
+    env:
+      dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}
 
     steps:
       - uses: actions/checkout@v2      
       - uses: cschleiden/replace-tokens@v1
         with:
           files: '["src/pvaalm/deploymentSettings.json"]'
-        env:
-          dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}

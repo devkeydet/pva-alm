@@ -27,7 +27,7 @@ jobs:
       - name: call whoami-action
         uses: microsoft/powerplatform-actions/who-am-i@0.4.3
         with:
-          environment-url: ${{ env.environment_url }}          
-          tenant-id: ${{ env.tenant_id }}
-          app-id: ${{ env.client_id }}
-          client-secret: ${{ env.client_secret }}
+          environment-url: ${{ secrets.environment_url }}          
+          tenant-id: ${{ secrets.tenant_id }}
+          app-id: ${{ secrets.client_id }}
+          client-secret: ${{ secrets.client_secret }}

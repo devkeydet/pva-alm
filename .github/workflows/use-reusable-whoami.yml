@@ -3,6 +3,8 @@ name: use-reusable-whoami
 on:
   workflow_dispatch:
 
+concurrency: test
+
 jobs:
   echo:
     runs-on: ubuntu-latest

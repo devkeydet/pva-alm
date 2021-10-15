@@ -71,7 +71,7 @@ jobs:
           solution-type: "Both"
           overwrite-files: true
 
-      - name : clear out solution version build_number
+      - name : clear out solution version number
         shell: pwsh
         run: |
           Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage/**/Solution.xml" | 
@@ -80,7 +80,7 @@ jobs:
                     -replace '<Version>[\s\S]*?<\/Version>', '<Version>0.0.0.0</Version>' |
                 Out-File $_.FullName
           }
-          
+
       - name: commit changes
         run: |
           git config --global user.name ${{ github.actor }}          

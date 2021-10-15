@@ -17,7 +17,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
+      - name: tag commit
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name ${{ github.actor }}          
+          git tag '${{ env.build_number }}' ${{ github.sha }}
+          git push
+
+      - name : clear out solution version number
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage/**/Solution.xml" | 
+          ForEach-Object {
+                (Get-Content $_.FullName) `
+                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ env.build_number }}</Version>' |
+                Out-File $_.FullName
+          }
+
       - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@0.4.3
         with:
@@ -29,3 +46,5 @@ jobs:
         with:
           name: ${{ inputs.solution_name }}
           path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
+      
+      

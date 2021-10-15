@@ -7,7 +7,7 @@ jobs:
   
   call-whoami:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
-    secrets:      
+    with:      
       environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}

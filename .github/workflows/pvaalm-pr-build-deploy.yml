@@ -9,8 +9,34 @@ on:
 
 env:
   solution_name: pvaalm
+  environmenturl: temp
 
 jobs:
+  set-env-var-conditionally:
+    runs-on: ubuntu-latest
+    steps:
+      - name: set environment variables conditionally
+        shell: pwsh
+        run: |
+          $ref = ${{ github.ref }}
+          switch ( $ref )
+          {
+            'refs/heads/main'
+            {
+              echo 'environment_url=uat' >> $GITHUB_ENV
+            }
+            default
+            {
+              echo 'environment_url=pr' >> $GITHUB_ENV
+            } 
+          }
+  ech-env-var-set:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo env var set
+        run: |
+          echo '${{ env.environment_url }}'
+          
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     with:

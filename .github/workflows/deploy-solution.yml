@@ -20,12 +20,18 @@ jobs:
   deploy-solution:
     runs-on: ubuntu-latest
 
+    env:
+      dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}
+
     steps:      
       - uses: actions/download-artifact@v2
         with:
           name: ${{ inputs.solution_name }}
-
-      # comment
+      
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
+        
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
@@ -35,3 +41,4 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           solution-file: ${{ inputs.solution_name }}.zip
           force-overwrite: true
+          #deploymentSettings.json support coming soon

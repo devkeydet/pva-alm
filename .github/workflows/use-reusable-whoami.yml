@@ -39,6 +39,7 @@ jobs:
   call-whoami-pr:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
     if: startsWith(github.ref, 'refs/heads/main') == false
+    needs: set-env-var-conditionally
     with: 
       environment: pr
     secrets:      

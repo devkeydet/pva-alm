@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - run: |
-          git fetch
+          git fetch -all
           $commit = git rev-list -n 1 tags/1.0.3
           $commit
         shell: pwsh

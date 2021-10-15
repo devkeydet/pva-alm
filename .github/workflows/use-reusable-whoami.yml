@@ -19,7 +19,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/main') == false
         run: |
           echo "environment_url=uat" >> $GITHUB_ENV
-      - name: pr env var
+      - name: echo env var in job
         run: |
           echo "${{ env.environment_url }}"
       
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: set-env-var-conditionally
     steps:
-      - name: echo env var set
+      - name: echo env var set in previous job
         run: |
           echo '${{ env.environment_url }}'
 

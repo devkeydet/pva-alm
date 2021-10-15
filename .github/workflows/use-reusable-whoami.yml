@@ -3,7 +3,33 @@ name: use-reusable-whoami
 on:
   workflow_dispatch:
 
+env:
+  environment_url: init
+
 jobs:
+
+  set-env-var-conditionally:
+    runs-on: ubuntu-latest
+    steps:
+      - name: uat env var
+        if: startsWith(github.ref, 'refs/heads/main')
+        run: |
+          echo "environment_url=uat" >> $GITHUB_ENV
+      - name: pr env var
+        if: startsWith(github.ref, 'refs/heads/main') == false
+        run: |
+          echo "environment_url=uat" >> $GITHUB_ENV
+      - name: pr env var
+        run: |
+          echo "${{ env.environment_url }}"
+      
+  echo-env-var-set:
+    runs-on: ubuntu-latest
+    needs: set-env-var-conditionally
+    steps:
+      - name: echo env var set
+        run: |
+          echo '${{ env.environment_url }}'
 
   call-whoami-uat:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
@@ -18,7 +44,7 @@ jobs:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
     if: startsWith(github.ref, 'refs/heads/main') == false
     secrets:      
-      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
+      environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

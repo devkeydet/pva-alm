@@ -18,7 +18,7 @@ jobs:
       - name: set environment variables conditionally
         shell: pwsh
         run: |
-          $ref = '${{ github.ref }}'
+          $ref = '${{ github.ref }}''
           switch ( $ref )
           {
             'refs/heads/main'

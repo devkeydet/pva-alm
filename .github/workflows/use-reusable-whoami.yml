@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "::set-output name=env::${{ env.environment }}"
       - run: |
-          echo "$(date +'%Y%M%D')"
+          echo "build_number=1.0.$(date +'%Y%m%d').${{ github.run_number }}" >> $GITHUB_ENV
     
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}

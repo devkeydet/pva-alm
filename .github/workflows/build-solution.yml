@@ -21,7 +21,8 @@ jobs:
       - name: tag commit
         if: github.ref == 'refs/heads/main'
         run: |
-          git config --global user.name ${{ github.actor }}          
+          git config --global user.name ${{ github.actor }}
+          git pull          
           git tag '${{ env.build_number }}' ${{ github.sha }}
           git push
 

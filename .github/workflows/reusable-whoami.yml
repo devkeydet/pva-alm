@@ -1,9 +1,9 @@
-name: deploy-solution
+name: reusable-whoami
 
 on:
   workflow_call:
     inputs:
-      solution_name:
+      environment:
         required: true
         type: string
     secrets:
@@ -14,24 +14,20 @@ on:
       client_id:
         required: true
       client_secret:
-        required: true
+        required: true  
 
 jobs:
-  deploy-solution:
+  whoami:
     runs-on: ubuntu-latest
 
-    steps:      
-      - uses: actions/download-artifact@v2
-        with:
-          name: ${{ inputs.solution_name }}
+    environment: ${{ inputs.enviorment }}
 
+    steps:   
       # comment
-      - name: import solution to environment
-        uses: microsoft/powerplatform-actions/import-solution@0.4.3
+      - name: call whoami-action
+        uses: microsoft/powerplatform-actions/who-am-i@0.4.3
         with:
           environment-url: ${{ secrets.environment_url }}          
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}
-          solution-file: ${{ inputs.solution_name }}.zip
-          force-overwrite: true

@@ -1,0 +1,69 @@
+name: pvaalm-build-deploy-${{ github.run_number }}
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - src/pvaalm/**
+  push:
+    branches:
+      - main
+    paths:
+      - src/pvaalm/**
+
+env:
+  solution_name: pvaalm
+  environmenturl: temp
+
+jobs:
+  set-env-var-conditionally:
+    environment: foo
+    runs-on: ubuntu-latest
+    
+    steps: 
+      - name: uat env var
+        if: startsWith(github.ref, 'refs/heads/main')
+        run: |
+          echo "environment=uat" >> $GITHUB_ENV
+      - name: pr env var
+        if: startsWith(github.ref, 'refs/heads/main') == false
+        run: |
+          echo "environment=pr" >> $GITHUB_ENV
+      - id: setOuput
+        run: |
+          echo "::set-output name=env::${{ env.environment }}"
+    
+    outputs:
+      environment: ${{ steps.setOuput.outputs.env }}
+
+  build-solution:
+    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
+    needs: set-env-var-conditionally
+    with:
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+  
+  deploy-solution-pr:
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    needs: build-solution
+    if: needs.set-env-var-conditionally.outputs.environment == 'pr'
+    with:
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+    secrets:      
+      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+
+  deploy-solution-uat:
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    needs: build-solution
+    if: needs.set-env-var-conditionally.outputs.environment == 'uat'
+    with:
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+    secrets:      
+      environment_url: ${{ secrets.UAT_ENV }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+      

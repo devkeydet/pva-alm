@@ -14,7 +14,7 @@ on:
       CLIENT_ID:
         required: true
       CLIENT_SECRET:
-        required: true     
+        required: true
 
 jobs:
   deploy-solution:

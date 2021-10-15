@@ -2,6 +2,10 @@ name: list-tag-by-commit
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: 'provide the tag'
 
 jobs:
   list-tag-by-commit:
@@ -12,4 +16,4 @@ jobs:
 
       - run: |
           git fetch --all --tags
-          git rev-list -n 1 tags/1.0.5
+          git rev-list -n 1 tags/${{ github.event.tag }}

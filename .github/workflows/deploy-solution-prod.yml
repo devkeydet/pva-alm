@@ -1,0 +1,34 @@
+name: deploy-prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: 'GitHub tag for solution-version to deploy'
+
+jobs:
+  get-solution-name-from-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - id: setOutput
+        run: |
+          $tag = "${{ github.event.inputs.tag }}"
+          $splitArray = $tag -split "-"
+          echo "::set-output name=solution_name::$splitArray[0]"
+        shell: pwsh
+    outputs:
+      solution_name: ${{ steps.setOuput.outputs.solution_name }}
+
+  deploy-prod:
+    needs: get-solution-name-from-tag
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    with:
+      solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name}}
+      deploy_to_prod: true
+      tag: ${{ github.event.inputs.tag }}
+    secrets:      
+      environment_url: ${{ secrets.PROD_ENV }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}

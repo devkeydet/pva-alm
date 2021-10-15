@@ -29,7 +29,10 @@ jobs:
     env:
       dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}
 
-    steps:            
+    steps:
+      - uses: actions/checkout@v2
+        if: inputs.deploy_to_prod
+
       - run: |
           git fetch --all --tags
           $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}

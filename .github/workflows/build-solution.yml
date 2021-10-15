@@ -18,11 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name : clear out solution version number
+      - name : update solution version number
         shell: pwsh
         run: |
-          $solutionName = '${{ inputs.solution_name }}'
-          Get-ChildItem -Path "/src/" + $solutionName + "/SolutionPackage/**/Solution.xml" | 
+          Get-ChildItem -Path "/src/"${{ inputs.solution_name }}/SolutionPackage/**/Solution.xml" | 
           ForEach-Object {
                 (Get-Content $_.FullName) `
                     -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ env.build_number }}</Version>' |

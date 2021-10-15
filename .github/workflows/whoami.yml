@@ -1,4 +1,4 @@
-name: reusable-whoami
+name: whoami
 
 on:
   workflow_dispatch:

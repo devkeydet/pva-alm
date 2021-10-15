@@ -19,11 +19,11 @@ jobs:
           {
             'refs/heads/main'
             {
-              echo 'environment_url=uat' >> $GITHUB_ENV
+              echo 'environment_url=uat' >> $Env:GITHUB_ENV
             }
             default
             {
-              echo 'environment_url=pr' >> $GITHUB_ENV
+              echo 'environment_url=pr' >> $Env:GITHUB_ENV
             } 
           }
   echo-env-var-set:

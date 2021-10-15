@@ -27,7 +27,7 @@ jobs:
 
       - name: echo env.environment_url
         run: |
-          echo '${{ env.environment_url }}
+          echo '${{ env.environment_url }}'
         if: startsWith(github.ref, 'refs/heads/main') == false
       
       - uses: actions/download-artifact@v2

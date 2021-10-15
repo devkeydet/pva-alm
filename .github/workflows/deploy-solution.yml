@@ -6,6 +6,12 @@ on:
       solution_name:
         required: true
         type: string
+    secrets:
+      UAT_ENV:
+      PR_VALIDATION_ENV:
+      TENANT_ID:
+      CLIENT_ID:
+      CLIENT_SECRET:
 
 jobs:
   deploy-solution:
@@ -34,7 +40,7 @@ jobs:
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ secrets.PR_VALIDATION_ENV }}          
+          environment-url: ${{ env.environment_url }}          
           tenant-id: ${{ secrets.TENANT_ID }}
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}

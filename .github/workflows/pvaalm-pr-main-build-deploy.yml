@@ -26,3 +26,9 @@ jobs:
     needs: build-solution
     with:
       solution_name: pvaalm
+    secrets:
+      UAT_ENV: ${{ secrets.UAT_ENV }}
+      PR_VALIDATION_ENV: ${{ secrets.PR_VALIDATION_ENV }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}

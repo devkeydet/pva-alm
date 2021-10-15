@@ -3,9 +3,6 @@ name: use-reusable-whoami
 on:
   workflow_dispatch:
 
-env:
-  environment_url: temp
-
 jobs:
 
   set-env-var-conditionally:

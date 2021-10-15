@@ -7,13 +7,13 @@ on:
         required: true
         type: string
     secrets:
-      environment_url:
+      ENVIRONMENT_URL:
         required: true
-      tenant_id:
+      TENANT_ID:
         required: true
-      client_id:
+      CLIENT_ID:
         required: true
-      client_secret:
+      CLIENT_SECRET:
         required: true     
 
 jobs:
@@ -23,17 +23,7 @@ jobs:
     env:
       solution_pack_folder: solution-pack-temp
 
-    steps:
-      - name: set environment to uat
-        run: |
-          echo 'environment_url=${{ inputs.uat_env }}' >> $GITHUB_ENV
-        if: startsWith(github.ref, 'refs/heads/main')
-      
-      - name: set environment to pr validation
-        run: |
-          echo 'environment_url=${{ inputs.pr_validation_env }}' >> $GITHUB_ENV
-        if: startsWith(github.ref, 'refs/heads/main') == false
-      
+    steps:      
       - uses: actions/download-artifact@v2
         with:
           name: ${{ inputs.solution_name }}
@@ -43,9 +33,9 @@ jobs:
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ inputs.environment_url }}          
-          tenant-id: ${{ inputs.tenant_id }}
+          environment-url: ${{ secrets.ENVIRONMENT_URL }}          
+          tenant-id: ${{ secrets.TENANT_ID }}
           app-id: ${{ inputs.client_id }}
-          client-secret: ${{ inputs.client_secret }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
           force-overwrite: true

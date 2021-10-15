@@ -9,6 +9,9 @@ jobs:
 
     steps:      
       - uses: actions/checkout@v2
+        with:
+          ref: main
+
       - run: |
           git config --global user.name ${{ github.actor }}
           git pull

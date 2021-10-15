@@ -1,0 +1,13 @@
+name: list-tag-by-commit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list-tag-by-commit:
+    runs-on: ubuntu-latest
+
+    steps:      
+      - uses: actions/checkout@v2
+      - run: |
+          git rev-list -n 1 tags/1.0.5

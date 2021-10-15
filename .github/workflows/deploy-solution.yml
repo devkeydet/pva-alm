@@ -68,6 +68,6 @@ jobs:
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}
-          solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}.zip
+          solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}.zip
           force-overwrite: true
           #deploymentSettings.json support coming soon

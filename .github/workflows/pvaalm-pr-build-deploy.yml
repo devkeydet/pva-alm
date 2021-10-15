@@ -7,17 +7,20 @@ on:
     paths:
       - src/pvaalm/**
 
+env:
+  solution_name: pvaalm
+
 jobs:
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     with:
-      solution_name: pvaalm
+      solution_name: ${{ env.solution_name }}
   
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
     with:
-      solution_name: pvaalm
+      solution_name: ${{ env.solution_name }}
     secrets:      
       environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}

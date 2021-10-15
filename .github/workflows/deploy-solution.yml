@@ -20,9 +20,6 @@ jobs:
   deploy-solution:
     runs-on: ubuntu-latest
 
-    env:
-      solution_pack_folder: solution-pack-temp
-
     steps:      
       - uses: actions/download-artifact@v2
         with:

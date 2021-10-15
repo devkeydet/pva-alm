@@ -2,6 +2,10 @@ name: reusable-whoami
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
     secrets:
       environment_url:
         required: true
@@ -15,6 +19,8 @@ on:
 jobs:
   whoami:
     runs-on: ubuntu-latest
+
+    environment: ${{ inputs.environment }}
 
     steps:   
       # comment

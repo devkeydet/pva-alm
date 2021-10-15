@@ -31,7 +31,7 @@ jobs:
     with: 
       environment: uat
     secrets:      
-      environment_url: ${{ secrets.ENVIRONMENT_URL }}
+      environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

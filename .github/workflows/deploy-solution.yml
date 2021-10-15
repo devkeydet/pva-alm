@@ -6,17 +6,19 @@ on:
       solution_name:
         required: true
         type: string
-    secrets:
-      UAT_ENV:
+      environment_url:
+        required: false
+        type: string
+      tenant_id:
         required: true
-      PR_VALIDATION_ENV:
+        type: string
+      client_id:
         required: true
-      TENANT_ID:
+        type: string
+      client_secret:
         required: true
-      CLIENT_ID:
-        required: true
-      CLIENT_SECRET:
-        required: true
+        type: string
+     
 
 jobs:
   deploy-solution:
@@ -28,12 +30,12 @@ jobs:
     steps:
       - name: set environment to uat
         run: |
-          echo 'environment_url=${{ secrets.UAT_ENV }}' >> $GITHUB_ENV
+          echo 'environment_url=${{ inputs.uat_env }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main')
       
       - name: set environment to pr validation
         run: |
-          echo 'environment_url=${{ secrets.PR_VALIDATION_ENV }}' >> $GITHUB_ENV
+          echo 'environment_url=${{ inputs.pr_validation_env }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false
       
       - uses: actions/download-artifact@v2
@@ -45,9 +47,9 @@ jobs:
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ env.environment_url }}          
-          tenant-id: ${{ secrets.TENANT_ID }}
-          app-id: ${{ secrets.CLIENT_ID }}
-          client-secret: ${{ secrets.CLIENT_SECRET }}
+          environment-url: ${{ inputs.environment_url }}          
+          tenant-id: ${{ inputs.tenant_id }}
+          app-id: ${{ inputs.client_id }}
+          client-secret: ${{ inputs.client_secret }}
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
           force-overwrite: true

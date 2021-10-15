@@ -1,0 +1,27 @@
+name: pvaalm-pr-build-deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - src/pvaalm/**
+
+env:
+  solution_name: pvaalm
+  
+jobs:
+  build-solution:
+    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
+    with:
+      solution_name: ${{ env.solution_name }}
+  
+  deploy-solution:
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    needs: build-solution
+    with:
+      solution_name: ${{ env.solution_name }}
+      environment_url: ${{ secrets.UAT_ENV }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}

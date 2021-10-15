@@ -1,4 +1,4 @@
-name: reuse-whoami
+name: use-reusable-whoami
 
 on:
   workflow_dispatch:

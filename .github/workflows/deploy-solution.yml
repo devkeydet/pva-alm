@@ -40,7 +40,7 @@ jobs:
           $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}
           echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         shell: pwsh
-        if: inputs.deploy_to_prod == true
+        if: ${{ inputs.deploy_to_prod }}
       
       - name: download prod artifact
         uses: dawidd6/action-download-artifact@v2
@@ -48,7 +48,7 @@ jobs:
           workflow: ${{ inputs.solution_name }}-build-deploy.yml
           commit: ${{ env.commit }}
           path: ${{ runner.temp }}
-        if: inputs.deploy_to_prod == true
+        if: ${{ inputs.deploy_to_prod }}
 
       - name: download workflow run artifact
         uses: dawidd6/action-download-artifact@v2
@@ -56,7 +56,7 @@ jobs:
           workflow: ${{ inputs.solution_name }}-build-deploy.yml
           run_number: ${{ github.run_number }}
           path: ${{ runner.temp }}
-        if: inputs.deploy_to_prod != true
+        if: ${{ !inputs.deploy_to_prod }}
           
       - uses: cschleiden/replace-tokens@v1
         with:

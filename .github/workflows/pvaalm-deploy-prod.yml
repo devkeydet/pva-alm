@@ -1,0 +1,19 @@
+name: pvaalm-deploy-prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        description: 'provide the tag'
+
+jobs:
+  call-whoami-uat:
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    with:
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+    secrets:      
+      environment_url: ${{ secrets.PROD_ENV }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}

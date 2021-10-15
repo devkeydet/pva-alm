@@ -6,6 +6,12 @@ on:
       solution_name:
         required: true
         type: string
+      deploy_to_prod:
+        required: false
+        type: string  
+      tag:
+        required: false
+        type: string    
     secrets:
       environment_url:
         required: true
@@ -28,6 +34,24 @@ jobs:
         with:
           name: ${{ inputs.solution_name }}
       
+      - run: |
+          git fetch --all --tags
+          $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}
+          echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+        shell: pwsh
+        if: env.deploy_to_prod
+
+      - run: |
+          echo "${{ env.commit }}"
+        if: env.deploy_to_prod
+      
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ${{ inputs.solution_name }}-build-deploy.yml
+          commit: ${{ env.commit }}
+        if: env.deploy_to_prod
+          
       - uses: cschleiden/replace-tokens@v1
         with:
           files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'

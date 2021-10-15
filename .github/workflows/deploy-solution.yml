@@ -24,11 +24,6 @@ jobs:
         run: |
           echo 'environment_url=${{ secrets.PR_VALIDATION_ENV }}' >> $GITHUB_ENV
         if: startsWith(github.ref, 'refs/heads/main') == false
-
-      - name: echo env.environment_url
-        run: |
-          echo '${{ env.environment_url }}'
-        if: startsWith(github.ref, 'refs/heads/main') == false
       
       - uses: actions/download-artifact@v2
         with:

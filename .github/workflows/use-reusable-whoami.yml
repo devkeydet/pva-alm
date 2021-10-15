@@ -6,6 +6,7 @@ on:
 jobs:
 
   set-env-var-conditionally:
+    environment: foo
     runs-on: ubuntu-latest
     
     steps: 
@@ -31,7 +32,7 @@ jobs:
     with: 
       environment: uat
     secrets:      
-      environment_url: ${{ secrets.ENVIRONMENT_URL }}
+      environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}
@@ -43,7 +44,7 @@ jobs:
     with: 
       environment: pr
     secrets:      
-      environment_url: ${{ secrets.ENVIRONMENT_URL }}
+      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

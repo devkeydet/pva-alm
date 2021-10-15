@@ -14,7 +14,7 @@ on:
       client_id:
         required: true
       client_secret:
-        required: true
+        required: true  
 
 jobs:
   whoami:

@@ -34,9 +34,10 @@ jobs:
 
   call-whoami-uat:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
+    needs: set-env-var-conditionally
     if: startsWith(github.ref, 'refs/heads/main')
     with: 
-      environment: uat
+      environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
     secrets:      
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}

@@ -46,6 +46,8 @@ jobs:
   call-whoami-pr:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
     if: startsWith(github.ref, 'refs/heads/main') == false
+    with: 
+      environment: pr
     secrets:      
       environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}

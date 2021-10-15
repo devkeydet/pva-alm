@@ -16,4 +16,5 @@ jobs:
 
       - run: |
           git fetch --all --tags
-          git rev-list -n 1 tags/${{ github.event.inputs.tag }}
+          $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}
+        shell: pwsh

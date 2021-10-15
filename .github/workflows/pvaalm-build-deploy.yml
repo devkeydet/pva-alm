@@ -1,4 +1,4 @@
-name: pvaalm-build-deploy
+name: pvaalm-build-deploy-${{ github.run_number }}
 
 on:
   pull_request:

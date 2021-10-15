@@ -1,14 +1,14 @@
 name: pvaalm-pr-build-deploy
 
+env:
+  solution_name: pvaalm
+
 on:
   pull_request:
     branches:
       - main
     paths:
       - src/pvaalm/**
-
-env:
-  solution_name: pvaalm
 
 jobs:
   build-solution:
@@ -22,7 +22,7 @@ jobs:
     with:
       solution_name: ${{ env.solution_name }}
     secrets:      
-      environment_url: ${{ secrets.UAT_ENV }}
+      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

@@ -17,6 +17,9 @@ jobs:
           $splitArray = $tag -split "-"
           echo "::set-output name=solution_name::$splitArray[0]"
         shell: pwsh
+      - run: |
+          echo "${{ steps.setOuput.outputs.solution_name }}"
+        shell: pwsh
     outputs:
       solution_name: ${{ steps.setOuput.outputs.solution_name }}
 

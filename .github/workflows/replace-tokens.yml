@@ -1,4 +1,4 @@
-name: whoami
+name: replace-tokens
 
 on:
   workflow_dispatch:

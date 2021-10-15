@@ -1,27 +1,28 @@
 name: pvaalm-pr-main-build-deploy
-# Run a build and validate deployment on pull request
-#
+
+env:
+  solution_name: pvaalm
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - src/pvaalm/**
+      - src/${{ env.solution_name }}/**
   push:
     branches:
       - main
     paths:
-      - src/pvaalm/**
+      - src/${{ env.solution_name }}/**
 
 jobs:
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     with:
-      solution_name: pvaalm
+      solution_name: ${{ env.solution_name }}
   
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
     with:
-      solution_name: pvaalm
+      solution_name: ${{ env.solution_name }}

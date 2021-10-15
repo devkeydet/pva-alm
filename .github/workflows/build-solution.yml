@@ -22,6 +22,7 @@ jobs:
           solution-folder: src/${{ inputs.solution_name }}/SolutionPackage
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
           solution-type: Managed
+      
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ inputs.solution_name }}

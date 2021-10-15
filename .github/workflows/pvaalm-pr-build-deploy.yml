@@ -18,7 +18,7 @@ jobs:
       - name: set environment variables conditionally
         shell: pwsh
         run: |
-          $ref = ${{ github.ref }}
+          $ref = '${{ github.ref }}'
           switch ( $ref )
           {
             'refs/heads/main'
@@ -30,15 +30,16 @@ jobs:
               echo 'environment_url=pr' >> $GITHUB_ENV
             } 
           }
-  ech-env-var-set:
+  echo-env-var-set:
     runs-on: ubuntu-latest
     steps:
       - name: echo env var set
         run: |
           echo '${{ env.environment_url }}'
-          
+
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
+    needs: set-env-var-conditionally
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
   

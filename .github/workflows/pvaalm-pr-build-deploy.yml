@@ -1,14 +1,14 @@
 name: pvaalm-pr-build-deploy
 
-env:
-  solution_name: pvaalm
-
 on:
   pull_request:
     branches:
       - main
     paths:
       - src/pvaalm/**
+
+env:
+  solution_name: pvaalm
 
 jobs:
   build-solution:

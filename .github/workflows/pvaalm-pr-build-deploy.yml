@@ -21,6 +21,7 @@ jobs:
     needs: build-solution
     with:
       solution_name: ${{ env.solution_name }}
+    secrets:      
       environment_url: ${{ secrets.UAT_ENV }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}

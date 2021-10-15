@@ -6,19 +6,15 @@ on:
       solution_name:
         required: true
         type: string
+    secrets:
       environment_url:
-        required: false
-        type: string
+        required: true
       tenant_id:
         required: true
-        type: string
       client_id:
         required: true
-        type: string
       client_secret:
-        required: true
-        type: string
-     
+        required: true     
 
 jobs:
   deploy-solution:

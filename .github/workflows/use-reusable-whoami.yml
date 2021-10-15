@@ -19,6 +19,7 @@ jobs:
           {
             'refs/heads/main'
             {
+              echo 'refs/heads/main'
               echo 'environment_url=uat' >> $Env:GITHUB_ENV
             }
             default

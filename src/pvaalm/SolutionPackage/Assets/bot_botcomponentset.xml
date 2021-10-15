@@ -5,16 +5,7 @@
   <bot_botcomponent botcomponentid.schemaname="new_customtype_1245bebc75664baabd1c6ea9376ce289_f86fcadfd497444e91ed11c12b059d10" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
     <iscustomizable>1</iscustomizable>
   </bot_botcomponent>
-  <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_21a34f1673a24096a99ba0effb63cc1d" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
-    <iscustomizable>1</iscustomizable>
-  </bot_botcomponent>
-  <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_33d5123770ba4daeafae51b361ddc80a" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
-    <iscustomizable>1</iscustomizable>
-  </bot_botcomponent>
   <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_3d2584ec30914684839527e05e7be172_thankyou" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
-    <iscustomizable>1</iscustomizable>
-  </bot_botcomponent>
-  <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_85df75ce08a44a9b82cc8f3fdb25f669" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
     <iscustomizable>1</iscustomizable>
   </bot_botcomponent>
   <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_8a4964498f83424bb3a86295bf7d0952_startover" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
@@ -33,9 +24,6 @@
     <iscustomizable>1</iscustomizable>
   </bot_botcomponent>
   <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_db1f76b081dc43389df9dd2df7518737_confirmedsuccess" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
-    <iscustomizable>1</iscustomizable>
-  </bot_botcomponent>
-  <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_dbafebd526364487911b63a2a774389f" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">
     <iscustomizable>1</iscustomizable>
   </bot_botcomponent>
   <bot_botcomponent botcomponentid.schemaname="new_topic_1245bebc75664baabd1c6ea9376ce289_f56d1a3e522740c78f9fac0939332dbd_goodbye" botid.schemaname="new_bot_1245bebc75664baabd1c6ea9376ce289">

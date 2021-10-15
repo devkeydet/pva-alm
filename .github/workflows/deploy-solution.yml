@@ -50,12 +50,10 @@ jobs:
           path: ${{ runner.temp }}
         if: ${{ inputs.deploy_to_prod }}
 
-      - name: download workflow run artifact
-        uses: dawidd6/action-download-artifact@v2
+      - uses: actions/download-artifact@v2
         with:
-          workflow: ${{ inputs.solution_name }}-build-deploy.yml
-          run_number: ${{ github.run_number }}
-          path: ${{ runner.temp }}
+          name: ${{ inputs.solution_name }}
+          path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ !inputs.deploy_to_prod }}
           
       - uses: cschleiden/replace-tokens@v1

@@ -18,6 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: tag commit
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name ${{ github.actor }}          
+          git tag '${{ env.build_number }}' ${{ github.sha }}
+          git push
+
       - name : update solution version number
         shell: pwsh
         run: |

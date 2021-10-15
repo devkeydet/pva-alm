@@ -1,0 +1,42 @@
+name: deploy-solution
+
+on:
+  workflow_call:
+    inputs:
+      solution_name:
+        required: true
+        type: string
+
+jobs:
+  deploy-solution:
+    runs-on: ubuntu-latest
+
+    env:
+      solution_pack_folder: solution-pack-temp
+
+    steps:
+      - name: set environment to uat
+        run: |
+          echo 'environment_url=${{ secrets.UAT_ENV }}' >> $GITHUB_ENV
+        if: startsWith(github.ref, 'refs/heads/main')
+      
+      - name: set environment to pr validation
+        run: |
+          echo 'environment_url=${{ secrets.PR_VALIDATION_ENV }}' >> $GITHUB_ENV
+        if: startsWith(github.ref, 'refs/heads/main') == false
+      
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.solution_name }}
+          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
+
+         
+      - name: import solution to environment
+        uses: microsoft/powerplatform-actions/import-solution@0.4.3
+        with:
+          environment-url: ${{ env.environment_url }}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
+          force-overwrite: true

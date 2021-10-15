@@ -13,13 +13,11 @@ jobs:
 
     env:
       solution_pack_folder: solution-pack-temp
-      build_number: init
+      build_number: 1.0.${{ github.run_number }}
 
     steps:
       - uses: actions/checkout@v2
-      - id: setOuput
-        run: |
-          echo "build_number=1.0" >> $GITHUB_ENV
+      
       - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@0.4.3
         with:

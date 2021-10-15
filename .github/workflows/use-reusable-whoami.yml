@@ -6,7 +6,6 @@ on:
 jobs:
 
   set-env-var-conditionally:
-    environment: foo
     runs-on: ubuntu-latest
     
     steps: 
@@ -21,8 +20,6 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
-      - run: |
-          echo "build_number=1.0.$(date +'%Y%m%d').${{ github.run_number }}" >> $GITHUB_ENV
     
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}

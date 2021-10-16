@@ -19,7 +19,7 @@ env:
 jobs:
   set-github-environment: # determine if the build should go to the PR or UAT environment
     runs-on: ubuntu-latest
-    environment: ${{ steps.setOuput.outputs.env }}
+    environment: ${{ job.steps.setOuput.outputs.env }}
     
     steps: 
       - name: uat env var

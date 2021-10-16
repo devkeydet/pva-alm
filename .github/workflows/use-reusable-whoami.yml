@@ -30,7 +30,7 @@ jobs:
     with: 
       environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
     secrets:      
-      environment_url: ${{ secrets.environment_url }}
+      environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

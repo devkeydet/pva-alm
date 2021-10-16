@@ -19,7 +19,6 @@ env:
 jobs:
   set-github-environment: # determine if the build should go to the PR or UAT environment
     runs-on: ubuntu-latest
-    environment: ${{ job.steps.setOuput.outputs.env }}
     
     steps: 
       - name: uat env var
@@ -33,10 +32,6 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
-
-      - name: temp
-        run: |
-          echo ${{ secrets.ENVIRONMENT_URL }}
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}

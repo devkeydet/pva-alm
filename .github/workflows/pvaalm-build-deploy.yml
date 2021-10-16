@@ -32,7 +32,11 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
-    
+
+      - name: temp
+        run: |
+          echo ${{ secrets.ENVIRONMENT_URL }}
+
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
 

@@ -14,7 +14,7 @@ on:
         type: string  
 
     secrets:
-      environment_url:
+      ENVIRONMENT_URL:
         required: true
       tenant_id:
         required: true
@@ -65,7 +65,7 @@ jobs:
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
         with:
-          environment-url: ${{ secrets.environment_url }}          
+          environment-url: ${{ secrets.ENVIRONMENT_URL }}          
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}

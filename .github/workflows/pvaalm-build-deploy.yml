@@ -44,7 +44,7 @@ jobs:
   
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
-    needs: build-solution
+    needs: [set-github-environment, build-solution] 
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
       environment: ${{ needs.set-github-environment.outputs.environment }}

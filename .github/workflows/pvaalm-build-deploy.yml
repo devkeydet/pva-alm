@@ -44,7 +44,7 @@ jobs:
       environment: ${{ steps.setOuput.outputs.env }}
   
   deploy-solution:
-    name: deploy solution to ${{ needs.set-github-environment.outputs.environment }}
+    name: deploy solution to ${{ needs.set-github-environment.outputs.environment }} environment
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: [set-github-environment, build-solution] 
     with:

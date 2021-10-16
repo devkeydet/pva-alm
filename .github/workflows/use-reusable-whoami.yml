@@ -24,26 +24,13 @@ jobs:
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
 
-  call-whoami-uat:
+  call-whoami:
     uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
-    needs: set-env-var-conditionally
-    if: needs.set-env-var-conditionally.outputs.environment == 'uat'
-    with: 
-      environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
-    secrets:      
-      environment_url: ${{ secrets.UAT_ENV }}
-      tenant_id: ${{ secrets.TENANT_ID }}
-      client_id: ${{ secrets.CLIENT_ID }}
-      client_secret: ${{ secrets.CLIENT_SECRET }}
-  
-  call-whoami-pr:
-    uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
-    if: needs.set-env-var-conditionally.outputs.environment == 'pr'
     needs: set-env-var-conditionally
     with: 
       environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
     secrets:      
-      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
+      ENVIRONMENT_URL: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

@@ -49,7 +49,7 @@ jobs:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
       environment: ${{ needs.set-github-environment.outputs.environment }}
     secrets:      
-      ENVIRONMENT_URL: ${{ secrets.ENVIRONMENT_URL }}
+      environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}

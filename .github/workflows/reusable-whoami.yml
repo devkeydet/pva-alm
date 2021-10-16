@@ -7,7 +7,7 @@ on:
         required: true
         type: string
     secrets:
-      ENVIRONMENT_URL:
+      environment_url:
         required: true
       tenant_id:
         required: true
@@ -27,7 +27,7 @@ jobs:
       - name: call whoami-action
         uses: microsoft/powerplatform-actions/who-am-i@0.4.3
         with:
-          environment-url: ${{ secrets.ENVIRONMENT_URL }}          
+          environment-url: ${{ secrets.environment_url }}          
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}

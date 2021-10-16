@@ -56,7 +56,7 @@ jobs:
         with:
           name: ${{ inputs.solution_name }}
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
-        if: ${{ !inputs.environment == 'prod' }}
+        if: ${{ !inputs.environment != 'prod' }}
           
       - uses: cschleiden/replace-tokens@v1
         with:

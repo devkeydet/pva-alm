@@ -17,7 +17,14 @@ env:
   environmenturl: temp
 
 jobs:
+  build-solution:
+    name: build solution
+    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
+    with:
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+  
   set-github-environment: # determine if the build should go to the PR or UAT environment
+    name: determine deployment environment
     runs-on: ubuntu-latest
     
     steps: 
@@ -35,14 +42,9 @@ jobs:
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
-
-  build-solution:
-    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
-    needs: set-github-environment
-    with:
-      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
   
   deploy-solution:
+    name: deploy solution to ${{ needs.set-github-environment.outputs.environment }}
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: [set-github-environment, build-solution] 
     with:

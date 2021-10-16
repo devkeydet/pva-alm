@@ -19,6 +19,7 @@ env:
 jobs:
   set-github-environment: # determine if the build should go to the PR or UAT environment
     runs-on: ubuntu-latest
+    environment: ${{ steps.setOuput.outputs.env }}
     
     steps: 
       - name: uat env var
@@ -48,6 +49,7 @@ jobs:
   
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    environment: ${{ needs.set-github-environment.outputs.environment }}
     needs: build-solution
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.

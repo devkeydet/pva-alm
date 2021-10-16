@@ -17,7 +17,7 @@ env:
   environmenturl: temp
 
 jobs:
-  set-env-var-conditionally:
+  set-github-environment: # determine if the build should go to the PR or UAT environment
     runs-on: ubuntu-latest
     
     steps: 
@@ -42,7 +42,7 @@ jobs:
 
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
-    needs: set-env-var-conditionally
+    needs: set-github-environment
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
   
@@ -51,7 +51,7 @@ jobs:
     needs: build-solution
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
-      environment: needs.set-env-var-conditionally.outputs.environment
+      environment: ${{ needs.set-github-environment.outputs.environment }}
     secrets:      
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}

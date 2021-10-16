@@ -28,7 +28,7 @@ jobs:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     with:
       solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name}}
-      deploy_to_prod: true
+      environment: 'prod'
       tag: ${{ github.event.inputs.tag }}
     secrets:      
       environment_url: ${{ secrets.PROD_ENV }}

@@ -6,12 +6,13 @@ on:
       solution_name:
         required: true
         type: string
-      deploy_to_prod:
-        required: false
-        type: string  
+      environment:
+        required: true
+        type: string
       tag:
         required: false
-        type: string    
+        type: string  
+
     secrets:
       environment_url:
         required: true
@@ -25,22 +26,24 @@ on:
 jobs:
   deploy-solution:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
 
     env:
       dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}
+      production_environment: prod
 
     steps:
-      - run: echo ${{ inputs.deploy_to_prod }}
+      - run: echo ${{ inputs.environment }}
 
       - uses: actions/checkout@v2
-        if: ${{ inputs.deploy_to_prod }}
+        if: ${{ inputs.environment == production_environment }}
 
       - run: |
           git fetch --all --tags
           $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}
           echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         shell: pwsh
-        if: ${{ inputs.deploy_to_prod }}
+        if: ${{ inputs.environment == production_environment }}
       
       - name: download prod artifact
         uses: dawidd6/action-download-artifact@v2
@@ -48,13 +51,13 @@ jobs:
           workflow: ${{ inputs.solution_name }}-build-deploy.yml
           commit: ${{ env.commit }}
           path: ${{ runner.temp }}
-        if: ${{ inputs.deploy_to_prod }}
+        if: ${{ inputs.environment == production_environment }}
 
       - uses: actions/download-artifact@v2
         with:
           name: ${{ inputs.solution_name }}
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
-        if: ${{ !inputs.deploy_to_prod }}
+        if: ${{ !inputs.environment == production_environment }}
           
       - uses: cschleiden/replace-tokens@v1
         with:

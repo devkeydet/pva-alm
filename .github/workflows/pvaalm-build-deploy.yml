@@ -18,7 +18,6 @@ env:
 
 jobs:
   set-env-var-conditionally:
-    environment: foo
     runs-on: ubuntu-latest
     
     steps: 
@@ -43,27 +42,14 @@ jobs:
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
   
-  deploy-solution-pr:
+  deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
-    if: needs.set-env-var-conditionally.outputs.environment == 'pr'
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
+      environment: needs.set-env-var-conditionally.outputs.environment
     secrets:      
-      environment_url: ${{ secrets.PR_VALIDATION_ENV }}
+      environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}
-
-  deploy-solution-uat:
-    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
-    needs: build-solution
-    if: needs.set-env-var-conditionally.outputs.environment == 'uat'
-    with:
-      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
-    secrets:      
-      environment_url: ${{ secrets.UAT_ENV }}
-      tenant_id: ${{ secrets.TENANT_ID }}
-      client_id: ${{ secrets.CLIENT_ID }}
-      client_secret: ${{ secrets.CLIENT_SECRET }}
-      

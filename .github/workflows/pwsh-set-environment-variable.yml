@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: my-step
-        run: echo "::set-output name=my_output::foo"
         shell: pwsh
-      - run: echo "my_env=${{ steps.my-step.outputs.my_output  }}" >> $GITHUB_ENV
+        run: echo "::set-output name=my_output::foo"        
+      - shell: pwsh
+        run: |
+          echo "my_env=${{ steps.my-step.outputs.my_output  }}" >> $GITHUB_ENVshell: pwsh
       - run: echo "${{ env.my_env }}"

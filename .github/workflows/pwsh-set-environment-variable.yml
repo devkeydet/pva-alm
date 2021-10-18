@@ -1,0 +1,15 @@
+name: pwsh-set-environment-variable.yml
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - id: my-step
+        run: echo "::set-output name=my_output::foo"
+        shell: pwsh
+      - run: echo "my_env=${{ steps.my-step.outputs.my_output  }}" >> $GITHUB_ENV
+      - run: echo "${{ env.my_env }}"

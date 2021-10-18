@@ -15,16 +15,11 @@ on:
 env:
   solution_name: pvaalm
   environmenturl: temp
+  build_number: '1.0'
 
 jobs:
-  build-solution:
-    name: build solution
-    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
-    with:
-      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
-  
-  set-github-environment: # determine if the build should go to the PR or UAT environment
-    name: determine deployment environment
+  set-github-environment-build-number: # determine if the build should go to the PR or UAT environment
+    name: determine deployment environment and generate build number
     runs-on: ubuntu-latest
     
     steps: 
@@ -39,9 +34,21 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
+          $dateStamp = Get-Date -Format "yyyyMMdd"
+          $buildNumber = "${{ env.build_number }}.$dateStamp.${{ github.run_number }}"
+          echo "::set-output name=env::${{ env.environment }}"
+        shell: pwsh
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
+
+  build-solution:
+    name: build solution
+    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
+    
+    with:
+      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.      
+      build_number: "${{ env.build_number }}"   
   
   deploy-solution:
     name: deploy solution to ${{ needs.set-github-environment.outputs.environment }} environment

@@ -6,6 +6,9 @@ on:
       solution_name:
         required: true
         type: string
+      build_number:
+        required: true
+        type: string
 
 jobs:
   build-solution:
@@ -13,7 +16,6 @@ jobs:
 
     env:
       solution_pack_folder: solution-pack-temp
-      build_number: 1.0.${{ github.run_number }}
 
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +29,7 @@ jobs:
             github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/${{ inputs.solution_name }}-${{ env.build_number }}",
+              ref: "refs/tags/${{ inputs.solution_name }}-${{ inputs.build_number }}",
               sha: context.sha
             })
 
@@ -37,7 +39,7 @@ jobs:
           Get-ChildItem -Path "src/${{ inputs.solution_name }}/SolutionPackage/Other/Solution.xml" | 
           ForEach-Object {
                 (Get-Content $_.FullName) `
-                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ env.build_number }}</Version>' |
+                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ inputs.build_number }}</Version>' |
                 Out-File $_.FullName
           }
 

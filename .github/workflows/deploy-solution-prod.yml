@@ -35,3 +35,5 @@ jobs:
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}
+  
+  #TODO: Create a release in GitHub

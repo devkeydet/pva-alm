@@ -61,6 +61,13 @@ jobs:
       - uses: cschleiden/replace-tokens@v1
         with:
           files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
+
+      - id: get-solution-zip
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" | Where-Object{$_.Name.startsWith('solution')}
+          $solutionZip = $files[0].Name
+          echo "::set-output name=solution_zip::$solutionZip"
         
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@0.4.3
@@ -69,6 +76,6 @@ jobs:
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}
-          solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}.zip
+          solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
           force-overwrite: true
           #deploymentSettings.json support coming soon

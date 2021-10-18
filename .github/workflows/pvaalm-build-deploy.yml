@@ -42,7 +42,7 @@ jobs:
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
-      build_number: ${{ steps.setOuput.outputs.env }}
+      build_number: ${{ steps.setOuput.outputs.build }}
 
   build-solution:
     name: build solution

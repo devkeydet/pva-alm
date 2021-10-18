@@ -47,12 +47,12 @@ jobs:
         uses: microsoft/powerplatform-actions/pack-solution@0.4.3
         with:
           solution-folder: src/${{ inputs.solution_name }}/SolutionPackage
-          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
+          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}_${{ inputs.build_number }}.zip
           solution-type: Managed
       
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ inputs.solution_name }}
-          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}.zip
+          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}_${{ inputs.build_number }}.zip
       
       

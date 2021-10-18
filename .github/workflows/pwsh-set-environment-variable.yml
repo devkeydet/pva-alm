@@ -10,7 +10,6 @@ jobs:
       - id: my-step
         shell: pwsh
         run: echo "::set-output name=my_output::foo"        
-      - shell: pwsh
-        run: |
+      - run: |
           echo "my_env=${{ steps.my-step.outputs.my_output  }}" >> $GITHUB_ENV
       - run: echo "${{ env.my_env }}"

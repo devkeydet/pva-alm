@@ -65,7 +65,7 @@ jobs:
       - id: get-solution-zip
         shell: pwsh
         run: |
-          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" | Where-Object{$_.Name.startsWith('solution')}
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" | Where-Object{$_.Name.startsWith('${{ inputs.solution_name }}')}
           $solutionZip = $files[0].Name
           echo "::set-output name=solution_zip::$solutionZip"
         

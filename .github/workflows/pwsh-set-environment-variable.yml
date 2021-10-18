@@ -9,7 +9,11 @@ jobs:
     steps:
       - id: my-step
         shell: pwsh
-        run: echo "::set-output name=my_output::foo"        
+        run: echo "::set-output name=my_output::foo"
+      # "" >> $GITHUB_ENV doesn't work in  action using pwsh and the alternative is verbose:
+      # https://www.jamescroft.co.uk/setting-github-actions-environment-variables-in-powershell/
+      # Instead, we use two run actions.  One to set an output from the pwsh step, then another
+      # to set the environment variable using output value form pwsh step.
       - run: |
           echo "my_env=${{ steps.my-step.outputs.my_output  }}" >> $GITHUB_ENV
       - run: echo "${{ env.my_env }}"

@@ -1,5 +1,4 @@
-name: pwsh-set-environment-variable.yml
-
+name: pwsh-set-environment-variable
 on:
   workflow_dispatch:
 

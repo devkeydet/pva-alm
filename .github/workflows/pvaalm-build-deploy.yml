@@ -14,15 +14,15 @@ on:
 
 env:
   solution_name: pvaalm
-  environmenturl: temp
-  build_number: '1.0'
+  solution_version_major_minor: '1.0'
 
 jobs:
-  set-github-environment-build-number: # determine if the build should go to the PR or UAT environment
+  set-variables-output: 
     name: determine deployment environment and generate build number
     runs-on: ubuntu-latest
     
     steps: 
+      # determine if the build should go to the PR or UAT environment
       - name: uat env var
         if: github.ref == 'refs/heads/main'
         run: |
@@ -31,32 +31,34 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: |
           echo "environment=pr" >> $GITHUB_ENV
+      # set environment and build number as output variables for further use
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
           $dateStamp = Get-Date -Format "yyyyMMdd"
-          $buildNumber = "${{ env.build_number }}.$dateStamp.${{ github.run_number }}"
-          echo "::set-output name=env::${{ env.environment }}"
+          $buildNumber = "${{ env.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
+          echo "::set-output name=build::$buildNumber"
         shell: pwsh
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
+      build_number: ${{ steps.setOuput.outputs.env }}
 
   build-solution:
     name: build solution
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
-    
+    needs: set-variables-output 
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.      
-      build_number: "${{ env.build_number }}"   
+      build_number: "${{ needs.set-variables-output.outputs.build_number }}"   
   
   deploy-solution:
-    name: deploy solution to ${{ needs.set-github-environment.outputs.environment }} environment
+    name: deploy solution to ${{ needs.set-variables-output.outputs.environment }} environment
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
-    needs: [set-github-environment, build-solution] 
+    needs: [set-variables-output, build-solution] 
     with:
       solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
-      environment: ${{ needs.set-github-environment.outputs.environment }}
+      environment: ${{ needs.set-variables-output.outputs.environment }}
     secrets:      
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}

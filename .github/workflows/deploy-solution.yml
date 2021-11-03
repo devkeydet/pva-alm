@@ -57,7 +57,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
-        if: ${{ inputs.environment -ne 'prod' }}
+        if: ${{ inputs.environment != 'prod' }}
 
       - name: prepare token variables
         shell: pwsh
@@ -65,7 +65,7 @@ jobs:
           $csv = @"
           ${{ secrets.deploymentsettings_tokens }}
           "@
-          if ([String]::IsNullOrWhiteSpace($csv) != True){
+          if ([String]::IsNullOrWhiteSpace($csv) -ne True){
             $tokenAarray = $csv.Split('\n')
             foreach ($tokenValuePairString in $tokenAarray){
               $tokenValuePair = $tokenValuePairString.Split(',')

@@ -59,7 +59,7 @@ jobs:
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment != 'prod' }}
 
-      - name: prepare token variables
+      - name: prepare deploymentSettings.js token variables
         shell: pwsh
         run: |          
           $csv = @"

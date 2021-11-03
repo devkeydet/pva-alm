@@ -71,9 +71,15 @@ jobs:
           $tokenAarray = $csv.Split('\n')
           foreach ($tokenValuePairString in $tokenAarray){
             $tokenValuePair = $tokenValuePairString.Split(',')
-            Write-Host $tokenValuePair[0]
-            Write-Host $tokenValuePair[1]
+            $tokenName = $tokenValuePair[0]
+            $tokenValue = $tokenValuePair[1]
+            echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
           }
+      
+      - name: validate variable set
+        shell: pwsh
+        run: |          
+          Write-Host ${{ env.dkdt_pvamsnweather }}
 
       - uses: cschleiden/replace-tokens@v1
         with:

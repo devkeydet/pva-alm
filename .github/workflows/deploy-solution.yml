@@ -72,10 +72,10 @@ jobs:
         run: |
           #$location = Get-Location
           #Write-Host $location
-          #$subdirectories = Get-ChildItem
-          #Write-Host $subdirectories
-          $content = Get-Content ${{ runner.temp }}/deploymentSettings.json
-          Write-Host $content
+          $content = Get-ChildItem ${{ runner.temp }}/deploymentSettings.json
+          Write-Host $subdirectories
+          #$content = Get-Content ${{ runner.temp }}/deploymentSettings.json
+          #$Write-Host $content
 
       - id: get-solution-zip
         shell: pwsh
@@ -93,4 +93,4 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
           force-overwrite: true
-          #deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json
+          #deployment-settings-file: ${{ runner.temp }}/deploymentSettings.json

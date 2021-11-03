@@ -57,7 +57,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
-        if: ${{ inputs.environment != 'prod' }}
+        if: ${{ inputs.environment -ne 'prod' }}
 
       - name: prepare token variables
         shell: pwsh

@@ -25,12 +25,11 @@ on:
       deploymentsettings_tokens:
         required: false
         # should be in the form of 
-        #[
-        #    ["token1","value"],
         #
-        #    ["token2","value"]
-        #]
-
+        # token1,value
+        # token2,value
+        # token3,value
+        
 jobs:
   deploy-solution:
     runs-on: ubuntu-latest
@@ -66,11 +65,12 @@ jobs:
       - name: prepare token variables
         shell: pwsh
         run: |          
-          $json = @"
+          $csv = @"
           ${{ secrets.deploymentsettings_tokens }}
           "@
-          $tokenAarray = ConvertFrom-Json $json
-          foreach ($tokenValuePair){
+          $tokenAarray = $csv.Split('\n')
+          foreach ($tokenValuePairString){
+            $tokenValuePair = $tokenValuePairString.Split(',')
             Write-Host $tokenValuePair[0]
             Write-Host $tokenValuePair[1]
           }

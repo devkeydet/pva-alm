@@ -28,14 +28,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
 
-    env:
-      dkdt_PVAMSNWeather: ${{ secrets.DKDT_PVAMSNWEATHER }}
-
-    steps:
-      - run: echo ${{ inputs.environment }}
-
+    steps:   
       - uses: actions/checkout@v2
         if: ${{ inputs.environment == 'prod' }}
+      
+      - uses: Firenza/secrets-to-env@v1.1.0
+        with:
+            secrets: ${{ toJSON(secrets) }}
+            secret_filter_regex: DKDT_*
 
       - run: |
           git fetch --all --tags
@@ -64,7 +64,7 @@ jobs:
       - name: show deploymentSettings.json
         shell: pwsh
         run: |
-          Write-Host "dkdt_PVAMSNWeather: ${{ env.dkdt_PVAMSNWeather }}"
+          Write-Host "dkdt_PVAMSNWeather: ${{ env.DKDT_PVAMSNWEATHER }}"
           #$location = Get-Location
           #Write-Host $location
           $results = Get-ChildItem ${{ runner.temp }}/${{ inputs.solution_name }}/artifact

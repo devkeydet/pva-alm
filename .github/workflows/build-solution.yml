@@ -49,13 +49,13 @@ jobs:
           solution-folder: src/${{ inputs.solution_name }}/SolutionPackage
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}_${{ inputs.build_number }}.zip
           solution-type: Managed
+      
+      - name: copy deploymentSettings.json
+        shell: pwsh
+        run: |
+          Copy-Item "src/${{ inputs.solution_name }}/deploymentSettings.json" -Destination "${{ runner.temp }}/${{ env.solution_pack_folder }}"
 
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ inputs.solution_name }}
-          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}_${{ inputs.build_number }}.zip
-      
-      - uses: actions/upload-artifact@v2
-        with:
-          name: deploymentSettings
-          path: src/${{ inputs.solution_name }}/deploymentSettings.json
+          name: artifact
+          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}

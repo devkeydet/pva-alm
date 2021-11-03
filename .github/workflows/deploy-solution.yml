@@ -59,7 +59,7 @@ jobs:
 
       - uses: cschleiden/replace-tokens@v1
         with:
-          files: '["${{ runner.temp }}/deploymentSettings.json"]'
+          files: '["${{ runner.temp }}/${{ inputs.solution_name }}/deploymentSettings/deploymentSettings.json"]'
 
       - name: show deploymentSettings.json
         shell: pwsh

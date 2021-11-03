@@ -65,13 +65,15 @@ jobs:
           $csv = @"
           ${{ secrets.deploymentsettings_tokens }}
           "@
-          $tokenAarray = $csv.Split('\n')
-          foreach ($tokenValuePairString in $tokenAarray){
-            $tokenValuePair = $tokenValuePairString.Split(',')
-            $tokenName = $tokenValuePair[0]
-            $tokenValue = $tokenValuePair[1]
-            echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-          }
+          if ([String]::IsNullOrWhiteSpace($csv) != True){
+            $tokenAarray = $csv.Split('\n')
+            foreach ($tokenValuePairString in $tokenAarray){
+              $tokenValuePair = $tokenValuePairString.Split(',')
+              $tokenName = $tokenValuePair[0]
+              $tokenValue = $tokenValuePair[1]
+              echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+            }
+          }          
 
       - uses: cschleiden/replace-tokens@v1
         with:

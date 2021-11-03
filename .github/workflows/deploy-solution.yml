@@ -69,7 +69,7 @@ jobs:
           $results = Get-ChildItem ${{ runner.temp }}/${{ inputs.solution_name }}
           Write-Host $results
           $content = Get-Content ${{ runner.temp }}/deploymentSettings/deploymentSettings.json
-          $Write-Host $content
+          Write-Host $content
 
       - id: get-solution-zip
         shell: pwsh

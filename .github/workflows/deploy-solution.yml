@@ -71,6 +71,11 @@ jobs:
           Write-Host $results
           $content = Get-Content ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
           Write-Host $content
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: updated-deploymentSettings
+          path: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
 
       - id: get-solution-zip
         shell: pwsh

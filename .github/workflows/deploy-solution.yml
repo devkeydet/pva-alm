@@ -65,7 +65,10 @@ jobs:
       - name: show deploymentSettings.json
         shell: pwsh
         run: |
-          Write-Host Get-Location
+          $location = Get-Location
+          Write-Host $location
+          $subdirectories = Get-ChildItem
+          Write-Host $subdirectories
           #Get-Content src/${{ inputs.solution_name }}/deploymentSettings.json
 
       - id: get-solution-zip

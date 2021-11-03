@@ -51,7 +51,8 @@ jobs:
         with:
           workflow: ${{ inputs.solution_name }}-build-deploy.yml
           commit: ${{ env.commit }}
-          path: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact
+          path: ${{ runner.temp }}/${{ inputs.solution_name }}
+          name: artifact
         if: ${{ inputs.environment == 'prod' }}
 
       - uses: actions/download-artifact@v2

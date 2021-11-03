@@ -66,9 +66,14 @@ jobs:
       - name: prepare token variables
         shell: pwsh
         run: |          
-          Write-Host @"
+          $json = @"
           ${{ secrets.deploymentsettings_tokens }}
           "@
+          $tokenAarray = ConvertFrom-Json $json
+          foreach ($tokenValuePair){
+            Write-Host $tokenValuePair[0]
+            Write-Host $tokenValuePair[1]
+          }
 
       - uses: cschleiden/replace-tokens@v1
         with:

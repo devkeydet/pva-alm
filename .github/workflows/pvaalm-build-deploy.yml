@@ -64,4 +64,4 @@ jobs:
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}
-      dkdt_pvamsnweather: ${{ secrets.DKDT_PVAMSNWEATHER }}
+      deploymentsettings_tokens: ${{ secrets.PVAALM_DEPLOYMENTSETTINGS_TOKENS }}

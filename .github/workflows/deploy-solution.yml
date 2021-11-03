@@ -22,8 +22,14 @@ on:
         required: true
       client_secret:
         required: true
-      dkdt_pvamsnweather:
-        required: true
+      deploymentsettings_tokens:
+        required: false
+        # should be in the form of 
+        #[
+        #    ["token1","value"],
+        #
+        #    ["token2","value"]
+        #]
 
 jobs:
   deploy-solution:
@@ -57,20 +63,16 @@ jobs:
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment != 'prod' }}
 
+      - name: prepare token variables
+        shell: pwsh
+        run: |          
+          Write-Host @"
+          ${{ secrets.deploymentsettings_tokens }}
+          "@
+
       - uses: cschleiden/replace-tokens@v1
         with:
-          files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'
-
-      - name: show deploymentSettings.json
-        shell: pwsh
-        run: |
-          Write-Host "dkdt_PVAMSNWeather: ${{ env.dkdt_pvamsnweather }}"
-          #$location = Get-Location
-          #Write-Host $location
-          $results = Get-ChildItem ${{ runner.temp }}/${{ inputs.solution_name }}/artifact
-          Write-Host $results
-          $content = Get-Content ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
-          Write-Host $content
+          files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'      
 
       - id: get-solution-zip
         shell: pwsh
@@ -88,4 +90,4 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/${{ steps.get-solution-zip.outputs.solution_zip }}
           force-overwrite: true
-          deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
+          #deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json

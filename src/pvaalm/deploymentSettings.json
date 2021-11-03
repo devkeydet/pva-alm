@@ -3,7 +3,7 @@
     "ConnectionReferences": [
       {
         "LogicalName": "dkdt_PVAMSNWeather",
-        "ConnectionId": "#{dkdt_PVAMSNWeather}#",
+        "ConnectionId": "#{dkdt_pvamsnweather}#",
         "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_msnweather"
       }
     ]

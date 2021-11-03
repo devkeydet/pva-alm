@@ -62,6 +62,11 @@ jobs:
         with:
           files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
 
+      - name: show deploymentSettings.json
+        shell: pwsh
+        run: |
+          Get-Content src/${{ inputs.solution_name }}/deploymentSettings.json
+
       - id: get-solution-zip
         shell: pwsh
         run: |
@@ -70,7 +75,7 @@ jobs:
           echo "::set-output name=solution_zip::$solutionZip"
 
       - name: import solution to environment
-        uses: microsoft/powerplatform-actions/import-solution@v0
+        uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0 
         with:
           environment-url: ${{ secrets.environment_url }}
           tenant-id: ${{ secrets.tenant_id }}
@@ -78,4 +83,4 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
           force-overwrite: true
-          #deploymentSettings.json support coming soon
+          #deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json

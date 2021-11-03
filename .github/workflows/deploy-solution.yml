@@ -29,7 +29,7 @@ jobs:
     environment: ${{ inputs.environment }}
 
     env:
-      dkdt_PVAMSNWeather: ${{ secrets.PR_DKDT_PVAMSNWEATHER }}
+      dkdt_PVAMSNWeather: ${{ secrets.DKDT_PVAMSNWEATHER }}
 
     steps:
       - run: echo ${{ inputs.environment }}
@@ -59,7 +59,7 @@ jobs:
 
       - uses: cschleiden/replace-tokens@v1
         with:
-          files: '["${{ runner.temp }}/${{ inputs.solution_name }}/deploymentSettings/deploymentSettings.json"]'
+          files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'
 
       - name: show deploymentSettings.json
         shell: pwsh

@@ -65,6 +65,7 @@ jobs:
       - name: show deploymentSettings.json
         shell: pwsh
         run: |
+          dir
           Get-Content src/${{ inputs.solution_name }}/deploymentSettings.json
 
       - id: get-solution-zip

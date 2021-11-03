@@ -69,7 +69,7 @@ jobs:
           ${{ secrets.deploymentsettings_tokens }}
           "@
           $tokenAarray = $csv.Split('\n')
-          foreach ($tokenValuePairString){
+          foreach ($tokenValuePairString in $tokenAarray){
             $tokenValuePair = $tokenValuePairString.Split(',')
             Write-Host $tokenValuePair[0]
             Write-Host $tokenValuePair[1]

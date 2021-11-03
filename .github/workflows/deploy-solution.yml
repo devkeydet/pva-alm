@@ -72,8 +72,8 @@ jobs:
         run: |
           #$location = Get-Location
           #Write-Host $location
-          $content = Get-ChildItem ${{ runner.temp }}/deploymentSettings.json
-          Write-Host $subdirectories
+          $results = Get-ChildItem ${{ runner.temp }}/deploymentSettings.json
+          Write-Host $results
           #$content = Get-Content ${{ runner.temp }}/deploymentSettings.json
           #$Write-Host $content
 

@@ -65,7 +65,7 @@ jobs:
           $csv = @"
           ${{ secrets.deploymentsettings_tokens }}
           "@
-          if ([String]::IsNullOrWhiteSpace($csv) -ne True){
+          if (-Not [String]::IsNullOrWhiteSpace($csv)){
             $tokenAarray = $csv.Split('\n')
             foreach ($tokenValuePairString in $tokenAarray){
               $tokenValuePair = $tokenValuePairString.Split(',')

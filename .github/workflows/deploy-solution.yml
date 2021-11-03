@@ -35,9 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
 
-    env:
-      dkdt_pvamsnweather: ${{ secrets.dkdt_pvamsnweather }}
-
     steps:   
       - uses: actions/checkout@v2
         if: ${{ inputs.environment == 'prod' }}
@@ -75,11 +72,6 @@ jobs:
             $tokenValue = $tokenValuePair[1]
             echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
           }
-      
-      - name: validate variable set
-        shell: pwsh
-        run: |          
-          Write-Host ${{ env.dkdt_pvamsnweather }}
 
       - uses: cschleiden/replace-tokens@v1
         with:

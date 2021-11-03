@@ -36,14 +36,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}
-      
+
       - name: create new git branch
         if: github.event.inputs.branch_to_create != ''
         run: |
           git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
 
       - name: export-unmanaged-solution action
-        uses: microsoft/powerplatform-actions/export-solution@0.4.3
+        uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
           app-id: ${{ secrets.CLIENT_ID }}
@@ -53,7 +53,7 @@ jobs:
           solution-output-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
 
       - name: export-managed-solution action
-        uses: microsoft/powerplatform-actions/export-solution@0.4.3
+        uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
           app-id: ${{ secrets.CLIENT_ID }}
@@ -64,14 +64,14 @@ jobs:
           managed: true
 
       - name: unpack-solution action
-        uses: microsoft/powerplatform-actions/unpack-solution@0.4.3
+        uses: microsoft/powerplatform-actions/unpack-solution@v0
         with:
           solution-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
           solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
           solution-type: "Both"
           overwrite-files: true
 
-      - name : clear out solution version number
+      - name: clear out solution version number
         shell: pwsh
         run: |
           Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage/**/Solution.xml" | 

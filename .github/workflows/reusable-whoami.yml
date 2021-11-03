@@ -14,7 +14,7 @@ on:
       client_id:
         required: true
       client_secret:
-        required: true  
+        required: true
 
 jobs:
   whoami:
@@ -22,12 +22,12 @@ jobs:
 
     environment: ${{ inputs.environment }}
 
-    steps:   
+    steps:
       # comment
       - name: call whoami-action
-        uses: microsoft/powerplatform-actions/who-am-i@0.4.3
+        uses: microsoft/powerplatform-actions/who-am-i@v0
         with:
-          environment-url: ${{ secrets.environment_url }}          
+          environment-url: ${{ secrets.environment_url }}
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}

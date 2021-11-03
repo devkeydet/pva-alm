@@ -11,7 +11,7 @@ on:
         type: string
       tag:
         required: false
-        type: string  
+        type: string
 
     secrets:
       environment_url:
@@ -43,7 +43,7 @@ jobs:
           echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         shell: pwsh
         if: ${{ inputs.environment == 'prod' }}
-      
+
       - name: download prod artifact
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -57,7 +57,7 @@ jobs:
           name: ${{ inputs.solution_name }}
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment != 'prod' }}
-          
+
       - uses: cschleiden/replace-tokens@v1
         with:
           files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
@@ -68,11 +68,11 @@ jobs:
           $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" | Where-Object{$_.Name.startsWith('${{ inputs.solution_name }}')}
           $solutionZip = $files[0].Name
           echo "::set-output name=solution_zip::$solutionZip"
-        
+
       - name: import solution to environment
-        uses: microsoft/powerplatform-actions/import-solution@0.4.3
+        uses: microsoft/powerplatform-actions/import-solution@v0
         with:
-          environment-url: ${{ secrets.environment_url }}          
+          environment-url: ${{ secrets.environment_url }}
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}

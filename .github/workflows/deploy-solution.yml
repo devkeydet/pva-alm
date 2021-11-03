@@ -64,6 +64,7 @@ jobs:
       - name: show deploymentSettings.json
         shell: pwsh
         run: |
+          Write-Host "dkdt_PVAMSNWeather: {{ env.dkdt_PVAMSNWeather }}""
           #$location = Get-Location
           #Write-Host $location
           $results = Get-ChildItem ${{ runner.temp }}/${{ inputs.solution_name }}/artifact

@@ -15,8 +15,6 @@ on:
         required: true
       client_secret:
         required: true
-      all-secrets: 
-        required: false
 
 jobs:
   whoami:
@@ -33,7 +31,3 @@ jobs:
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}
-
-      - uses: Firenza/secrets-to-env@v1.1.0
-        with:
-            secrets: ${{ toJSON(secrets.all-secrets) }}

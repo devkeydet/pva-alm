@@ -29,7 +29,7 @@ jobs:
     environment: ${{ inputs.environment }}
 
     env:
-      dkdt_PVAMSNWeather: ${{ secrets.DKDT_PVAMSNWEATHER }}
+      dkdt_PVAMSNWeather: 'foo'
 
     steps:
       - run: echo ${{ inputs.environment }}

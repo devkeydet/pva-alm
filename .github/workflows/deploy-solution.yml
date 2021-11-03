@@ -54,14 +54,8 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: ${{ inputs.solution_name }}
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment != 'prod' }}
-      
-      - uses: actions/download-artifact@v2
-        with:
-          name: deploymentSettings
-          path: ${{ runner.temp }}/${{ inputs.solution_name }}
 
       - uses: cschleiden/replace-tokens@v1
         with:

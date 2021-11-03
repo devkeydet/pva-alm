@@ -66,15 +66,15 @@ jobs:
         run: |
           #$location = Get-Location
           #Write-Host $location
-          $results = Get-ChildItem ${{ runner.temp }}/${{ inputs.solution_name }}
+          $results = Get-ChildItem ${{ runner.temp }}/${{ inputs.solution_name }}/artifact
           Write-Host $results
-          $content = Get-Content ${{ runner.temp }}/${{ inputs.solution_name }}/deploymentSettings.json
+          $content = Get-Content ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
           Write-Host $content
 
       - id: get-solution-zip
         shell: pwsh
         run: |
-          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" | Where-Object{$_.Name.startsWith('${{ inputs.solution_name }}')}
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.startsWith('${{ inputs.solution_name }}')}
           $solutionZip = $files[0].Name
           echo "::set-output name=solution_zip::$solutionZip"
 
@@ -85,6 +85,6 @@ jobs:
           tenant-id: ${{ secrets.tenant_id }}
           app-id: ${{ secrets.client_id }}
           client-secret: ${{ secrets.client_secret }}
-          solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
+          solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/${{ steps.get-solution-zip.outputs.solution_zip }}
           force-overwrite: true
-          #deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/deploymentSettings.json
+          #deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json

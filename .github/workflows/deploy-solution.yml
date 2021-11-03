@@ -57,10 +57,15 @@ jobs:
           name: ${{ inputs.solution_name }}
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment != 'prod' }}
+      
+      - uses: actions/download-artifact@v2
+        with:
+          name: deploymentSettings
+          path: ${{ runner.temp }}/deploymentSettings.json
 
       - uses: cschleiden/replace-tokens@v1
         with:
-          files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
+          files: '["${{ runner.temp }}/deploymentSettings.json"]'
 
       - name: show deploymentSettings.json
         shell: pwsh
@@ -69,7 +74,7 @@ jobs:
           Write-Host $location
           $subdirectories = Get-ChildItem
           Write-Host $subdirectories
-          #Get-Content src/${{ inputs.solution_name }}/deploymentSettings.json
+          #Get-Content ${{ runner.temp }}/deploymentSettings.json
 
       - id: get-solution-zip
         shell: pwsh

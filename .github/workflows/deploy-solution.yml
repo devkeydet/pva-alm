@@ -22,20 +22,20 @@ on:
         required: true
       client_secret:
         required: true
+      dkdt_pvamsnweather:
+        required: true
 
 jobs:
   deploy-solution:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
 
+    env:
+      dkdt_pvamsnweather: ${{ secrets.dkdt_pvamsnweather }}
+
     steps:   
       - uses: actions/checkout@v2
         if: ${{ inputs.environment == 'prod' }}
-      
-      - uses: Firenza/secrets-to-env@v1.1.0
-        with:
-            secrets: ${{ toJSON(secrets) }}
-            secret_filter_regex: DKDT_*
 
       - run: |
           git fetch --all --tags
@@ -64,18 +64,13 @@ jobs:
       - name: show deploymentSettings.json
         shell: pwsh
         run: |
-          Write-Host "dkdt_PVAMSNWeather: ${{ env.DKDT_PVAMSNWEATHER }}"
+          Write-Host "dkdt_PVAMSNWeather: ${{ env.dkdt_pvamsnweather }}"
           #$location = Get-Location
           #Write-Host $location
           $results = Get-ChildItem ${{ runner.temp }}/${{ inputs.solution_name }}/artifact
           Write-Host $results
           $content = Get-Content ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
           Write-Host $content
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: updated-deploymentSettings
-          path: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
 
       - id: get-solution-zip
         shell: pwsh

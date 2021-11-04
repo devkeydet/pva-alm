@@ -72,7 +72,7 @@ jobs:
               $tokenName = $tokenValuePair[0]
               $tokenValue = $tokenValuePair[1]
               echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-              $maskVariable = "::add-mask::$dkdt_pvamsnweather"
+              echo "::add-mask::71c264db46114dafb7f2234fd23e1389"
             }
           }          
 

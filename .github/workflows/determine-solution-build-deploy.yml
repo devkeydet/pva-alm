@@ -39,12 +39,14 @@ jobs:
           $files = git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
           $filesArray = $files -split ' '
 
+          echo $filesArray
+
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
           foreach ($file in $filesArray) {         
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
               $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')              
-              echo = $solutionDirectory
+              echo $solutionDirectory
               $solutionDirectoriesArray.Add($solutionDirectory)
             }        
           }

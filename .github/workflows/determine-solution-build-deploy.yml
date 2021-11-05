@@ -43,14 +43,17 @@ jobs:
 
           foreach ($file in $filesArray) {         
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
-              $solutionDirectoriesArray.Add("{0}/{1}/{2}" -f $file.Split('/'))
+              $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')              
+              echo = $solutionDirectory
+              $solutionDirectoriesArray.Add($solutionDirectory)
             }        
           }
 
           $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
           
-          foreach ($dir in $uniqueSolutionDirectories) {
+          foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
+            echo $solutionName
 
             $ref = "${{ github.ref }}"
             $branch = $ref.Replace("refs/heads/","")

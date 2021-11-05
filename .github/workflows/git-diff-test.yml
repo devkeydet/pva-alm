@@ -12,6 +12,10 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-       
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
       - run: |
-          git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            echo "Do something with this ${changed_file}."
+          done

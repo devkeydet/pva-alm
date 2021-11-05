@@ -38,32 +38,32 @@ jobs:
       # if found, queue build and deply workflow
       - shell: pwsh
         run: |
-          $files = "${{ steps.files.outputs.all }}""
+          $files = "${{ steps.files.outputs.all }}"
           echo $files
-          # $filesArray = $files -split ','
+          $filesArray = $files -split ','
 
-          #echo $filesArray
+          echo $filesArray
 
-          # $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
+          $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
-          # foreach ($file in $filesArray) {         
-          #   if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
-          #     $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')              
-          #     echo $solutionDirectory
-          #     $solutionDirectoriesArray.Add($solutionDirectory)
-          #   }        
-          # }
+          foreach ($file in $filesArray) {         
+            if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
+              $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')              
+              echo $solutionDirectory
+              $solutionDirectoriesArray.Add($solutionDirectory)
+            }        
+          }
 
-          # $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
+          $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
           
-          # foreach ($dir in $uniqueSolutionDirectories) {            
-          #   $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
-          #   echo $solutionName
+          foreach ($dir in $uniqueSolutionDirectories) {            
+            $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
+            echo $solutionName
 
-          #   $ref = "${{ github.ref }}"
-          #   $branch = $ref.Replace("refs/heads/","")
+            $ref = "${{ github.ref }}"
+            $branch = $ref.Replace("refs/heads/","")
 
-          #   gh workflow run gh-test -f branch=$branch -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
+            gh workflow run gh-test -f branch=$branch -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
-          #   echo "pipeline queued for $solutionName"
-          # }
+            echo "pipeline queued for $solutionName"
+          }

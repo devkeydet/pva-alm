@@ -10,8 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: List issues
+      - name: call workflow
+        shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         run: |
-          gh workflow run gh-test        
+            $foo = gh issue list
+            echo $foo
+            $foo = gh workflow run gh-test
+            echo $foo

@@ -10,6 +10,8 @@ jobs:
   determine-solution-build-deploy: 
     runs-on: ubuntu-latest
     
-    steps: 
+    steps:
+      - uses: actions/checkout@v2
+       
       - run: |
           git diff-tree --no-commit-id --name-only -r ${{ github.sha }}

@@ -10,9 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: |
-          $foo = gh issue list
-          echo $foo
+      - name: list issues
         shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        run: |
+            $foo = gh issue list
+            echo $foo
+        

@@ -1,0 +1,15 @@
+name: gh-test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: List issues
+        run: |
+          gh issue list

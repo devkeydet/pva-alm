@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps: 
+      - uses: actions/checkout@v2
       # determine if the build should go to the PR or UAT environment
       - name: uat env var
         if: github.ref == 'refs/heads/main'

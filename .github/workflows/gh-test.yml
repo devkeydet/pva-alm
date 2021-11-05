@@ -17,4 +17,6 @@ jobs:
         run: |
           #$foo = gh issue list
           #echo $foo
-          gh issue list     
+          gh issue list
+          gh issue lis
+          gh workflow list

@@ -15,5 +15,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         run: |
-          gh issue list
-          gh workflow list
+          gh workflow run gh-test

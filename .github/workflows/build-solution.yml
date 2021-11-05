@@ -22,6 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       # set environment and build number as output variables for further use
       - id: setOutput

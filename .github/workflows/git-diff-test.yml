@@ -1,0 +1,15 @@
+name: git-diff-test
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - git-diff-test/**
+jobs:
+  determine-solution-build-deploy: 
+    runs-on: ubuntu-latest
+    
+    steps: 
+      - run: |
+          git diff-tree --no-commit-id --name-only -r ${{ github.sha }}

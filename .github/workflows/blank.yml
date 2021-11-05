@@ -1,0 +1,17 @@
+name: gh-call-workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: List issues
+        run: |
+          gh workflow run gh-test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

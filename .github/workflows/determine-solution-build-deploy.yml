@@ -37,19 +37,17 @@ jobs:
       # check for file changes in solution source folder(s)
       # if found, queue build and deply workflow
       - shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $files = "${{ steps.files.outputs.all }}"
-          echo $files
           $filesArray = $files -split ','
-
-          echo $filesArray
 
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
           foreach ($file in $filesArray) {         
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
-              $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')              
-              echo $solutionDirectory
+              $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
               $solutionDirectoriesArray.Add($solutionDirectory)
             }        
           }
@@ -58,7 +56,6 @@ jobs:
           
           foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
-            echo $solutionName
 
             $ref = "${{ github.ref }}"
             $branch = $ref.Replace("refs/heads/","")

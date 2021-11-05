@@ -9,7 +9,7 @@ on:
       solution_name:
         required: true
         type: string
-      build_number:
+      solution_version_major_minor:
         required: true
         type: string
 
@@ -23,6 +23,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # set environment and build number as output variables for further use
+      - id: setOutput
+        run: |
+          $dateStamp = Get-Date -Format "yyyyMMdd"
+          $buildNumber = "${{ github.event.inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
+          echo "::set-output name=buildNumber::$buildNumber"
+          echo "buildNumber: $buildNumber"
+        shell: pwsh
+      
       - name: Create tag
         uses: actions/github-script@v3
         if: ${{ github.event.inputs.branch }} == 'main'
@@ -32,7 +41,7 @@ jobs:
             github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/${{ github.event.inputs.solution_name }}-${{ github.event.inputs.build_number }}",
+              ref: "refs/tags/${{ github.event.inputs.solution_name }}-${{ steps.setOutput.outputs.buildNumber }}",
               sha: context.sha
             })
 
@@ -42,7 +51,7 @@ jobs:
           Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage/Other/Solution.xml" | 
           ForEach-Object {
                 (Get-Content $_.FullName) `
-                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ github.event.inputs.build_number }}</Version>' |
+                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ steps.setOutput.outputs.buildNumber }}</Version>' |
                 Out-File $_.FullName
           }
 
@@ -50,7 +59,7 @@ jobs:
         uses: microsoft/powerplatform-actions/pack-solution@v0
         with:
           solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
-          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ github.event.inputs.solution_name }}_${{ github.event.inputs.build_number }}.zip
+          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ github.event.inputs.solution_name }}_${{ steps.setOutput.outputs.buildNumber }}.zip
           solution-type: Both
       
       - name: copy deploymentSettings.json

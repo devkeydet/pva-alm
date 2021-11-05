@@ -49,7 +49,7 @@ jobs:
       - name: download prod artifact
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: ${{ inputs.solution_name }}-build-deploy.yml
+          workflow: build-deploy-solutiom.yml
           commit: ${{ env.commit }}
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment == 'prod' }}
@@ -88,7 +88,7 @@ jobs:
           $solutionZip = $files[0].Name
           echo "::set-output name=solution_zip::$solutionZip"
         # TODO: evolve this to be reusable for importing unmanaged into dev.  This sample currently currently only shows managed for downstream environments.
-        
+
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0 
         with:

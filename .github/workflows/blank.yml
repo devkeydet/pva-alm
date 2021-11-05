@@ -1,0 +1,22 @@
+
+name: api-call-workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: call workflow
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        run: |
+          $foo = gh issue list
+          echo $foo
+          $foo = gh workflow run gh-test
+          echo $foo

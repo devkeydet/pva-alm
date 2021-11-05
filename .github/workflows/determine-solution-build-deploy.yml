@@ -32,13 +32,15 @@ jobs:
           echo "environment=pr" >> $GITHUB_ENV      
       - id: files
         uses: jitterbit/get-changed-files@v1
+        with:
+          format: csv
       # check for file changes in solution source folder(s)
       # if found, queue build and deply workflow
       - shell: pwsh
         run: |
-          $files = ${{ steps.files.outputs.all }}
+          $files = "${{ steps.files.outputs.all }}""
           echo $files
-          # $filesArray = $files -split ' '
+          # $filesArray = $files -split ','
 
           #echo $filesArray
 

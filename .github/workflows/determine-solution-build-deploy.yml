@@ -1,0 +1,61 @@
+name: determine-solution-build-deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - src/**
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+
+env:
+  solution_version_major_minor: '1.0'
+
+jobs:
+  determine-solution-build-deploy: 
+    runs-on: ubuntu-latest
+    
+    steps: 
+      # determine if the build should go to the PR or UAT environment
+      - name: uat env var
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "environment=uat" >> $GITHUB_ENV
+      - name: pr env var
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "environment=pr" >> $GITHUB_ENV
+      # check for file changes in solution source folder(s)
+      # if found, queue build and deply workflow
+      - shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} #TODO: Figure out how to do with GITHUB_TOKEN
+        run: |
+          $files=$(git diff-tree --no-commit-id --name-only -r $(Build.SourceVersion))
+          $filesArray=$files -split ' '
+          $count=$filesArray.Length
+
+          $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
+
+          foreach ($file in $filesArray) {         
+            if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
+              $solutionDirectoriesArray.Add("{0}/{1}/{2}" -f $file.Split('/'))
+            }        
+          }
+
+          $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
+          
+          foreach ($dir in $uniqueSolutionDirectories) {
+            $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
+
+            $ref = "${{ github.ref }}"
+            $branch = $ref.Replace("refs/heads/","")
+
+            gh workflow run gh-test -f branch=$branch -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
+            
+            echo "pipeline queued for $solutionName"
+          }

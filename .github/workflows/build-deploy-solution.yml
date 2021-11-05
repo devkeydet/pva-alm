@@ -1,47 +1,36 @@
-name: pvaalm-build-deploy
+name: build-deploy-solution
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - src/pvaalm/**
-  push:
-    branches:
-      - main
-    paths:
-      - src/pvaalm/**
-
-env:
-  solution_name: pvaalm
-  solution_version_major_minor: '1.0'
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: true
+        description: 'branch to build from'
+      solution_name:
+        required: true
+        description: 'solution to build'
+      solution_version_major_minor:
+        required: true
+        description: 'version major.minor of solution to build'
+      environment:
+        required: true
+        description: 'environment where the build will be deployed'        
 
 jobs:
   set-variables-output: 
     name: determine deployment environment and generate build number
     runs-on: ubuntu-latest
     
-    steps: 
-      # determine if the build should go to the PR or UAT environment
-      - name: uat env var
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "environment=uat" >> $GITHUB_ENV
-      - name: pr env var
-        if: github.ref != 'refs/heads/main'
-        run: |
-          echo "environment=pr" >> $GITHUB_ENV
+    steps:       
       # set environment and build number as output variables for further use
       - id: setOuput
         run: |
-          echo "::set-output name=env::${{ env.environment }}"
           $dateStamp = Get-Date -Format "yyyyMMdd"
-          $buildNumber = "${{ env.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
+          $buildNumber = "${{ inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
           echo "::set-output name=build::$buildNumber"
         shell: pwsh
 
     outputs:
-      environment: ${{ steps.setOuput.outputs.env }}
       build_number: ${{ steps.setOuput.outputs.build }}
 
   build-solution:
@@ -49,7 +38,7 @@ jobs:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     needs: set-variables-output 
     with:
-      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.      
+      solution_name: ${{ inputs.solution_name }}      
       build_number: "${{ needs.set-variables-output.outputs.build_number }}"   
   
   deploy-solution:
@@ -57,8 +46,8 @@ jobs:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: [set-variables-output, build-solution] 
     with:
-      solution_name: pvaalm # Using env.solution_name was causing the workflow to be invalid. Need to investigate.
-      environment: ${{ needs.set-variables-output.outputs.environment }}
+      solution_name: ${{ inputs.solution_name }} 
+      environment: ${{ inputs.environment }}
     secrets:      
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}

@@ -2,6 +2,9 @@ name: gh-call-workflow
 
 on:
   workflow_dispatch:
+  
+permissions:
+  actions: write
 
 jobs:
   test:
@@ -14,5 +17,6 @@ jobs:
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} 
+          #GITHUB_TOKEN: ${{ GITHUB_TOKEN }} 
         run: |
           gh workflow run gh-test

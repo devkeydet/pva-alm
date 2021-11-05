@@ -36,32 +36,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} #TODO: Figure out how to do with GITHUB_TOKEN
         run: |
-          git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
+          #git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
           $files = git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
-          $filesArray = $files -split ' '
+          Write-Host $files
+          # $filesArray = $files -split ' '
 
-          echo $filesArray
+          # echo $filesArray
 
-          $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
+          # $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
-          foreach ($file in $filesArray) {         
-            if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
-              $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')              
-              echo $solutionDirectory
-              $solutionDirectoriesArray.Add($solutionDirectory)
-            }        
-          }
+          # foreach ($file in $filesArray) {         
+          #   if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
+          #     $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')              
+          #     echo $solutionDirectory
+          #     $solutionDirectoriesArray.Add($solutionDirectory)
+          #   }        
+          # }
 
-          $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
+          # $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
           
-          foreach ($dir in $uniqueSolutionDirectories) {            
-            $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
-            echo $solutionName
+          # foreach ($dir in $uniqueSolutionDirectories) {            
+          #   $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
+          #   echo $solutionName
 
-            $ref = "${{ github.ref }}"
-            $branch = $ref.Replace("refs/heads/","")
+          #   $ref = "${{ github.ref }}"
+          #   $branch = $ref.Replace("refs/heads/","")
 
-            gh workflow run gh-test -f branch=$branch -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
+          #   gh workflow run gh-test -f branch=$branch -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
-            echo "pipeline queued for $solutionName"
-          }
+          #   echo "pipeline queued for $solutionName"
+          # }

@@ -25,6 +25,7 @@ jobs:
       # set environment and build number as output variables for further use
       - id: setOuput
         run: |
+          echo "test"
           $dateStamp = Get-Date -Format "yyyyMMdd"
           $buildNumber = "${{ inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
           echo "::set-output name=build::$buildNumber"

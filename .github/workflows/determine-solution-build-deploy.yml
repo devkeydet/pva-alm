@@ -38,7 +38,7 @@ jobs:
       # if found, queue build and deply workflow
       - shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
         run: |
           $files = "${{ steps.files.outputs.all }}"
           $filesArray = $files -split ','

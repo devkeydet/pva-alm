@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "environment=pr" >> $GITHUB_ENV      
       - id: files
-        uses: jitterbit/get-changed-files@      
+        uses: jitterbit/get-changed-files@v1
       # check for file changes in solution source folder(s)
       # if found, queue build and deply workflow
       - shell: pwsh

@@ -15,7 +15,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         run: |
-          #$foo = gh issue list
-          #echo $foo
           gh issue list
           gh workflow list

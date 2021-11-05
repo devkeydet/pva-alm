@@ -36,13 +36,11 @@ jobs:
       # if found, queue build and deply workflow
       - shell: pwsh
         run: |
-          $filesArray = ${{ steps.files.outputs.all }}
-          #git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
-          #$files = $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
-          #Write-Host $files
+          $files = ${{ steps.files.outputs.all }}
+          echo $files
           # $filesArray = $files -split ' '
 
-          echo $filesArray
+          #echo $filesArray
 
           # $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 

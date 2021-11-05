@@ -10,8 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: List issues
-        run: |
-          gh issue list
+      - run: gh issue list
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

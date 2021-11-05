@@ -35,7 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} #TODO: Figure out how to do with GITHUB_TOKEN
         run: |
-          $files = git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+          $files = git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
           $filesArray = $files -split ' '
 
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()

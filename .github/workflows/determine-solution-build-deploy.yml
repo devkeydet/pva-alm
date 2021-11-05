@@ -29,19 +29,20 @@ jobs:
       - name: pr env var
         if: github.ref != 'refs/heads/main'
         run: |
-          echo "environment=pr" >> $GITHUB_ENV
+          echo "environment=pr" >> $GITHUB_ENV      
+      - id: files
+        uses: jitterbit/get-changed-files@      
       # check for file changes in solution source folder(s)
       # if found, queue build and deply workflow
       - shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} #TODO: Figure out how to do with GITHUB_TOKEN
         run: |
+          $filesArray = ${{ steps.files.outputs.all }}
           #git diff-tree --no-commit-id --name-only -r ${{ github.sha }}
-          $files = $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
-          Write-Host $files
+          #$files = $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+          #Write-Host $files
           # $filesArray = $files -split ' '
 
-          # echo $filesArray
+          echo $filesArray
 
           # $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 

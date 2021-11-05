@@ -13,3 +13,5 @@ jobs:
       - name: List issues
         run: |
           gh issue list
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

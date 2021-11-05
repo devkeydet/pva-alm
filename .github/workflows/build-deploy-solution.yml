@@ -20,7 +20,6 @@ jobs:
   build-solution:
     name: build solution
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
-    needs: set-variables-output 
     with:
       branch: ${{ github.event.inputs.branch }}
       solution_name: ${{ github.event.inputs.solution_name }}      

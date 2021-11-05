@@ -25,38 +25,38 @@ jobs:
 
       - name: Create tag
         uses: actions/github-script@v3
-        if: ${{ inputs.branch }} == 'main'
+        if: ${{ github.event.inputs.branch }} == 'main'
         with:
           github-token: ${{ github.token }}
           script: |
             github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/${{ inputs.solution_name }}-${{ inputs.build_number }}",
+              ref: "refs/tags/${{ github.event.inputs.solution_name }}-${{ github.event.inputs.build_number }}",
               sha: context.sha
             })
 
       - name: update solution version number
         shell: pwsh
         run: |
-          Get-ChildItem -Path "src/${{ inputs.solution_name }}/SolutionPackage/Other/Solution.xml" | 
+          Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage/Other/Solution.xml" | 
           ForEach-Object {
                 (Get-Content $_.FullName) `
-                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ inputs.build_number }}</Version>' |
+                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ github.event.inputs.build_number }}</Version>' |
                 Out-File $_.FullName
           }
 
       - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@v0
         with:
-          solution-folder: src/${{ inputs.solution_name }}/SolutionPackage
-          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}_${{ inputs.build_number }}.zip
+          solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
+          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ github.event.inputs.solution_name }}_${{ github.event.inputs.build_number }}.zip
           solution-type: Both
       
       - name: copy deploymentSettings.json
         shell: pwsh
         run: |
-          Copy-Item "src/${{ inputs.solution_name }}/deploymentSettings.json" -Destination "${{ runner.temp }}/${{ env.solution_pack_folder }}"
+          Copy-Item "src/${{ github.event.inputs.solution_name }}/deploymentSettings.json" -Destination "${{ runner.temp }}/${{ env.solution_pack_folder }}"
 
       - uses: actions/upload-artifact@v2
         with:

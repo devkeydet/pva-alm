@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "test"
           $dateStamp = Get-Date -Format "yyyyMMdd"
-          $buildNumber = "${{ inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
+          $buildNumber = "${{ github.event.inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
           echo "::set-output name=build::$buildNumber"
         shell: pwsh
 
@@ -39,7 +39,7 @@ jobs:
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     needs: set-variables-output 
     with:
-      solution_name: ${{ inputs.solution_name }}      
+      solution_name: ${{ github.event.inputs.solution_name }}      
       build_number: "${{ needs.set-variables-output.outputs.build_number }}"   
   
   deploy-solution:
@@ -47,8 +47,8 @@ jobs:
     uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: [set-variables-output, build-solution] 
     with:
-      solution_name: ${{ inputs.solution_name }} 
-      environment: ${{ inputs.environment }}
+      solution_name: ${{ github.event.inputs.solution_name }} 
+      environment: ${{ github.event.inputs.environment }}
     secrets:      
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}

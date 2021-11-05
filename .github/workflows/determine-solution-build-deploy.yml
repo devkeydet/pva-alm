@@ -39,6 +39,7 @@ jobs:
       - shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
         run: |
           $files = "${{ steps.files.outputs.all }}"
           $filesArray = $files -split ','

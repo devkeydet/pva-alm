@@ -6,8 +6,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
 
     steps:
       - uses: actions/checkout@v2
@@ -15,6 +13,6 @@ jobs:
       - name: call another workflow
         shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} 
         run: |
           gh workflow run gh-test

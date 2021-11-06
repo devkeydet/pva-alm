@@ -9,7 +9,7 @@ on:
 
 concurrency: 
   group: prod-one-at-a-time
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   get-solution-name-from-tag:

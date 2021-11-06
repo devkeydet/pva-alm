@@ -20,7 +20,7 @@ on:
 jobs:
   build-solution:
     name: build solution
-    uses: devkeydet/pva-alm/reusable-workflows/build-solution.yml@main
+    uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     with:
       branch: ${{ github.event.inputs.branch }}
       solution_name: ${{ github.event.inputs.solution_name }}
@@ -28,7 +28,7 @@ jobs:
 
   deploy-solution:
     name: deploy solution to ${{ github.event.inputs.environment }} environment
-    uses: devkeydet/pva-alm/reusable-workflows/deploy-solution.yml@main
+    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
     needs: build-solution
     with:
       solution_name: ${{ github.event.inputs.solution_name }}

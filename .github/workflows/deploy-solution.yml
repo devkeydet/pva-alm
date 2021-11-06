@@ -88,6 +88,9 @@ jobs:
           $solutionZip = $files[0].Name
           echo "::set-output name=solution_zip::$solutionZip"
         # TODO: evolve this to be reusable for importing unmanaged into dev.  This sample currently currently only shows managed for downstream environments.
+      
+      # Solutions cannot be imported in parallel, so we queue
+      - uses: ahmadnassri/action-workflow-queue@v1
 
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0 

@@ -7,10 +7,6 @@ on:
         required: true
         description: "GitHub tag for solution-version to deploy"
 
-concurrency: 
-  group: prod-one-at-a-time
-  cancel-in-progress: true
-
 jobs:
   get-solution-name-from-tag:
     runs-on: ubuntu-latest

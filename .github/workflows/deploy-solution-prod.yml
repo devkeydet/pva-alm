@@ -7,6 +7,8 @@ on:
         required: true
         description: "GitHub tag for solution-version to deploy"
 
+concurrency: prod-one-at-a-time
+
 jobs:
   get-solution-name-from-tag:
     runs-on: ubuntu-latest

@@ -99,3 +99,4 @@ jobs:
           solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/${{ steps.get-solution-zip.outputs.solution_zip }}
           force-overwrite: true
           deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
+          async: true

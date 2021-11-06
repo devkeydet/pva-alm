@@ -5,7 +5,7 @@ on:
     inputs:
       tag:
         required: true
-        description: 'GitHub tag for solution-version to deploy'
+        description: "GitHub tag for solution-version to deploy"
 
 jobs:
   get-solution-name-from-tag:
@@ -25,16 +25,16 @@ jobs:
 
   deploy-prod:
     needs: get-solution-name-from-tag
-    uses: devkeydet/pva-alm/.github/workflows/reusable/deploy-solution.yml@main
+    uses: devkeydet/pva-alm/reusable-workflows/deploy-solution.yml@main
     with:
       solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name}}
-      environment: 'prod'
+      environment: "prod"
       tag: ${{ github.event.inputs.tag }}
-    secrets:      
+    secrets:
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}
       deploymentsettings_tokens: ${{ secrets.PVAALM_DEPLOYMENTSETTINGS_TOKENS }}
-  
+
   #TODO: Create a release in GitHub

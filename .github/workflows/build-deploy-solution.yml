@@ -6,34 +6,34 @@ on:
     inputs:
       branch:
         required: true
-        description: 'branch to build from'
+        description: "branch to build from"
       solution_name:
         required: true
-        description: 'solution to build'
+        description: "solution to build"
       solution_version_major_minor:
         required: true
-        description: 'version major.minor of solution to build'
+        description: "version major.minor of solution to build"
       environment:
         required: true
-        description: 'environment where the build will be deployed'        
+        description: "environment where the build will be deployed"
 
 jobs:
   build-solution:
     name: build solution
-    uses: devkeydet/pva-alm/.github/workflows/reusable/build-solution.yml@main
+    uses: devkeydet/pva-alm/reusable-workflows/build-solution.yml@main
     with:
       branch: ${{ github.event.inputs.branch }}
-      solution_name: ${{ github.event.inputs.solution_name }}      
-      solution_version_major_minor: "${{ github.event.inputs.solution_version_major_minor }}"   
-  
+      solution_name: ${{ github.event.inputs.solution_name }}
+      solution_version_major_minor: "${{ github.event.inputs.solution_version_major_minor }}"
+
   deploy-solution:
     name: deploy solution to ${{ github.event.inputs.environment }} environment
-    uses: devkeydet/pva-alm/.github/workflows/reusable/deploy-solution.yml@main
+    uses: devkeydet/pva-alm/reusable-workflows/deploy-solution.yml@main
     needs: build-solution
     with:
-      solution_name: ${{ github.event.inputs.solution_name }} 
+      solution_name: ${{ github.event.inputs.solution_name }}
       environment: ${{ github.event.inputs.environment }}
-    secrets:      
+    secrets:
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}

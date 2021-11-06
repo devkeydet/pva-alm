@@ -17,8 +17,6 @@ on:
         required: true
         description: "environment where the build will be deployed"
 
-concurrency: ${{ github.event.inputs.environment }}-only-one-at-a-time
-
 jobs:
   build-solution:
     name: build solution

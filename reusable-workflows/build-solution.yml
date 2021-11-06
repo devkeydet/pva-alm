@@ -1,0 +1,75 @@
+name: build-solution
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+      solution_name:
+        required: true
+        type: string
+      solution_version_major_minor:
+        required: true
+        type: string
+
+jobs:
+  build-solution:
+    runs-on: ubuntu-latest
+
+    env:
+      solution_pack_folder: solution-pack-temp
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      # set environment and build number as output variables for further use
+      - id: setOutput
+        run: |
+          $dateStamp = Get-Date -Format "yyyyMMdd"
+          $buildNumber = "${{ github.event.inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
+          echo "::set-output name=buildNumber::$buildNumber"
+          echo "buildNumber: $buildNumber"
+        shell: pwsh
+      
+      - name: Create tag
+        uses: actions/github-script@v3
+        if: ${{ github.event.inputs.branch }} == 'main'
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/${{ github.event.inputs.solution_name }}-${{ steps.setOutput.outputs.buildNumber }}",
+              sha: context.sha
+            })
+
+      - name: update solution version number
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage/Other/Solution.xml" | 
+          ForEach-Object {
+                (Get-Content $_.FullName) `
+                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ steps.setOutput.outputs.buildNumber }}</Version>' |
+                Out-File $_.FullName
+          }
+
+      - name: pack solution
+        uses: microsoft/powerplatform-actions/pack-solution@v0
+        with:
+          solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
+          solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ github.event.inputs.solution_name }}_${{ steps.setOutput.outputs.buildNumber }}.zip
+          solution-type: Both
+      
+      - name: copy deploymentSettings.json
+        shell: pwsh
+        run: |
+          Copy-Item "src/${{ github.event.inputs.solution_name }}/deploymentSettings.json" -Destination "${{ runner.temp }}/${{ env.solution_pack_folder }}"
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}

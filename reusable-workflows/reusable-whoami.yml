@@ -1,0 +1,33 @@
+name: reusable-whoami
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      environment_url:
+        required: true
+      tenant_id:
+        required: true
+      client_id:
+        required: true
+      client_secret:
+        required: true
+
+jobs:
+  whoami:
+    runs-on: ubuntu-latest
+
+    environment: ${{ inputs.environment }}
+
+    steps:
+      # comment
+      - name: call whoami-action
+        uses: microsoft/powerplatform-actions/who-am-i@v0
+        with:
+          environment-url: ${{ secrets.environment_url }}
+          tenant-id: ${{ secrets.tenant_id }}
+          app-id: ${{ secrets.client_id }}
+          client-secret: ${{ secrets.client_secret }}

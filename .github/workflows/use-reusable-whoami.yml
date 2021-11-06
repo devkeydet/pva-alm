@@ -4,11 +4,10 @@ on:
   workflow_dispatch:
 
 jobs:
-
   set-env-var-conditionally:
     runs-on: ubuntu-latest
-    
-    steps: 
+
+    steps:
       - name: uat env var
         if: startsWith(github.ref, 'refs/heads/main')
         run: |
@@ -20,16 +19,16 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
-    
+
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
 
   call-whoami:
-    uses: devkeydet/pva-alm/.github/workflows/reusable/reusable-whoami.yml@main
+    uses: devkeydet/pva-alm/reusable-workflows/reusable-whoami.yml@main
     needs: set-env-var-conditionally
-    with: 
+    with:
       environment: ${{ needs.set-env-var-conditionally.outputs.environment }}
-    secrets:      
+    secrets:
       environment_url: ${{ secrets.ENVIRONMENT_URL }}
       tenant_id: ${{ secrets.TENANT_ID }}
       client_id: ${{ secrets.CLIENT_ID }}

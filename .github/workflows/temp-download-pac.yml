@@ -6,7 +6,7 @@ on:
 jobs:
   get-pac-path:
     runs-on: windows-latest
-    environment: prod
+    environment: pr
 
     steps:
       - uses: actions/checkout@v2

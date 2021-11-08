@@ -14,5 +14,7 @@ jobs:
       - run: echo "${{ steps.get-pac-path.outputs.path }}"
       - shell: pwsh
         run: |
+          $env:PATH
           $env:PATH = $env:PATH + ";" + "${{ steps.get-pac-path.outputs.path }}"
-          pac
+          $env:PATH
+          "& ${{ steps.get-pac-path.outputs.path }}\pac.exe"

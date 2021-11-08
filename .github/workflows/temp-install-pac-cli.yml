@@ -1,0 +1,15 @@
+name: temp-install-pac-cli
+
+on:
+  workflow_dispatch:
+    inputs:
+      pac_version:
+        description: "version of power platform cli to install"
+        required: false
+
+jobs:
+  install-pac:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/download-pac@main

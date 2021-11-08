@@ -62,6 +62,9 @@ jobs:
 
             $ref = "${{ github.ref }}"
 
+            echo "${{ github.ref }}"
+            echo "${{ github.event.pull_request.head.ref }}"
+
             gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
             echo "pipeline queued for $solutionName"

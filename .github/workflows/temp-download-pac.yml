@@ -6,12 +6,20 @@ on:
 jobs:
   get-pac-path:
     runs-on: windows-latest
+    environment: prod
 
     steps:
       - uses: actions/checkout@v2
       - id: get-pac-path
         uses: ./.github/actions/get-pac-path
       - run: echo "${{ steps.get-pac-path.outputs.path }}"
+      - name: call whoami-action
+        uses: microsoft/powerplatform-actions/who-am-i@v0
+        with:
+          environment-url: ${{ secrets.ENVIRONMENT_URL }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
       - shell: pwsh
         run: |
           #$env:PATH

@@ -5,7 +5,7 @@ on:
 
 jobs:
   get-pac-path:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     environment: pr
 
     steps:
@@ -26,7 +26,7 @@ jobs:
         run: |
           $env:PATH = $env:PATH + ";${{ steps.get-pac-path.outputs.path }}"
           pac
-      
+
       - shell: pwsh
         run: |
           pac

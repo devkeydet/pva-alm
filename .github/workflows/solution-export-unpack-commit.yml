@@ -26,7 +26,7 @@ on:
 
 jobs:
   export-from-dev:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       RUNNER_DEBUG: 1
@@ -80,10 +80,10 @@ jobs:
                     -replace '<Version>[\s\S]*?<\/Version>', '<Version>0.0.0.0</Version>' |
                 Out-File $_.FullName
           }
-      
+
       - id: get-pac-path
         uses: ./.github/actions/get-pac-path
-      
+
       - name: unpack msapp files
         shell: pwsh
         run: |
@@ -95,7 +95,7 @@ jobs:
           }
       # TEMPORARY until SolutionPackager supports formatting json files on unpack we
       # update all the json files to be pretty-print / formatted so they are easier to read in source control.
-      # This also makes it easier to read changes from one commit to another    
+      # This also makes it easier to read changes from one commit to another
       - name: format json files
         shell: pwsh
         run: |

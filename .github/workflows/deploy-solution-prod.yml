@@ -9,7 +9,7 @@ on:
 
 jobs:
   get-solution-name-from-tag:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - id: setOutput
         run: |

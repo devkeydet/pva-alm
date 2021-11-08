@@ -20,5 +20,5 @@ runs:
         # hack, but necessary until GitHub Actions for Power Platform support all pac commands
         $env:PATH
         $gitHubTemp = "${{ runner.temp }}"
-        $pacPath = $githubTemp.Replace("_temp","_actions") + "/microsoft/powerplatform-actions/${{ inputs.tag }}\dist\pac\tools/dist/pac_linux/tools"
+        $pacPath = $githubTemp.Replace("_temp","_actions") + "/microsoft/powerplatform-actions/${{ inputs.tag }}/dist/pac_linux/tools"
         echo "::set-output name=path::$pacPath"

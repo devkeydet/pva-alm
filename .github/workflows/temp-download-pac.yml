@@ -12,3 +12,7 @@ jobs:
       - id: get-pac-path
         uses: ./.github/actions/get-pac-path
       - run: echo "${{ steps.get-pac-path.outputs.path }}"
+      - shell: pwsh
+        run: |
+          $env:PATH = $env:PATH + ";" + "${{ steps.get-pac-path.outputs.path }}"
+          pac

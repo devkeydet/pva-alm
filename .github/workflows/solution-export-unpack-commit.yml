@@ -89,9 +89,9 @@ jobs:
         run: |
           Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage" -Recurse -Filter *.msapp | 
           ForEach-Object {
+              $unpackedPath = $_.FullName.Replace(".msapp", "_msapp_src")
               $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
               pac canvas unpack --msapp $_.FullName --sources $unpackedPath
-              $env:PATH
               del $_.FullName
           }
       # TEMPORARY until SolutionPackager supports formatting json files on unpack we

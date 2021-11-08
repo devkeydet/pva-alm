@@ -1,11 +1,53 @@
 {
+  "botMessages": [
+    {
+      "channelContent": {
+        "web": {
+          "content": "To connect with a person now, click on the following link: <link>",
+          "contentFormat": "Markdown"
+        }
+      },
+      "createdTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "id": "8bdfc12c-27d2-46db-a9ad-626ce257d6a7",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "updatedUserId": "user0"
+    }
+  ],
+  "createdUtc": "0001-01-01T00:00:00Z",
+  "dialogs": [
+    {
+      "createdTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "dialogType": "System",
+      "displayName": "Dialog",
+      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_954135cafcd647eaae5999ad91fc08cf_talktoagent",
+      "messageNodes": [
+        {
+          "botMessageId": "8bdfc12c-27d2-46db-a9ad-626ce257d6a7",
+          "id": "8c1bab33-6b0e-4f2a-a900-43099a39e0a6",
+          "nodeType": "BotMessageNode"
+        }
+      ],
+      "rootNodeId": "8c1bab33-6b0e-4f2a-a900-43099a39e0a6",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "updatedUserId": "user0"
+    }
+  ],
   "intents": [
     {
+      "createdTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "description": "System Intent Escalate",
+      "dialogId": "new_topic_1245bebc75664baabd1c6ea9376ce289_954135cafcd647eaae5999ad91fc08cf_talktoagent",
+      "displayName": "Escalate",
+      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_954135cafcd647eaae5999ad91fc08cf_talktoagent",
+      "intentType": "System",
+      "isTriggeringEnabled": true,
       "systemIntentTypes": [
         "TalkToAgent",
         "ExpectedEscalation"
       ],
-      "intentType": "System",
       "triggerQueries": [
         "Talk to agent",
         "Talk to a person",
@@ -73,50 +115,8 @@
         "I would like to talk to a technician",
         "Talk with tech support member"
       ],
-      "dialogId": "new_topic_1245bebc75664baabd1c6ea9376ce289_954135cafcd647eaae5999ad91fc08cf_talktoagent",
-      "isTriggeringEnabled": true,
-      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_954135cafcd647eaae5999ad91fc08cf_talktoagent",
-      "displayName": "Escalate",
-      "description": "System Intent Escalate",
-      "createdTime": "2019-01-15T00:00:00Z",
       "updatedTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
       "updatedUserId": "user0"
     }
-  ],
-  "dialogs": [
-    {
-      "rootNodeId": "8c1bab33-6b0e-4f2a-a900-43099a39e0a6",
-      "dialogType": "System",
-      "messageNodes": [
-        {
-          "botMessageId": "8bdfc12c-27d2-46db-a9ad-626ce257d6a7",
-          "nodeType": "BotMessageNode",
-          "id": "8c1bab33-6b0e-4f2a-a900-43099a39e0a6"
-        }
-      ],
-      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_954135cafcd647eaae5999ad91fc08cf_talktoagent",
-      "displayName": "Dialog",
-      "createdTime": "2019-01-15T00:00:00Z",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "updatedUserId": "user0"
-    }
-  ],
-  "botMessages": [
-    {
-      "channelContent": {
-        "web": {
-          "contentFormat": "Markdown",
-          "content": "To connect with a person now, click on the following link: <link>"
-        }
-      },
-      "id": "8bdfc12c-27d2-46db-a9ad-626ce257d6a7",
-      "createdTime": "2019-01-15T00:00:00Z",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "updatedUserId": "user0"
-    }
-  ],
-  "createdUtc": "0001-01-01T00:00:00Z"
+  ]
 }

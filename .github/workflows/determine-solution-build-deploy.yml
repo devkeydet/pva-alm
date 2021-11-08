@@ -24,10 +24,12 @@ jobs:
       # determine if the build should go to the PR or UAT environment
       - name: uat env var
         if: github.ref == 'refs/heads/main'
+        shell: bash
         run: |
           echo "environment=uat" >> $GITHUB_ENV
       - name: pr env var
         if: github.ref != 'refs/heads/main'
+        shell: bash
         run: |
           echo "environment=pr" >> $GITHUB_ENV
       - id: files
@@ -59,10 +61,8 @@ jobs:
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
 
             $ref = "${{ github.ref }}"
-            $branch = $ref.Replace("refs/heads/","")
-            echo "branch: $branch"
 
-            gh workflow run build-deploy-solution -f branch=$branch -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
+            gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
             echo "pipeline queued for $solutionName"
           }

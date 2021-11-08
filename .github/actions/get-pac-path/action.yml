@@ -8,8 +8,8 @@ inputs:
 
 outputs:
   path:
-    description: "Path pac is downloaded"
-    value: ${{ steps.download-pac.outputs.path }}
+    description: "location of pac.exe"
+    value: ${{ steps.get-pac-path.outputs.path }}
 runs:
   using: "composite"
   steps:

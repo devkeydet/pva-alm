@@ -13,13 +13,13 @@ on:
       - src/**
 
 env:
-  solution_version_major_minor: '1.0'
+  solution_version_major_minor: "1.0"
 
 jobs:
-  determine-solution-build-deploy: 
-    runs-on: ubuntu-latest
-    
-    steps: 
+  determine-solution-build-deploy:
+    runs-on: windows-latest
+
+    steps:
       - uses: actions/checkout@v2
       # determine if the build should go to the PR or UAT environment
       - name: uat env var
@@ -29,7 +29,7 @@ jobs:
       - name: pr env var
         if: github.ref != 'refs/heads/main'
         run: |
-          echo "environment=pr" >> $GITHUB_ENV      
+          echo "environment=pr" >> $GITHUB_ENV
       - id: files
         uses: jitterbit/get-changed-files@v1
         with:
@@ -54,7 +54,7 @@ jobs:
           }
 
           $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
-          
+
           foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
 

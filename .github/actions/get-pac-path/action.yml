@@ -1,0 +1,22 @@
+name: 'get pac path'
+description: 'get path to use for Power Platform CLI'
+inputs:
+  tag:
+    description: 'which tag folder to use'
+    default: v0
+    required: false
+
+outputs:
+  path:
+    description: "Path pac is downloaded"
+    value: ${{ steps.download-pac.outputs.path }}
+runs:
+  using: "composite"
+  steps:
+    - id: get-pac-path
+      shell: pwsh
+      run: |
+        # hack, but necessary until GitHub Actions for Power Platform support all pac commands
+        $gitHubTemp = "${{ runner.temp }}"
+        $pacPath = $githubTemp.Replace("_temp","_actions") + "\microsoft\powerplatform-actions\${{ inputs.tag }}\dist\pac\tools"
+        echo "::set-output name=path::$pacPath"

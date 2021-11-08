@@ -24,18 +24,18 @@ on:
         required: true
       deploymentsettings_tokens:
         required: false
-        # should be in the form of 
+        # should be in the form of
         #
         # token1,value
         # token2,value
         # token3,value
-        
+
 jobs:
   deploy-solution:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment: ${{ inputs.environment }}
 
-    steps:   
+    steps:
       - uses: actions/checkout@v2
         if: ${{ inputs.environment == 'prod' }}
 
@@ -61,7 +61,7 @@ jobs:
 
       - name: prepare deploymentSettings.js token variables
         shell: pwsh
-        run: |          
+        run: |
           $csv = @"
           ${{ secrets.deploymentsettings_tokens }}
           "@
@@ -74,11 +74,11 @@ jobs:
               echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
               echo "::add-mask::$tokenValue"
             }
-          }          
+          }
 
       - uses: cschleiden/replace-tokens@v1
         with:
-          files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'      
+          files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'
 
       - name: get solution zip
         id: get-solution-zip
@@ -88,12 +88,12 @@ jobs:
           $solutionZip = $files[0].Name
           echo "::set-output name=solution_zip::$solutionZip"
         # TODO: evolve this to be reusable for importing unmanaged into dev.  This sample currently currently only shows managed for downstream environments.
-      
+
       # Solutions cannot be imported in parallel, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1
 
       - name: import solution to environment
-        uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0 
+        uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
         with:
           environment-url: ${{ secrets.environment_url }}
           tenant-id: ${{ secrets.tenant_id }}

@@ -24,7 +24,6 @@ jobs:
 
       - shell: pwsh
         run: |
-          #$env:PATH
-          #$env:PATH = $env:PATH + ";" + "${{ steps.get-pac-path.outputs.path }}"
-          dir "${{ steps.get-pac-path.outputs.path }}"
-          
+          $env:PATH
+          $env:PATH = $env:PATH + ";${{ steps.get-pac-path.outputs.path }}"
+          pac

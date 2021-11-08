@@ -1,4 +1,4 @@
-name: temp-install-pac-cli
+name: temp-download-pac
 
 on:
   workflow_dispatch:

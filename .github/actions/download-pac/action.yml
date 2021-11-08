@@ -13,5 +13,5 @@ runs:
   steps:
     - id: download-pac
       shell: pwsh
-      run: echo "hello there"
+      run: download-pac.ps1
         

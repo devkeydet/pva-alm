@@ -1,10 +1,52 @@
 {
+  "botMessages": [
+    {
+      "channelContent": {
+        "web": {
+          "content": "Thanks for chatting with me. Bye!",
+          "contentFormat": "Markdown"
+        }
+      },
+      "createdTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "id": "026a85be-8cca-4b87-b39f-3639fcfe3383",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "updatedUserId": "user0"
+    }
+  ],
+  "createdUtc": "0001-01-01T00:00:00Z",
+  "dialogs": [
+    {
+      "createdTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "dialogType": "System",
+      "displayName": "Dialog for Goodbye",
+      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_f56d1a3e522740c78f9fac0939332dbd_goodbye",
+      "messageNodes": [
+        {
+          "botMessageId": "026a85be-8cca-4b87-b39f-3639fcfe3383",
+          "id": "3ce2158c-ebd3-4e2f-9e15-74432e415182",
+          "nodeType": "BotMessageNode"
+        }
+      ],
+      "rootNodeId": "3ce2158c-ebd3-4e2f-9e15-74432e415182",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "updatedUserId": "user0"
+    }
+  ],
   "intents": [
     {
+      "createdTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "description": "System Intent Goodbye",
+      "dialogId": "new_topic_1245bebc75664baabd1c6ea9376ce289_f56d1a3e522740c78f9fac0939332dbd_goodbye",
+      "displayName": "Goodbye",
+      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_f56d1a3e522740c78f9fac0939332dbd_goodbye",
+      "intentType": "System",
+      "isTriggeringEnabled": true,
       "systemIntentTypes": [
         "Goodbye"
       ],
-      "intentType": "System",
       "triggerQueries": [
         "Bye",
         "Bye bye thanks again",
@@ -74,50 +116,8 @@
         "Thanks. I'm fine now. Have a good day.",
         "Thx. Goodbye"
       ],
-      "dialogId": "new_topic_1245bebc75664baabd1c6ea9376ce289_f56d1a3e522740c78f9fac0939332dbd_goodbye",
-      "isTriggeringEnabled": true,
-      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_f56d1a3e522740c78f9fac0939332dbd_goodbye",
-      "displayName": "Goodbye",
-      "description": "System Intent Goodbye",
-      "createdTime": "2019-01-15T00:00:00Z",
       "updatedTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
       "updatedUserId": "user0"
     }
-  ],
-  "dialogs": [
-    {
-      "rootNodeId": "3ce2158c-ebd3-4e2f-9e15-74432e415182",
-      "dialogType": "System",
-      "messageNodes": [
-        {
-          "botMessageId": "026a85be-8cca-4b87-b39f-3639fcfe3383",
-          "nodeType": "BotMessageNode",
-          "id": "3ce2158c-ebd3-4e2f-9e15-74432e415182"
-        }
-      ],
-      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_f56d1a3e522740c78f9fac0939332dbd_goodbye",
-      "displayName": "Dialog for Goodbye",
-      "createdTime": "2019-01-15T00:00:00Z",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "updatedUserId": "user0"
-    }
-  ],
-  "botMessages": [
-    {
-      "channelContent": {
-        "web": {
-          "contentFormat": "Markdown",
-          "content": "Thanks for chatting with me. Bye!"
-        }
-      },
-      "id": "026a85be-8cca-4b87-b39f-3639fcfe3383",
-      "createdTime": "2019-01-15T00:00:00Z",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "updatedUserId": "user0"
-    }
-  ],
-  "createdUtc": "0001-01-01T00:00:00Z"
+  ]
 }

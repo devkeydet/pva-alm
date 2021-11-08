@@ -10,6 +10,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: call whoami-action
         uses: microsoft/powerplatform-actions/who-am-i@v0
         with:
@@ -17,12 +18,12 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
+
       - id: get-pac-path
         uses: ./.github/actions/get-pac-path
-      - run: echo "${{ steps.get-pac-path.outputs.path }}"      
+
       - shell: pwsh
         run: |
           #$env:PATH
           #$env:PATH = $env:PATH + ";" + "${{ steps.get-pac-path.outputs.path }}"
-          #$env:PATH
-          dir "D:\a\_actions\microsoft\powerplatform-actions\" 
+          pac

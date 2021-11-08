@@ -91,6 +91,7 @@ jobs:
           ForEach-Object {
               $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
               pac canvas unpack --msapp $_.FullName --sources $unpackedPath
+              $env:PATH
               del $_.FullName
           }
       # TEMPORARY until SolutionPackager supports formatting json files on unpack we

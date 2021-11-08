@@ -15,7 +15,7 @@ on:
 
 jobs:
   build-solution:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       solution_pack_folder: solution-pack-temp

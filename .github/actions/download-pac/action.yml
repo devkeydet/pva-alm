@@ -13,5 +13,5 @@ runs:
   steps:
     - id: download-pac
       shell: pwsh
-      run: download-pac.ps1
+      run: ./download-pac.ps1
         

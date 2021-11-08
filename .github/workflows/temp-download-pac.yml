@@ -17,5 +17,4 @@ jobs:
           #$env:PATH
           #$env:PATH = $env:PATH + ";" + "${{ steps.get-pac-path.outputs.path }}"
           #$env:PATH
-          #echo ${{ github.}}
           dir "D:\a\_actions\microsoft\powerplatform-actions\" 

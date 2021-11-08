@@ -1,3 +1,4 @@
+#comment
 name: 'get pac path'
 description: 'get path to use for Power Platform CLI'
 inputs:

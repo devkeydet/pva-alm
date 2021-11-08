@@ -26,4 +26,5 @@ jobs:
         run: |
           #$env:PATH
           #$env:PATH = $env:PATH + ";" + "${{ steps.get-pac-path.outputs.path }}"
-          pac
+          dir "${{ steps.get-pac-path.outputs.path }}"
+          

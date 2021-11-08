@@ -32,7 +32,7 @@ on:
 
 jobs:
   deploy-solution:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
 
     steps:

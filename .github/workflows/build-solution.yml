@@ -3,7 +3,7 @@ name: build-solution
 on:
   workflow_call:
     inputs:
-      branch:
+      ref:
         required: true
         type: string
       solution_name:
@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ github.event.inputs.ref }}
 
       # set environment and build number as output variables for further use
       - id: setOutput
@@ -36,7 +36,7 @@ jobs:
 
       - name: Create tag
         uses: actions/github-script@v3
-        if: ${{ github.event.inputs.branch }} == 'main'
+        if: ${{ github.event.inputs.ref }} == 'ref/heads/main'
         with:
           github-token: ${{ github.token }}
           script: |

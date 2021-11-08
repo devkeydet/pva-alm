@@ -4,9 +4,9 @@ name: build-deploy-solution
 on:
   workflow_dispatch:
     inputs:
-      branch:
+      ref:
         required: true
-        description: "branch to build from"
+        description: "ref to build from"
       solution_name:
         required: true
         description: "solution to build"
@@ -22,7 +22,7 @@ jobs:
     name: build solution
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main
     with:
-      branch: ${{ github.event.inputs.branch }}
+      ref: ${{ github.event.inputs.ref }}
       solution_name: ${{ github.event.inputs.solution_name }}
       solution_version_major_minor: "${{ github.event.inputs.solution_version_major_minor }}"
 

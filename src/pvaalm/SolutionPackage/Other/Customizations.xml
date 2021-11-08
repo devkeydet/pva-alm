@@ -11,6 +11,7 @@
   <optionsets />
   <CustomControls />
   <EntityDataProviders />
+  <CanvasApps />
   <connectionreferences>
     <connectionreference connectionreferencelogicalname="dkdt_PVAMSNWeather">
       <connectionreferencedisplayname>PVA MSN Weather</connectionreferencedisplayname>

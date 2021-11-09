@@ -104,18 +104,18 @@ jobs:
               del $_.FullName
           }
 
-      # # TEMPORARY until platform/tools support formatted json files on unpack we
-      # # update the Power Automate json files to be pretty-print / formatted so they are easier to read in source control.
-      # # This also makes it easier to read changes from one commit to another
-      # - name: format json files
-      #   shell: pwsh
-      #   run: |
-      #     Get-ChildItem -Path "${{ env.solution_package_source }}/Workflows" -Recurse -Filter *.json | 
-      #     ForEach-Object {
-      #       Write-Host $_.FullName
-      #       $formatted = jq . $_.FullName --sort-keys
-      #       $formatted | Out-File $_.FullName -Encoding UTF8
-      #     }
+      # TEMPORARY until platform/tools support formatted json files on unpack we
+      # update the Power Automate json files to be pretty-print / formatted so they are easier to read in source control.
+      # This also makes it easier to read changes from one commit to another
+      - name: format json files
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path "${{ env.solution_package_source }}/Workflows" -Recurse -Filter *.json | 
+          ForEach-Object {
+            Write-Host $_.FullName
+            $formatted = jq . $_.FullName --sort-keys
+            $formatted | Out-File $_.FullName -Encoding UTF8
+          }
 
       - name: commit changes
         run: |

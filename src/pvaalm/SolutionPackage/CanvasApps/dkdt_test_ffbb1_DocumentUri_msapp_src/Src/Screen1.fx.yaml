@@ -1,0 +1,11 @@
+Screen1 As screen:
+
+    Label1 As label:
+        Height: =70
+        Size: =21
+        Text: ="Canvas Code - updated"
+        Width: =560
+        X: =40
+        Y: =40
+        ZIndex: =1
+

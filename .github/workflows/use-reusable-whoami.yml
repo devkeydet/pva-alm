@@ -19,8 +19,6 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
-      - run: |
-          ehco jq
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}

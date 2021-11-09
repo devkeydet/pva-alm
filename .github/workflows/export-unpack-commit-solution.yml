@@ -1,4 +1,4 @@
-name: solution-export-unpack-commit
+name: export-unpack-commit-solution
 # Export solution from DEV environment
 #  unpack it, commit and push the changes
 

@@ -19,6 +19,9 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
+      - run: |
+          sudo apt-get install -y jq
+          jq
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}

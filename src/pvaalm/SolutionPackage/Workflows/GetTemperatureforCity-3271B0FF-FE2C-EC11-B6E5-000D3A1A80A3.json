@@ -14,7 +14,7 @@
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "actions": {
-        "Get_current_weather_(updated)": {
+        "Get_current_weather": {
           "inputs": {
             "authentication": "@parameters('$authentication')",
             "host": {
@@ -36,7 +36,7 @@
         "Return_value(s)_to_Power_Virtual_Agents": {
           "inputs": {
             "body": {
-              "temperature": "@{outputs('Get_current_weather_(updated)')?['body/responses/weather/current/temp']}"
+              "temperature": "@{outputs('Get_current_weather')?['body/responses/weather/current/temp']}"
             },
             "schema": {
               "properties": {
@@ -55,7 +55,7 @@
             "operationMetadataId": "ce13e346-c6ff-4042-ab01-7fc0d0fbc09c"
           },
           "runAfter": {
-            "Get_current_weather_(updated)": [
+            "Get_current_weather": [
               "Succeeded"
             ]
           },

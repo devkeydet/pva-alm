@@ -109,7 +109,6 @@ jobs:
       - name: format json files
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe -OutFile  jq.exe
           Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage" -Recurse -Filter *.json | 
           ForEach-Object {
             #skip canvas app folder because canvas team already handles this for canvas unpack
@@ -119,7 +118,6 @@ jobs:
               $formatted | Out-File $_.FullName -Encoding UTF8
             }
           }
-          del jq.exe
 
       - name: commit changes
         run: |

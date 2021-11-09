@@ -26,7 +26,7 @@ jobs:
       solution_export_folder: solution-export-temp 
 
     steps:
-      - uses: actions/checkout@v2
+      #- uses: actions/checkout@v2
 
       - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
@@ -82,10 +82,6 @@ jobs:
     - uses: actions/download-artifact@v2
       with:
         path: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}
-
-    - name: dir
-      shell: pwsh
-      run: dir
 
     - name: import-manage-solution-to-environment
       uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0

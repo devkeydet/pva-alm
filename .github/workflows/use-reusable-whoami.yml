@@ -24,7 +24,7 @@ jobs:
       environment: ${{ steps.setOuput.outputs.env }}
 
   call-whoami:
-    uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@${{ githib.sha }}
+    uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@${{ github.sha }}
     needs: set-env-var-conditionally
     with:
       environment: ${{ needs.set-env-var-conditionally.outputs.environment }}

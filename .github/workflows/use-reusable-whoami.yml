@@ -19,12 +19,15 @@ jobs:
       - id: setOuput
         run: |
           echo "::set-output name=env::${{ env.environment }}"
+      - run: |
+          sudo apt-get install -y jq
+          jq
 
     outputs:
       environment: ${{ steps.setOuput.outputs.env }}
 
   call-whoami:
-    uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@${{ github.sha }}
+    uses: devkeydet/pva-alm/.github/workflows/reusable-whoami.yml@main
     needs: set-env-var-conditionally
     with:
       environment: ${{ needs.set-env-var-conditionally.outputs.environment }}

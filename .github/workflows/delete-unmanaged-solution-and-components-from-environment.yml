@@ -129,11 +129,11 @@ jobs:
     - name: delete-managed-solution
       shell: pwsh
       run: |
-        #$env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
         pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
         pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
 
-  #   - name: delete-managed-solution (DOES NOT DELETE SOLUTION COMPONENTS)
+  #   - name: delete-managed-solution
   #     uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
   #     with:
   #       environment-url: ${{ github.event.inputs.environment_url}}

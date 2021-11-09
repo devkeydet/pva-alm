@@ -9,4 +9,4 @@ jobs:
 
     steps:
       - run: |
-          ehco jq
+          echo jq

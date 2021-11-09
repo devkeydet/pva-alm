@@ -102,8 +102,9 @@ jobs:
     - name: import-manage-solution-to-environment
       shell: pwsh
       run: |
-        echo ":${{ steps.get-pac-path.outputs.path }}"
+        echo $env:PATH
         $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        echo $env:PATH
         pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
         pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip"
 

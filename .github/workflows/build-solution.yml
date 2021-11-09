@@ -22,9 +22,21 @@ jobs:
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
 
     steps:
-      - uses: actions/checkout@v2
+      - name: update-pr-with-link-to-workflow
+        uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
+      
+      - shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $ref = "${{ github.event.inputs.ref }}"
+          if ($ref.Contains("refs/pull")) {
+            $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
+            $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            gh pr comment $prNumber --body "latest pr validation workflow: $runUrl"
+          }  
 
       # set environment and build number as output variables for further use
       - id: setOutput

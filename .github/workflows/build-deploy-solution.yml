@@ -18,20 +18,6 @@ on:
         description: "environment where the build will be deployed"
 
 jobs:
-  update-pr-with-link-to-workflow:
-    runs-on: ubuntu-latest
-    steps:
-      - shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          $ref = "${{ github.event.inputs.ref }}"
-          if ($ref.Contains("refs/pull")) {
-            $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
-            $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            gh pr comment $prNumber --body "latest pr validation workflow: $runUrl"
-          }          
-
   build-solution:
     name: build solution
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main

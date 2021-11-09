@@ -79,7 +79,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    
+
     - uses: actions/download-artifact@v2
       with:
         path: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}
@@ -102,7 +102,7 @@ jobs:
     - name: import-manage-solution-to-environment
       shell: pwsh
       run: |
-        #$env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
         pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
         pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip"
 
@@ -118,7 +118,7 @@ jobs:
     - name: delete-managed-solution
       shell: pwsh
       run: |
-        $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        #$env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
         pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
         pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
 

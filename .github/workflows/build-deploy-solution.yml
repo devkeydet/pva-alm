@@ -24,7 +24,7 @@ jobs:
       - shell: pwsh
         run: |
           echo "${{ github.run_id }}"
-          $ref "${{ github.ref }}"
+          $ref = "${{ github.ref }}"
           if ($ref.Contains("refs/pull")) {
             echo $ref.Replace("refs/pull","").Replace("/merge","")
           }          

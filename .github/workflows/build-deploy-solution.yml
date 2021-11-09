@@ -21,9 +21,13 @@ jobs:
   update-pr-with-link-to-workflow:
     runs-on: ubuntu-latest
     steps:
-      - run: |
+      - shell: pwsh
+        run: |
           echo "${{ github.run_id }}"
-          echo "${{ gihtub.ref }}"
+          $ref "${{ gihtub.ref }}"
+          if ($ref.Contains("refs/pull")) {
+            echo $ref.Replace("refs/pull","").Replace("/merge","")
+          }          
           echo "${{ gihtub.server_url }}/${{ gihtub.repository }}/runs/${{ github.run_id }}"
 
   build-solution:

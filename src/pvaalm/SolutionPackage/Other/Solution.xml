@@ -79,6 +79,7 @@
     </Publisher>
     <RootComponents>
       <RootComponent type="29" id="{3271b0ff-fe2c-ec11-b6e5-000d3a1a80a3}" behavior="0" />
+      <RootComponent type="300" schemaName="dkdt_test_ffbb1" behavior="0" />
     </RootComponents>
     <MissingDependencies />
   </SolutionManifest>

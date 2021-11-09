@@ -9,6 +9,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - shell: pwsh
+        run: |
+          $foo = '{"foo": 0}' | jq .
+          echo $foo
+          
       # TEMPORARY until platform/tools support formatted json files on unpack we
       # update the Power Automate json files to be pretty-print / formatted so they are easier to read in source control.
       # This also makes it easier to read changes from one commit to another

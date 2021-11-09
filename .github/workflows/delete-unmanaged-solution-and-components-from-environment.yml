@@ -26,6 +26,9 @@ jobs:
       solution_export_folder: solution-export-temp 
 
     steps:
+      # Solutions cannot be imported in parallel, so we queue
+      - uses: ahmadnassri/action-workflow-queue@v1
+
       - uses: actions/checkout@v2
 
       - name: export-managed-solution

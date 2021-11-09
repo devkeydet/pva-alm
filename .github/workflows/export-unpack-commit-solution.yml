@@ -33,6 +33,9 @@ jobs:
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
 
     steps:
+      # Solutions cannot be imported in parallel, so we queue
+      - uses: ahmadnassri/action-workflow-queue@v1
+
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}

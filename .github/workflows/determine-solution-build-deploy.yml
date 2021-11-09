@@ -21,17 +21,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      # determine if the build should go to the PR or UAT environment
-      - name: uat env var
-        if: github.ref == 'refs/heads/main'
-        shell: bash
-        run: |
-          echo "environment=uat" >> $GITHUB_ENV
-      - name: pr env var
-        if: github.ref != 'refs/heads/main'
-        shell: bash
-        run: |
-          echo "environment=pr" >> $GITHUB_ENV
       - id: files
         uses: jitterbit/get-changed-files@v1
         with:

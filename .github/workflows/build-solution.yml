@@ -22,12 +22,12 @@ jobs:
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
 
     steps:
-      - name: update-pr-with-link-to-workflow
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
       
-      - shell: pwsh
+      - name: update-pr-with-link-to-workflow
+        shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

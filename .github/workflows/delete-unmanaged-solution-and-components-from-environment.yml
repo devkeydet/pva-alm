@@ -25,7 +25,8 @@ jobs:
     env:
       solution_export_folder: solution-export-temp 
 
-    steps:      
+    steps:
+      - uses: actions/checkout@v2      
       - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:

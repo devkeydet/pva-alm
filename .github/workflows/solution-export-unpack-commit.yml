@@ -42,15 +42,15 @@ jobs:
         run: |
           git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
       
-      - name: publish customizations
-        uses: microsoft/powerplatform-actions/publish-solution@v0
-        with:
-          environment-url: ${{ github.event.inputs.environment_url}}
-          app-id: ${{ secrets.CLIENT_ID }}
-          client-secret: ${{ secrets.CLIENT_SECRET }}
-          tenant-id: ${{ secrets.TENANT_ID }}
+      # - name: publish customizations
+      #   uses: microsoft/powerplatform-actions/publish-solution@v0
+      #   with:
+      #     environment-url: ${{ github.event.inputs.environment_url}}
+      #     app-id: ${{ secrets.CLIENT_ID }}
+      #     client-secret: ${{ secrets.CLIENT_SECRET }}
+      #     tenant-id: ${{ secrets.TENANT_ID }}
       
-      - name: export-managed-solution action
+      - name: export-unmanaged-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
@@ -61,7 +61,7 @@ jobs:
           solution-output-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
           managed: false
 
-      - name: export-managed-solution action
+      - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: ${{ github.event.inputs.environment_url}}

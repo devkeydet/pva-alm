@@ -22,13 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "${{ github.run_id }}"
           $ref = "${{ github.event.inputs.ref }}"
           if ($ref.Contains("refs/pull")) {
-            echo $ref.Replace("refs/pull","").Replace("/merge","")
+            $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
+            $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            gh pr comment $prNumber --body "latest pr validation workflow: $runUrl"
           }          
-          echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   build-solution:
     name: build solution

@@ -19,6 +19,7 @@ jobs:
 
     env:
       solution_pack_folder: solution-pack-temp
+      solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
 
     steps:
       - uses: actions/checkout@v2
@@ -50,17 +51,41 @@ jobs:
       - name: update solution version number
         shell: pwsh
         run: |
-          Get-ChildItem -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage/Other/Solution.xml" | 
+          Get-ChildItem -Path "${{ env.solution_package_source }}/Other/Solution.xml" | 
           ForEach-Object {
                 (Get-Content $_.FullName) `
                     -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ steps.setOutput.outputs.buildNumber }}</Version>' |
                 Out-File $_.FullName
           }
 
+      - name: Flatten JSON files
+        shell: pwsh
+        run: |
+          #When we unpack the solution files, we format the json, but it causes solution import failures so we need to flatten the files
+          Get-ChildItem -Path "${{ env.solution_package_source }}" -Recurse -Filter *.json |
+          ForEach-Object {
+              $fileContent = (Get-Content $_.FullName) -join ' '
+              if(-not [string]::IsNullOrWhiteSpace($fileContent)) {
+                  Set-Content $_.FullName $fileContent
+              }
+          }
+
+      - name: pack msapp files
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path "${{ env.solution_package_source }}" -Recurse -Filter *_src | 
+          ForEach-Object {     
+            $unpackedPath = $_.FullName
+            $packedFileName = $unpackedPath.Replace("_msapp_src", ".msapp")
+            $env:PATH = $env:PATH + ";" + "$(pacPath)"
+            pac canvas pack --sources $unpackedPath --msapp $packedFileName
+            Remove-Item -Path $unpackedPath -Recurse
+          }
+
       - name: pack solution
         uses: microsoft/powerplatform-actions/pack-solution@v0
         with:
-          solution-folder: src/${{ github.event.inputs.solution_name }}/SolutionPackage
+          solution-folder: ${{ env.solution_package_source }}
           solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ github.event.inputs.solution_name }}_${{ steps.setOutput.outputs.buildNumber }}.zip
           solution-type: Both
 

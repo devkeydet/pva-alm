@@ -14,7 +14,7 @@
     "definition": {
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "actions": {
-        "Get_current_weather": {
+        "Get_current_weather_(updated)": {
           "inputs": {
             "authentication": "@parameters('$authentication')",
             "host": {
@@ -27,13 +27,16 @@
               "units": "Imperial"
             }
           },
+          "metadata": {
+            "operationMetadataId": "b5fda7f3-0fa5-4f87-8519-f19789ac7be2"
+          },
           "runAfter": {},
           "type": "OpenApiConnection"
         },
         "Return_value(s)_to_Power_Virtual_Agents": {
           "inputs": {
             "body": {
-              "temperature": "@{outputs('Get_current_weather')?['body/responses/weather/current/temp']}"
+              "temperature": "@{outputs('Get_current_weather_(updated)')?['body/responses/weather/current/temp']}"
             },
             "schema": {
               "properties": {
@@ -48,8 +51,11 @@
             "statusCode": 200
           },
           "kind": "VirtualAgent",
+          "metadata": {
+            "operationMetadataId": "ce13e346-c6ff-4042-ab01-7fc0d0fbc09c"
+          },
           "runAfter": {
-            "Get_current_weather": [
+            "Get_current_weather_(updated)": [
               "Succeeded"
             ]
           },
@@ -88,6 +94,9 @@
             }
           },
           "kind": "VirtualAgent",
+          "metadata": {
+            "operationMetadataId": "ea6f5b58-81d0-435d-b617-c9b95a4a556d"
+          },
           "type": "Request"
         }
       }

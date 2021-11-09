@@ -8,14 +8,139 @@ name: delete-unmanaged-solution-and-components-from-environment
 
 on:
   workflow_dispatch:
+    inputs:
+      solution_name:
+        description: "name of the Solution in Dataverse environment"
+        required: true
+        default: pvaalm
+      environment_url:
+        description: "http endpoint of your Dataverse environment"
+        required: true
+        default: "https://[your-env].crm.dynamics.com"
 
 jobs:
-  job1:
+  export-and-delete-unmanaged:
     runs-on: ubuntu-latest
 
-    steps:      
-      - shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    env:
+      solution_export_folder: solution-export-temp 
+
+    steps:
+      # Solutions cannot be imported in parallel, so we queue
+      - uses: ahmadnassri/action-workflow-queue@v1
+
+      - uses: actions/checkout@v2
+
+      - name: export-managed-solution
+        uses: microsoft/powerplatform-actions/export-solution@v0
+        with:
+          environment-url: ${{ github.event.inputs.environment_url}}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          solution-name: ${{ github.event.inputs.solution_name }}
+          solution-output-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/${{ github.event.inputs.solution_name }}.zip
+          managed: true
+      
+      - uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}
+      
+      # need to drop to pac because there's a bug in delete-solution
+      # https://github.com/microsoft/powerplatform-actions/issues/141
+      # TODO: use delete-solution whe bug is fixed
+      - name: get-pac-path
+        id: get-pac-path
+        uses: ./.github/actions/get-pac-path
+
+      - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
+        shell: pwsh
         run: |
-          echo "foo"
+          $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
+          pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
+          
+      # - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
+      #   uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
+      #   with:
+      #     environment-url: ${{ github.event.inputs.environment_url}}
+      #     app-id: ${{ secrets.CLIENT_ID }}
+      #     client-secret: ${{ secrets.CLIENT_SECRET }}
+      #     tenant-id: ${{ secrets.TENANT_ID }}
+      #     solution-name: ${{ github.event.inputs.solution_name }}
+
+# If the import failed, we can't continue with the cleanup process. 
+# A common cause of this is that a canvas app is still open in the studio and therefore import is blocked.
+# To accomodate for import failures, we separate into two stages so we can rerun the import stage if it fails.
+# This gives the maker an opportunity to resolve the issue, and rerun the second stage which will try to import/delete the managed solution again.
+# Maker can continute to rerun the stage (trial/error) until there are no more import errors.
+
+  import-and-delete-managed:
+    runs-on: ubuntu-latest
+    needs: export-and-delete-unmanaged
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/download-artifact@v2
+      with:
+        path: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}
+
+    # - name: import-manage-solution-to-environment
+    #   uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
+    #   with:
+    #     environment-url: ${{ github.event.inputs.environment_url}}
+    #     tenant-id: ${{ secrets.tenant_id }}
+    #     app-id: ${{ secrets.client_id }}
+    #     client-secret: ${{ secrets.client_secret }}
+    #     solution-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip
+    #     force-overwrite: true
+    #     convert-to-managed: true
+
+    # HACK: In order for get-pac-path to work, we need to force the workflow to get the actions
+    - name: call-whoami-action
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{ github.event.inputs.environment_url}}
+        app-id: ${{ secrets.CLIENT_ID }}
+        client-secret: ${{ secrets.CLIENT_SECRET }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+
+    - name: get-pac-path
+      id: get-pac-path
+      uses: ./.github/actions/get-pac-path
+
+    - name: import-manage-solution-to-environment
+      shell: pwsh
+      run: |
+        echo $env:PATH
+        $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        echo $env:PATH
+        pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
+        pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip"
+
+    - if: ${{ failure() }}
+      name: log-error
+      shell: pwsh
+      run: |
+        $errorMessage = "Since the import failed, your environment is in an unhealthy state. "
+        $errorMessage = $errorMessage + "The unmanaged container is gone, but the unmanaged solution components still exist in the environment. "
+        $errorMessage = $errorMessage + "Fix whatever is causing the import to fail, then you can rerun this job."
+        echo "::error title=Error::$errorMessage"
+
+    - name: delete-managed-solution
+      shell: pwsh
+      run: |
+        $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
+        pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
+
+  #   - name: delete-managed-solution
+  #     uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
+  #     with:
+  #       environment-url: ${{ github.event.inputs.environment_url}}
+  #       app-id: ${{ secrets.CLIENT_ID }}
+  #       client-secret: ${{ secrets.CLIENT_SECRET }}
+  #       tenant-id: ${{ secrets.TENANT_ID }}
+  #       solution-name: ${{ github.event.inputs.solution_name }}

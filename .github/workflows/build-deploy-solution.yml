@@ -24,11 +24,11 @@ jobs:
       - shell: pwsh
         run: |
           echo "${{ github.run_id }}"
-          $ref = "${{ github.ref }}"
+          $ref = "${{ github.event.inputs.ref }}"
           if ($ref.Contains("refs/pull")) {
             echo $ref.Replace("refs/pull","").Replace("/merge","")
           }          
-          echo "${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}"
+          echo "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
   build-solution:
     name: build solution

@@ -1,91 +1,11 @@
 {
-  "botMessages": [
-    {
-      "channelContent": {
-        "web": {
-          "content": "Hi! I'm a virtual agent. I can help with account questions, orders, store information, and more.",
-          "contentFormat": "Markdown"
-        }
-      },
-      "createdTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "id": "987e1575-01b0-467b-a98e-33f113cb7dcb",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "updatedUserId": "user0"
-    },
-    {
-      "channelContent": {
-        "web": {
-          "content": "If you'd like to speak to a human agent, let me know at any time.",
-          "contentFormat": "PlainText"
-        }
-      },
-      "createdTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "id": "1edf5849-e499-4a6d-9fed-2a9ca0e43c87",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "updatedUserId": "user0"
-    },
-    {
-      "channelContent": {
-        "web": {
-          "content": "So, what can I help you with today?",
-          "contentFormat": "PlainText"
-        }
-      },
-      "createdTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "id": "9b10a545-fa43-4301-a7c4-8d17b0f1ff39",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "updatedUserId": "user0"
-    }
-  ],
-  "createdUtc": "0001-01-01T00:00:00Z",
-  "dialogs": [
-    {
-      "createdTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "dialogType": "System",
-      "displayName": "Dialog",
-      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_ba7b967c97ba4c39bca58a8bb6a72d59_conversationstart",
-      "messageNodes": [
-        {
-          "botMessageId": "987e1575-01b0-467b-a98e-33f113cb7dcb",
-          "defaultTargetNodeId": "768db8e6-1db0-4117-a5d4-0ebd7f7ac2b3",
-          "id": "8a32ebd1-bec3-4cde-a75a-1977a561b019",
-          "nodeType": "BotMessageNode"
-        },
-        {
-          "botMessageId": "1edf5849-e499-4a6d-9fed-2a9ca0e43c87",
-          "defaultTargetNodeId": "4c32d4d5-9bdc-47f0-afaf-614883acef7b",
-          "id": "768db8e6-1db0-4117-a5d4-0ebd7f7ac2b3",
-          "nodeType": "BotMessageNode"
-        },
-        {
-          "botMessageId": "9b10a545-fa43-4301-a7c4-8d17b0f1ff39",
-          "id": "4c32d4d5-9bdc-47f0-afaf-614883acef7b",
-          "nodeType": "BotMessageNode"
-        }
-      ],
-      "rootNodeId": "8a32ebd1-bec3-4cde-a75a-1977a561b019",
-      "updatedTime": "2019-01-15T00:00:00Z",
-      "updatedUserId": "user0"
-    }
-  ],
   "intents": [
     {
-      "createdTime": "2019-01-15T00:00:00Z",
-      "createdUserId": "user0",
-      "description": "This is the default greeting when a chat begins. Start by having your bot or virtual agent introduce itself. When building out topics, consider whether you need to comply with applicable local law.",
-      "dialogId": "new_topic_1245bebc75664baabd1c6ea9376ce289_ba7b967c97ba4c39bca58a8bb6a72d59_conversationstart",
-      "displayName": "Greeting",
-      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_ba7b967c97ba4c39bca58a8bb6a72d59_conversationstart",
-      "intentType": "System",
-      "isTriggeringEnabled": true,
       "systemIntentTypes": [
         "ConversationStart",
         "Greeting"
       ],
+      "intentType": "System",
       "triggerQueries": [
         "Good afternoon",
         "Good morning",
@@ -140,8 +60,88 @@
         "Hi there!",
         "Hi virtual agent"
       ],
+      "dialogId": "new_topic_1245bebc75664baabd1c6ea9376ce289_ba7b967c97ba4c39bca58a8bb6a72d59_conversationstart",
+      "isTriggeringEnabled": true,
+      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_ba7b967c97ba4c39bca58a8bb6a72d59_conversationstart",
+      "displayName": "Greeting",
+      "description": "This is the default greeting when a chat begins. Start by having your bot or virtual agent introduce itself. When building out topics, consider whether you need to comply with applicable local law.",
+      "createdTime": "2019-01-15T00:00:00Z",
       "updatedTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
       "updatedUserId": "user0"
     }
-  ]
+  ],
+  "dialogs": [
+    {
+      "rootNodeId": "8a32ebd1-bec3-4cde-a75a-1977a561b019",
+      "dialogType": "System",
+      "messageNodes": [
+        {
+          "botMessageId": "987e1575-01b0-467b-a98e-33f113cb7dcb",
+          "nodeType": "BotMessageNode",
+          "id": "8a32ebd1-bec3-4cde-a75a-1977a561b019",
+          "defaultTargetNodeId": "768db8e6-1db0-4117-a5d4-0ebd7f7ac2b3"
+        },
+        {
+          "botMessageId": "1edf5849-e499-4a6d-9fed-2a9ca0e43c87",
+          "nodeType": "BotMessageNode",
+          "id": "768db8e6-1db0-4117-a5d4-0ebd7f7ac2b3",
+          "defaultTargetNodeId": "4c32d4d5-9bdc-47f0-afaf-614883acef7b"
+        },
+        {
+          "botMessageId": "9b10a545-fa43-4301-a7c4-8d17b0f1ff39",
+          "nodeType": "BotMessageNode",
+          "id": "4c32d4d5-9bdc-47f0-afaf-614883acef7b"
+        }
+      ],
+      "id": "new_topic_1245bebc75664baabd1c6ea9376ce289_ba7b967c97ba4c39bca58a8bb6a72d59_conversationstart",
+      "displayName": "Dialog",
+      "createdTime": "2019-01-15T00:00:00Z",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "updatedUserId": "user0"
+    }
+  ],
+  "botMessages": [
+    {
+      "channelContent": {
+        "web": {
+          "contentFormat": "Markdown",
+          "content": "Hi! I'm a virtual agent. I can help with account questions, orders, store information, and more."
+        }
+      },
+      "id": "987e1575-01b0-467b-a98e-33f113cb7dcb",
+      "createdTime": "2019-01-15T00:00:00Z",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "updatedUserId": "user0"
+    },
+    {
+      "channelContent": {
+        "web": {
+          "contentFormat": "PlainText",
+          "content": "If you'd like to speak to a human agent, let me know at any time."
+        }
+      },
+      "id": "1edf5849-e499-4a6d-9fed-2a9ca0e43c87",
+      "createdTime": "2019-01-15T00:00:00Z",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "updatedUserId": "user0"
+    },
+    {
+      "channelContent": {
+        "web": {
+          "contentFormat": "PlainText",
+          "content": "So, what can I help you with today?"
+        }
+      },
+      "id": "9b10a545-fa43-4301-a7c4-8d17b0f1ff39",
+      "createdTime": "2019-01-15T00:00:00Z",
+      "updatedTime": "2019-01-15T00:00:00Z",
+      "createdUserId": "user0",
+      "updatedUserId": "user0"
+    }
+  ],
+  "createdUtc": "0001-01-01T00:00:00Z"
 }

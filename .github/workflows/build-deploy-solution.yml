@@ -18,6 +18,14 @@ on:
         description: "environment where the build will be deployed"
 
 jobs:
+  update-pr-with-link-to-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "${{ github.run_id }}"
+          echo "${{ gihtub.ref }}"
+          echo "${{ gihtub.server_url }}/${{ gihtub.repository }}/runs/${{ github.run_id }}"
+
   build-solution:
     name: build solution
     uses: devkeydet/pva-alm/.github/workflows/build-solution.yml@main

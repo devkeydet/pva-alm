@@ -26,6 +26,8 @@ jobs:
       solution_export_folder: solution-export-temp 
 
     steps:
+      - uses: actions/checkout@v2
+      
       - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
@@ -43,10 +45,11 @@ jobs:
           path: ${{ runner.temp }}/${{ env.solution_pack_folder }}
       
       # need to drop to pac because there's a bug in delete-solution
-      #
+      # https://github.com/microsoft/powerplatform-actions/issues/141
       # TODO: use delete-solution whe bug is fixed
       - id: get-pac-path
         uses: ./.github/actions/get-pac-path
+
       - shell: pwsh
         run: |
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"

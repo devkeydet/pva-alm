@@ -55,7 +55,6 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
-          $name = "${{ github.event.inputs.environment_url}}".Replace
           pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
           pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
           
@@ -83,16 +82,27 @@ jobs:
       with:
         path: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}
 
+    # - name: import-manage-solution-to-environment
+    #   uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
+    #   with:
+    #     environment-url: ${{ github.event.inputs.environment_url}}
+    #     tenant-id: ${{ secrets.tenant_id }}
+    #     app-id: ${{ secrets.client_id }}
+    #     client-secret: ${{ secrets.client_secret }}
+    #     solution-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip
+    #     force-overwrite: true
+    #     convert-to-managed: true
+
+    - name: get-pac-path
+      id: get-pac-path
+      uses: ./.github/actions/get-pac-path
+
     - name: import-manage-solution-to-environment
-      uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
-      with:
-        environment-url: ${{ github.event.inputs.environment_url}}
-        tenant-id: ${{ secrets.tenant_id }}
-        app-id: ${{ secrets.client_id }}
-        client-secret: ${{ secrets.client_secret }}
-        solution-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip
-        force-overwrite: true
-        convert-to-managed: true
+      shell: pwsh
+      run: |
+        #$env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
+        pac solution import --force-overwrite true  --convert-to-managed true --path ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip
 
     - if: ${{ failure() }}
       name: log-error
@@ -102,19 +112,11 @@ jobs:
         $errorMessage = $errorMessage + "The unmanaged container is gone, but the unmanaged solution components still exist in the environment. "
         $errorMessage = $errorMessage + "Fix whatever is causing the import to fail, then you can rerun this job."
         echo "::error title=Error::$errorMessage"
-   
-    # need to drop to pac because there's a bug in delete-solution
-    # https://github.com/microsoft/powerplatform-actions/issues/141
-    # TODO: use delete-solution whe bug is fixed
-    - name: get-pac-path
-      id: get-pac-path
-      uses: ./.github/actions/get-pac-path
 
-    - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
+    - name: delete-managed-solution
       shell: pwsh
       run: |
         $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
-        $name = "${{ github.event.inputs.environment_url}}".Replace
         pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
         pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
 

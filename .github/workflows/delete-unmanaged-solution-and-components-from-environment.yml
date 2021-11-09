@@ -51,12 +51,13 @@ jobs:
         id: get-pac-path
         uses: ./.github/actions/get-pac-path
 
-      - shell: pwsh
+      - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
+        shell: pwsh
         run: |
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
           $name = "${{ github.event.inputs.environment_url}}".Replace
           pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
-          pac auth list
+          pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
           
       # - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
       #   uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0

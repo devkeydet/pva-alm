@@ -83,6 +83,10 @@ jobs:
       with:
         path: ${{ runner.temp }}/${{ inputs.solution_name }}
 
+    - name: dir
+      shell: pwsh
+      run: dir
+
     - name: import-manage-solution-to-environment
       uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
       with:
@@ -94,14 +98,14 @@ jobs:
         force-overwrite: true
         convert-to-managed: true
 
-  #   - if: ${{ failure() }}
-  #     name: log-error
-  #     shell: pwsh
-  #     run: |
-  #       $errorMessage = "Since the import failed, your environment is in an unhealthy state. "
-  #       $errorMessage = $errorMessage + "The unmanaged container is gone, but the unmanaged solution components still exist in the environment. "
-  #       $errorMessage = $errorMessage + "Fix whatever is causing the import to fail, then you can rerun this job."
-  #       echo "::error title=Error::$errorMessage"
+    - if: ${{ failure() }}
+      name: log-error
+      shell: pwsh
+      run: |
+        $errorMessage = "Since the import failed, your environment is in an unhealthy state. "
+        $errorMessage = $errorMessage + "The unmanaged container is gone, but the unmanaged solution components still exist in the environment. "
+        $errorMessage = $errorMessage + "Fix whatever is causing the import to fail, then you can rerun this job."
+        echo "::error title=Error::$errorMessage"
    
     # need to drop to pac because there's a bug in delete-solution
     # https://github.com/microsoft/powerplatform-actions/issues/141
@@ -117,7 +121,7 @@ jobs:
         $name = "${{ github.event.inputs.environment_url}}".Replace
         pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
         pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
-        
+
   #   - name: delete-managed-solution (DOES NOT DELETE SOLUTION COMPONENTS)
   #     uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
   #     with:

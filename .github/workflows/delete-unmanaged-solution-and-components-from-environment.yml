@@ -26,7 +26,7 @@ jobs:
       solution_export_folder: solution-export-temp 
 
     steps:
-      - uses: actions/checkout@v2      
+      # - uses: actions/checkout@v2      
 
       - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
@@ -44,14 +44,14 @@ jobs:
           name: artifact
           path: ${{ runner.temp }}/${{ env.solution_pack_folder }}
       
-      - name: foo-foo
-        uses: microsoft/powerplatform-actions/delete-solution@v0
-        with:
-          environment-url: ${{ github.event.inputs.environment_url}}
-          app-id: ${{ secrets.CLIENT_ID }}
-          client-secret: ${{ secrets.CLIENT_SECRET }}
-          tenant-id: ${{ secrets.TENANT_ID }}
-          solution-name: ${{ github.event.inputs.solution_name }}
+      # - name: foo-foo
+      #   uses: microsoft/powerplatform-actions/delete-solution@v0
+      #   with:
+      #     environment-url: ${{ github.event.inputs.environment_url}}
+      #     app-id: ${{ secrets.CLIENT_ID }}
+      #     client-secret: ${{ secrets.CLIENT_SECRET }}
+      #     tenant-id: ${{ secrets.TENANT_ID }}
+      #     solution-name: ${{ github.event.inputs.solution_name }}
 
 # # If the import failed, we can't continue with the cleanup process. 
 # # A common cause of this is that a canvas app is still open in the studio and therefore import is blocked.

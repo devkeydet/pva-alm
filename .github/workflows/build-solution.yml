@@ -58,17 +58,17 @@ jobs:
                 Out-File $_.FullName
           }
 
-      # - name: Flatten JSON files
-      #   shell: pwsh
-      #   run: |
-      #     #When we unpack the solution files, we format the json, but it causes solution import failures so we need to flatten the files
-      #     Get-ChildItem -Path "${{ env.solution_package_source }}" -Recurse -Filter *.json |
-      #     ForEach-Object {
-      #         $fileContent = (Get-Content $_.FullName) -join ' '
-      #         if(-not [string]::IsNullOrWhiteSpace($fileContent)) {
-      #             Set-Content $_.FullName $fileContent
-      #         }
-      #     }
+      - name: Flatten JSON files
+        shell: pwsh
+        run: |
+          #When we unpack the solution files, we format Power Automate json files, but it causes solution import failures so we need to flatten the files
+          Get-ChildItem -Path "${{ env.solution_package_source }}/Workflows" -Recurse -Filter *.json |
+          ForEach-Object {
+              $fileContent = (Get-Content $_.FullName) -join ' '
+              if(-not [string]::IsNullOrWhiteSpace($fileContent)) {
+                  Set-Content $_.FullName $fileContent
+              }
+          }
 
       - id: get-pac-path
         uses: ./.github/actions/get-pac-path

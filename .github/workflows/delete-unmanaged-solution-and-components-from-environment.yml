@@ -95,6 +95,14 @@ jobs:
     #     force-overwrite: true
     #     convert-to-managed: true
 
+    # HACK: In order for get-pac-path to work, we need to force the workflow to get the actions
+    - name: call whoami-action
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{ github.event.inputs.environment_url}}
+        app-id: ${{ secrets.CLIENT_ID }}
+        client-secret: ${{ secrets.CLIENT_SECRET }}
+
     - name: get-pac-path
       id: get-pac-path
       uses: ./.github/actions/get-pac-path

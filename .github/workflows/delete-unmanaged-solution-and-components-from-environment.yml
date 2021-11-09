@@ -26,8 +26,6 @@ jobs:
       solution_export_folder: solution-export-temp 
 
     steps:
-      # - uses: actions/checkout@v2      
-
       - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
@@ -68,8 +66,8 @@ jobs:
       with:
         path: ${{ runner.temp }}/${{ inputs.solution_name }}
 
-    - name: import solution to environment
-      uses: microsoft/powerplatform-actions/import-solution@v0
+    - name: import-manage-solution-to-environment
+      uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
       with:
         environment-url: ${{ github.event.inputs.environment_url}}
         tenant-id: ${{ secrets.tenant_id }}
@@ -88,7 +86,7 @@ jobs:
         $errorMessage = $errorMessage + "Fix whatever is causing the import to fail, then you can rerun this job."
         echo "::error title=Error::$errorMessage"
 
-    - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
+    - name: delete-managed-solution (DOES NOT DELETE SOLUTION COMPONENTS)
       uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
       with:
         environment-url: ${{ github.event.inputs.environment_url}}

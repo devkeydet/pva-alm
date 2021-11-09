@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
@@ -47,13 +47,15 @@ jobs:
       # need to drop to pac because there's a bug in delete-solution
       # https://github.com/microsoft/powerplatform-actions/issues/141
       # TODO: use delete-solution whe bug is fixed
-      - id: get-pac-path
+      - name: get-pac-path
+        id: get-pac-path
         uses: ./.github/actions/get-pac-path
 
       - shell: pwsh
         run: |
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
-          pac auth list
+          $name = "${{ github.event.inputs.environment_url}}".Replace
+          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
           
       # - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
       #   uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0

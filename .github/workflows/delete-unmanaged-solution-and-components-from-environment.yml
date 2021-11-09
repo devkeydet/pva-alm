@@ -36,13 +36,13 @@ jobs:
           client-secret: ${{ secrets.CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}
           solution-name: ${{ github.event.inputs.solution_name }}
-          solution-output-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
+          solution-output-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/${{ github.event.inputs.solution_name }}.zip
           managed: true
       
       - uses: actions/upload-artifact@v2
         with:
           name: artifact
-          path: ${{ runner.temp }}/${{ env.solution_pack_folder }}
+          path: ${{ runner.temp }}
       
       # need to drop to pac because there's a bug in delete-solution
       # https://github.com/microsoft/powerplatform-actions/issues/141
@@ -81,7 +81,7 @@ jobs:
     steps:
     - uses: actions/download-artifact@v2
       with:
-        path: ${{ runner.temp }}/${{ inputs.solution_name }}
+        path: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}
 
     - name: dir
       shell: pwsh
@@ -94,7 +94,7 @@ jobs:
         tenant-id: ${{ secrets.tenant_id }}
         app-id: ${{ secrets.client_id }}
         client-secret: ${{ secrets.client_secret }}
-        solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip
+        solution-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip
         force-overwrite: true
         convert-to-managed: true
 

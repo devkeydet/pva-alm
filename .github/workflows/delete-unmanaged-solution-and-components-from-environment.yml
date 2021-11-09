@@ -78,6 +78,8 @@ jobs:
     needs: export-and-delete-unmanaged
 
     steps:
+    - uses: actions/checkout@v2
+    
     - uses: actions/download-artifact@v2
       with:
         path: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}
@@ -102,7 +104,7 @@ jobs:
       run: |
         #$env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
         pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
-        pac solution import --force-overwrite true  --convert-to-managed true --path ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip
+        pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ github.event.inputs.solution_name }}/artifact/${{ github.event.inputs.solution_name }}.zip"
 
     - if: ${{ failure() }}
       name: log-error

@@ -15,10 +15,6 @@ on:
         description: "the ref (branch, commit, tag) you want to import"
         required: true
         default: "main"
-      solution_version_major_minor:
-        description: "solution major minor version"
-        required: true
-        default: "1.0"
 
 jobs:
   build-solution:
@@ -26,7 +22,7 @@ jobs:
     with:
       ref: ${{ github.event.inputs.ref }}
       solution_name: ${{ github.event.inputs.solution_name }}
-      solution_version_major_minor: "${{ github.event.inputs.solution_version_major_minor }}"
+      solution_version_major_minor: "0.0"
       dev_build: true
 
   deploy-solution:

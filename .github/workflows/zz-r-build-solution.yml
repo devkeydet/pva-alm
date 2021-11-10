@@ -12,7 +12,7 @@ on:
       solution_version_major_minor:
         required: true
         type: string
-      dev_build:
+      foo_foo:
         required: true
         type: string
 
@@ -43,7 +43,7 @@ jobs:
 
       # set environment and build number as output variables for further use
       - id: setOutput
-        if: ${{ github.event.inputs.dev_build != true}}
+        if: ${{ github.event.inputs.foo_foo != true}}
         shell: pwsh
         run: |
           echo "dev_build: ${{ github.event.inputs.dev_build }}"

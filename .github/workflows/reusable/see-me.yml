@@ -1,0 +1,13 @@
+name: see-me
+
+on:
+  workflow_call:
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+
+    steps:
+      - shell: pwsh
+        run: |
+          echo "init"

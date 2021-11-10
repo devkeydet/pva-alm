@@ -12,7 +12,7 @@ on:
       solution_version_major_minor:
         required: true
         type: string
-      skip_tag:
+      dev_build:
         required: false
         type: boolean
         default: false
@@ -29,7 +29,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.ref }}
-      
+
       - name: update-pr-with-link-to-workflow
         shell: pwsh
         env:
@@ -40,10 +40,11 @@ jobs:
             $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
             $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             gh pr comment $prNumber --body "latest pr validation workflow: $runUrl"
-          }  
+          }
 
       # set environment and build number as output variables for further use
       - id: setOutput
+        if: ${{ !github.event.inputs.dev_build }}
         run: |
           $dateStamp = Get-Date -Format "yyyyMMdd"
           $buildNumber = "${{ github.event.inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
@@ -53,7 +54,7 @@ jobs:
 
       - name: Create tag
         uses: actions/github-script@v3
-        if: ${{ github.event.inputs.ref == 'ref/heads/main' && github.event.inputs.skip_tag }}
+        if: ${{ github.event.inputs.ref == 'ref/heads/main' && !github.event.inputs.dev_build }}
         with:
           github-token: ${{ github.token }}
           script: |

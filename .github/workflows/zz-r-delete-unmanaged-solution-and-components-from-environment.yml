@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      solution_export_folder: solution-export-temp 
+      solution_export_folder: ${{ runner.temp }}/${{ inputs.solution_name }}/delete_artifacts 
 
     steps:
       # Solutions cannot be imported in parallel, so we queue
@@ -40,7 +40,7 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           tenant-id: ${{ secrets.tenant_id }}
           solution-name: ${{ inputs.solution_name }}
-          solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_dev.zip
+          solution-output-file: ${{ env.solution_export_folder }}/${{ inputs.solution_name }}.zip
           managed: false
 
       - name: export-managed-solution
@@ -51,7 +51,7 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           tenant-id: ${{ secrets.tenant_id }}
           solution-name: ${{ inputs.solution_name }}
-          solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_dev_managed.zip
+          solution-output-file: ${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
           managed: true
       
       - uses: actions/upload-artifact@v2
@@ -89,7 +89,7 @@ jobs:
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
           echo $env:PATH
           pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ secrets.tenant_id }} --applicationId ${{ secrets.client_id }} --clientSecret ${{ secrets.client_secret }}
-          pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_dev_managed.zip"
+          pac solution import --force-overwrite true --convert-to-managed true --path "${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip"
       
       # - name: import-managed-solution-to-environment
       #   uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
@@ -98,7 +98,7 @@ jobs:
       #     tenant-id: ${{ secrets.tenant_id }}
       #     app-id: ${{ secrets.client_id }}
       #     client-secret: ${{ secrets.client_secret }}
-      #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_dev_managed.zip
+      #     solution-file: ${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
       #     force-overwrite: true
       #     convert-to-managed: true
 

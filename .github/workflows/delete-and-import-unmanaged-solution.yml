@@ -32,7 +32,6 @@ jobs:
       client_secret: ${{ secrets.CLIENT_SECRET }}
 
   build-solution:
-    name: build solution
     uses: devkeydet/pva-alm/.github/workflows/zz-r-build-solution.yml@main
     needs: delete-unmanaged-solution-and-components-from-environment
     with:
@@ -41,7 +40,6 @@ jobs:
       solution_version_major_minor: "${{ github.event.inputs.solution_version_major_minor }}"
 
   deploy-solution:
-    name: deploy solution to ${{ github.event.inputs.environment }} environment
     uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
     needs: build-solution
     with:

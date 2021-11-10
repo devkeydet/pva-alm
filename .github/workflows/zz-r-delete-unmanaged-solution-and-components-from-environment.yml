@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      solution_export_folder: ${{ runner.temp }}/${{ inputs.solution_name }}/delete_artifacts 
+      solution_export_folder: "${{ runner.temp }}/${{ inputs.solution_name }}/delete_artifacts" 
 
     steps:
       # Solutions cannot be imported in parallel, so we queue

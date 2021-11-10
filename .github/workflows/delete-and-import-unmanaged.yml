@@ -9,7 +9,6 @@ on:
     inputs:
       x:
         type: string
-        default: 'workflow_call'
 
 jobs:
   job1:

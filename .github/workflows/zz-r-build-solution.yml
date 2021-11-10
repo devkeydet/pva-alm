@@ -47,6 +47,7 @@ jobs:
         if: ${{ github.event.inputs.dev_build != true}}
         shell: pwsh
         run: |
+          echo ${{ github.event.inputs.dev_build }}
           $dateStamp = Get-Date -Format "yyyyMMdd"
           $buildNumber = "${{ github.event.inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
           echo "::set-output name=buildNumber::$buildNumber"

@@ -2,6 +2,7 @@ name: delete-and-import-unmanaged
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   job1:

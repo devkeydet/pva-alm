@@ -5,4 +5,4 @@ on:
 
 jobs:
   call-it:
-    uses: devkeydet/pva-alm/.github/reusable-workflows/call-me.yml@main
+    uses: devkeydet/pva-alm/.github/call-me.yml@main

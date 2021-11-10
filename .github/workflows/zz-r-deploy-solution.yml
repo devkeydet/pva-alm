@@ -1,4 +1,4 @@
-name: deploy-solution
+name: zz-r-deploy-solution
 
 on:
   workflow_call:

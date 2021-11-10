@@ -1,4 +1,4 @@
-name: build-solution
+name: zz-r-build-solution
 
 on:
   workflow_call:

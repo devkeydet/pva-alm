@@ -24,7 +24,7 @@ jobs:
     with:
       solution_name: ${{ github.event.inputs.solution_name }}
       environment_url: ${{ github.event.inputs.environment_url }}
-    secrets:
-      app-id: ${{ secrets.CLIENT_ID }}
-      client-secret: ${{ secrets.CLIENT_SECRET }}
-      tenant-id: ${{ secrets.TENANT_ID }}
+    secrets:      
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}

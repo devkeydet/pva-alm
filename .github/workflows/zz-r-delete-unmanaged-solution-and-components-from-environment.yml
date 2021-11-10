@@ -10,11 +10,11 @@ on:
         type: string
         required: true
     secrets:
-      app-id: 
+      tenant_id:
         required: true
-      client-secret:
+      client_id:
         required: true
-      tenant-id:
+      client_secret:
         required: true
 
 jobs:

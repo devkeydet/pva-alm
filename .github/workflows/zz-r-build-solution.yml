@@ -44,7 +44,7 @@ jobs:
 
       # set environment and build number as output variables for further use
       - id: setOutput
-        if: ${{ !github.event.inputs.dev_build }}
+        if: ${{ github.event.inputs.dev_build != true}}
         shell: pwsh
         run: |
           $dateStamp = Get-Date -Format "yyyyMMdd"
@@ -66,7 +66,7 @@ jobs:
             })
 
       - name: update solution version number
-        if: ${{ !github.event.inputs.dev_build }}
+        if: ${{ github.event.inputs.dev_build != true}}
         shell: pwsh
         run: |
           Get-ChildItem -Path "${{ env.solution_package_source }}/Other/Solution.xml" | 

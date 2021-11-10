@@ -23,7 +23,7 @@ jobs:
       ref: ${{ github.event.inputs.ref }}
       solution_name: ${{ github.event.inputs.solution_name }}
       solution_version_major_minor: "0.0"
-      foo_foo: "false"
+      dev_build: true
 
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main

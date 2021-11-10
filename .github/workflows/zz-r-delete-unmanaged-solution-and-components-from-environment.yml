@@ -9,6 +9,13 @@ on:
       environment_url:
         type: string
         required: true
+    secrets:
+      app-id: 
+        required: true
+      client-secret:
+        required: true
+      tenant-id:
+        required: true
 
 jobs:
   export-and-delete-unmanaged-import-and-delete-managed:
@@ -29,9 +36,9 @@ jobs:
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
-          app-id: ${{ secrets.CLIENT_ID }}
-          client-secret: ${{ secrets.CLIENT_SECRET }}
-          tenant-id: ${{ secrets.TENANT_ID }}
+          app-id: ${{ secrets.client_id }}
+          client-secret: ${{ secrets.client_secret }}
+          tenant-id: ${{ secrets.tenant_id }}
           solution-name: ${{ github.event.inputs.solution_name }}
           solution-output-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/${{ github.event.inputs.solution_name }}.zip
           managed: false
@@ -40,9 +47,9 @@ jobs:
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
-          app-id: ${{ secrets.CLIENT_ID }}
-          client-secret: ${{ secrets.CLIENT_SECRET }}
-          tenant-id: ${{ secrets.TENANT_ID }}
+          app-id: ${{ secrets.client_id }}
+          client-secret: ${{ secrets.client_secret }}
+          tenant-id: ${{ secrets.tenant_id }}
           solution-name: ${{ github.event.inputs.solution_name }}
           solution-output-file: ${{ runner.temp }}/${{ github.event.inputs.solution_name }}/${{ github.event.inputs.solution_name }}_managed.zip
           managed: true
@@ -63,16 +70,16 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
-          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
+          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.tenant_id }} --applicationId ${{ secrets.client_id }} --clientSecret ${{ secrets.client_secret }}
           pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
           
       # - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
       #   uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
       #   with:
       #     environment-url: ${{ github.event.inputs.environment_url}}
-      #     app-id: ${{ secrets.CLIENT_ID }}
-      #     client-secret: ${{ secrets.CLIENT_SECRET }}
-      #     tenant-id: ${{ secrets.TENANT_ID }}
+      #     app-id: ${{ secrets.client_id }}
+      #     client-secret: ${{ secrets.client_secret }}
+      #     tenant-id: ${{ secrets.tenant_id }}
       #     solution-name: ${{ github.event.inputs.solution_name }}
 
       - name: import-manage-solution-to-environment
@@ -81,7 +88,7 @@ jobs:
           echo $env:PATH
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
           echo $env:PATH
-          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
+          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.tenant_id }} --applicationId ${{ secrets.client_id }} --clientSecret ${{ secrets.client_secret }}
           pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ github.event.inputs.solution_name }}/${{ github.event.inputs.solution_name }}_managed.zip"
       
       # - name: import-manage-solution-to-environment
@@ -110,14 +117,14 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
-          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.TENANT_ID }} --applicationId ${{ secrets.CLIENT_ID }} --clientSecret ${{ secrets.CLIENT_SECRET }}
+          pac auth create --name temp --url ${{ github.event.inputs.environment_url}} --tenant ${{ secrets.tenant_id }} --applicationId ${{ secrets.client_id }} --clientSecret ${{ secrets.client_secret }}
           pac solution delete --solution-name ${{ github.event.inputs.solution_name }}
 
     #   - name: delete-managed-solution
     #     uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
     #     with:
     #       environment-url: ${{ github.event.inputs.environment_url}}
-    #       app-id: ${{ secrets.CLIENT_ID }}
-    #       client-secret: ${{ secrets.CLIENT_SECRET }}
-    #       tenant-id: ${{ secrets.TENANT_ID }}
+    #       app-id: ${{ secrets.client_id }}
+    #       client-secret: ${{ secrets.client_secret }}
+    #       tenant-id: ${{ secrets.tenant_id }}
     #       solution-name: ${{ github.event.inputs.solution_name }}

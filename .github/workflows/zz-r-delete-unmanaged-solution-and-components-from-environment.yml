@@ -40,7 +40,7 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           tenant-id: ${{ secrets.tenant_id }}
           solution-name: ${{ inputs.solution_name }}
-          solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}.zip
+          solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_dev.zip
           managed: false
 
       - name: export-managed-solution
@@ -51,7 +51,7 @@ jobs:
           client-secret: ${{ secrets.client_secret }}
           tenant-id: ${{ secrets.tenant_id }}
           solution-name: ${{ inputs.solution_name }}
-          solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_managed.zip
+          solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_dev_managed.zip
           managed: true
       
       - uses: actions/upload-artifact@v2
@@ -82,7 +82,7 @@ jobs:
       #     tenant-id: ${{ secrets.tenant_id }}
       #     solution-name: ${{ inputs.solution_name }}
 
-      - name: import-manage-solution-to-environment
+      - name: import-managed-solution-to-environment
         shell: pwsh
         run: |
           echo $env:PATH
@@ -91,7 +91,7 @@ jobs:
           pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ secrets.tenant_id }} --applicationId ${{ secrets.client_id }} --clientSecret ${{ secrets.client_secret }}
           pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_managed.zip"
       
-      # - name: import-manage-solution-to-environment
+      # - name: import-managed-solution-to-environment
       #   uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
       #   with:
       #     environment-url: ${{ inputs.environment_url}}

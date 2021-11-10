@@ -48,7 +48,7 @@ jobs:
 
       - run: |
           git fetch --all --tags
-          $commit = git rev-list -n 1 tags/${{ github.event.inputs.tag }}
+          $commit = git rev-list -n 1 tags/${{ inputs.tag }}
           echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         shell: pwsh
         if: ${{ inputs.environment == 'prod' }}

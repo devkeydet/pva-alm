@@ -5,4 +5,4 @@ on:
 
 jobs:
   call-it:
-    uses: ${{ github.repository }}/.github/workflows/call-me.yml@main
+    uses: devkeydet/pva-alm/.github/workflows/call-me.yml@main

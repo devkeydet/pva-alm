@@ -40,6 +40,9 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
+      # Solutions cannot be imported in parallel, so we queue
+      - uses: ahmadnassri/action-workflow-queue@v1
+
       - uses: actions/checkout@v2
         if: ${{ inputs.environment == 'prod' }}
 
@@ -91,17 +94,14 @@ jobs:
         run: |
           # unmanaged means we are targeting a dev environment
           if ([System.Convert]::ToBoolean("${{ inputs.unmanaged }}")) {
-            $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('.zip')}
+            $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('.zip') -and !$_.Name.EndsWith('_managed.zip')}
           }
           else {
             $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('_managed.zip')}
           }
           
           $solutionZip = $files[0].Name
-          echo "::set-output name=solution_zip::$solutionZip"
-
-      # Solutions cannot be imported in parallel, so we queue
-      - uses: ahmadnassri/action-workflow-queue@v1
+          echo "::set-output name=solution_zip::$solutionZip"      
 
       - name: import solution to environment
         uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0

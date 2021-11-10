@@ -8,7 +8,7 @@ on:
       solution_name:
         description: "name of the Solution in Dataverse environment"
         required: true
-        default: pvaalm
+        default: yoursolutionname
       environment_url:
         description: "http endpoint of your Dataverse environment"
         required: true

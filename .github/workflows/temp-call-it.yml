@@ -1,8 +1,0 @@
-name: temp-call-it
-
-on:
-  workflow_dispatch:
-
-jobs:
-  call-it:
-    uses: devkeydet/pva-alm/.github/workflows/call-me.yml@main

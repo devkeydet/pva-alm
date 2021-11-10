@@ -25,7 +25,7 @@ jobs:
 
   deploy-prod:
     needs: get-solution-name-from-tag
-    uses: devkeydet/pva-alm/.github/workflows/deploy-solution.yml@main
+    uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
     with:
       solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name}}
       environment: "prod"

@@ -9,6 +9,10 @@ on:
       environment:
         required: true
         type: string
+      unmanaged:
+        required: false
+        type: string
+        default: false
       tag:
         required: false
         type: string
@@ -49,7 +53,7 @@ jobs:
       - name: download prod artifact
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: build-deploy-solution.yml
+          workflow: build-zz-r-deploy-solution.yml
           commit: ${{ env.commit }}
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment == 'prod' }}
@@ -84,10 +88,15 @@ jobs:
         id: get-solution-zip
         shell: pwsh
         run: |
-          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('_managed.zip')}
+          if ([System.Convert]::ToBoolean("${{ inputs.unmanaged }}")) {
+            $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('.zip') -and !$_.Name.EndsWith('_managed.zip')}
+          }
+          else {
+            $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('_managed.zip')}
+          }
+          
           $solutionZip = $files[0].Name
           echo "::set-output name=solution_zip::$solutionZip"
-        # TODO: evolve this to be reusable for importing unmanaged into dev.  This sample currently currently only shows managed for downstream environments.
 
       # Solutions cannot be imported in parallel, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1

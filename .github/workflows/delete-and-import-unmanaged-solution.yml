@@ -1,0 +1,54 @@
+name: delete-and-import-unmanaged-solution
+
+on:
+  workflow_dispatch:
+    inputs:
+      solution_name:
+        description: "name of the Solution in Dataverse environment"
+        required: true
+        default: yoursolutionname
+      environment_url:
+        description: "http endpoint of your Dataverse environment"
+        required: true
+        default: "https://[your-env].crm[x].dynamics.com"
+      ref:
+        description: "the ref (branch, commit, tag) you want to import"
+        required: true
+        default: "main"
+      solution_version_major_minor:
+        description: "ex: 1.0"
+        required: true
+        default: "1.0"
+
+jobs:
+  delete-unmanaged-solution-and-components-from-environment:
+    uses: devkeydet/pva-alm/.github/workflows/zz-r-delete-unmanaged-solution-and-components-from-environment.yml@main
+    with:
+      solution_name: ${{ github.event.inputs.solution_name }}
+      environment_url: ${{ github.event.inputs.environment_url }}
+    secrets:
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+
+  build-solution:
+    name: build solution
+    uses: devkeydet/pva-alm/.github/workflows/zz-r-build-solution.yml@main
+    with:
+      ref: ${{ github.event.inputs.ref }}
+      solution_name: ${{ github.event.inputs.solution_name }}
+      solution_version_major_minor: "${{ github.event.inputs.solution_version_major_minor }}"
+
+  deploy-solution:
+    name: deploy solution to ${{ github.event.inputs.environment }} environment
+    uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
+    needs: build-solution
+    with:
+      solution_name: ${{ github.event.inputs.solution_name }}
+      environment: dev
+      unmanaged: true
+    secrets:
+      environment_url: ${{ github.event.inputs.environment_url }}
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      client_secret: ${{ secrets.CLIENT_SECRET }}

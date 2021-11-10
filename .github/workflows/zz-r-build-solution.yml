@@ -45,12 +45,12 @@ jobs:
       # set environment and build number as output variables for further use
       - id: setOutput
         if: ${{ !github.event.inputs.dev_build }}
+        shell: pwsh
         run: |
           $dateStamp = Get-Date -Format "yyyyMMdd"
           $buildNumber = "${{ github.event.inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
           echo "::set-output name=buildNumber::$buildNumber"
           echo "buildNumber: $buildNumber"
-        shell: pwsh
 
       - name: Create tag
         uses: actions/github-script@v3
@@ -66,6 +66,7 @@ jobs:
             })
 
       - name: update solution version number
+        if: ${{ !github.event.inputs.dev_build }}
         shell: pwsh
         run: |
           Get-ChildItem -Path "${{ env.solution_package_source }}/Other/Solution.xml" | 

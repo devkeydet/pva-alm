@@ -4,8 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       x:
-        default: 'Hello World2'
+        default: 'workflow_dispatch'
   workflow_call:
+    inputs:
+      x:
+        default: 'workflow_call'
 
 jobs:
   job1:
@@ -14,4 +17,4 @@ jobs:
     steps:      
       - shell: pwsh
         run: |
-          echo "init"
+          echo "${{ github.event.inputs.x }}"

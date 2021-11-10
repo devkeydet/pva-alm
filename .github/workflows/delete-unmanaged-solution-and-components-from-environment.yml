@@ -20,7 +20,7 @@ on:
 
 jobs:
   delete-unmanaged-solution-and-components-from-environment:
-    uses: devkeydet/pva-alm/.github/workflows/zz-r-delete-unmanaged-solution-and-components-from-environment.yml@dkdt_wip
+    uses: devkeydet/pva-alm/.github/workflows/zz-r-delete-unmanaged-solution-and-components-from-environment.yml@main
     with:
       solution_name: ${{ github.event.inputs.solution_name }}
       environment_url: ${{ github.event.inputs.environment_url }}

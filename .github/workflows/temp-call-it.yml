@@ -6,3 +6,5 @@ on:
 jobs:
   call-it:
     uses: devkeydet/pva-alm/.github/workflows/delete-and-import-unmanaged.yml@main
+    with:
+      x: "workflow_call"

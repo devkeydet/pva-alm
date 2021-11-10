@@ -1,4 +1,4 @@
-name: delete-and-import-unmanaged-solution
+name: import-unmanaged-solution
 
 on:
   workflow_dispatch:

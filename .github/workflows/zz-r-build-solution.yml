@@ -13,7 +13,7 @@ on:
         required: true
         type: string
       dev_build:
-        required: false
+        required: true
         type: boolean
         default: false
 

@@ -4,10 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: devkeydet/pva-alm/.github/workflows/delete-and-import-unmanaged.yml@main
-        with:
-          x: "workflow_call"
+  call-it:
+    uses: devkeydet/pva-alm/.github/workflows/delete-and-import-unmanaged.yml@main
+    with:
+      x: "workflow_call"

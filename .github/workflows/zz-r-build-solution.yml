@@ -15,7 +15,6 @@ on:
       dev_build:
         required: true
         type: string
-        default: "false"
 
 jobs:
   build-solution:

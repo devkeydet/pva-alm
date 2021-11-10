@@ -16,7 +16,7 @@ on:
         required: true
         default: "main"
       solution_version_major_minor:
-        description: "ex: 1.0"
+        description: "solution major minor version"
         required: true
         default: "1.0"
 
@@ -34,6 +34,7 @@ jobs:
   build-solution:
     name: build solution
     uses: devkeydet/pva-alm/.github/workflows/zz-r-build-solution.yml@main
+    needs: delete-unmanaged-solution-and-components-from-environment
     with:
       ref: ${{ github.event.inputs.ref }}
       solution_name: ${{ github.event.inputs.solution_name }}

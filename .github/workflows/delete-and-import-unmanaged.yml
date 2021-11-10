@@ -2,6 +2,9 @@ name: delete-and-import-unmanaged
 
 on:
   workflow_dispatch:
+    inputs:
+      x:
+        default: 'Hello World2'
   workflow_call:
 
 jobs:

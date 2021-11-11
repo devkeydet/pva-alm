@@ -13,6 +13,7 @@ jobs:
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
           environment_url: https://marcsc-alm-demo-dev.crm.dynamics.com
+          solution_name: pvaalm
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}

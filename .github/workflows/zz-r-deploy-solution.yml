@@ -81,6 +81,7 @@ jobs:
               echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
               echo "::add-mask::$tokenValue"
             }
+          }
         if: ${{ inputs.environment != 'dev' }}
 
       - uses: cschleiden/replace-tokens@v1

@@ -36,5 +36,20 @@ jobs:
       client_id: ${{ secrets.CLIENT_ID }}
       client_secret: ${{ secrets.CLIENT_SECRET }}
       secrets: ${{ toJSON(secrets) }}
+  
+  turn-on-flows:
+    runs-on: windows-latest
+    needs: [deploy-prod,get-solution-name-from-tag]
+    #environment: "prod"
+    steps:
+      - uses: actions/checkout@v2
+      - id: turn-on-flows-impersonation
+        uses: ./.github/actions/turn-on-flows-impersonation
+        with:
+          environment-url: ${{ github.event.inputs.environment_url }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          deployment-settings-file: src/${{ needs.get-solution-name-from-tag.outputs.solution_name}}/deploymentSettings.json
 
   #TODO: Create a release in GitHub

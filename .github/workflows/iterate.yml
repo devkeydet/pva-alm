@@ -13,6 +13,7 @@ jobs:
       - name: Run a multi-line script
         shell: pwsh
         env:
-          foo: "hello"
+          foo: hello
+          name: foo
         run: |
-          echo ${{ env.foo }}
+          echo ${{ env.${{ env.name }} }}

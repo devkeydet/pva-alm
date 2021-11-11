@@ -50,8 +50,8 @@ jobs:
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
           environment-url: ${{ secrets.inputs.environment_url }}
+          solution_name: ${{ github.event.inputs.solution_name }}
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
-          deployment_settings_file: src/${{ github.event.inputs.solution_name }}/deploymentSettings.json
           secrets: ${{ toJSON(secrets) }}

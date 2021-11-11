@@ -48,14 +48,14 @@ runs:
       run: |
         Import-Module Microsoft.Xrm.Data.PowerShell
         Import-Module  Microsoft.PowerApps.Administration.PowerShell
-        
+
         $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
-        echo $connectionString
-        echo "Get-CrmConnection"
+     
         $conn = Get-CrmConnection -ConnectionString $connectionString
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString
               
         $environmentName = $conn.EnviromentId
+        echo "environmentName: $environmentName"
         $solutions = Get-CrmRecords -conn $conn -EntityLogicalName solution -FilterAttribute "uniquename" -FilterOperator "eq" -FilterValue "$env:solution_name"
         if($solutions.Count -gt 0) {
             $solutionId = $solutions.CrmRecords[0].solutionid

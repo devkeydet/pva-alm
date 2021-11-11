@@ -1,0 +1,22 @@
+#comment
+name: 'get subdomain from url'
+description: 'get path to use for Power Platform CLI'
+inputs:
+  url:
+    description: 'gets subdomain out of subdomain.domain.com'
+    required: true
+
+outputs:
+  subdomain:
+    description: "subdomain of url"
+    value: ${{ steps.get-subdomain.outputs.subdomain }}
+runs:
+  using: "composite"
+  steps:
+    - id: get-subdomain
+      shell: pwsh
+      env:
+        url: ${{ inputs.url }}
+      run: |
+        $subdomain = $env:url.Replace("https://","").Replace("http://","").Split(".")[0]
+        echo "::set-output name=subdomain::$subdomain"

@@ -17,6 +17,16 @@ on:
         default: "main"
 
 jobs:
+  get-subdomain:
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-subdomain
+        uses: ./.github/actions/get-subdomain
+        with:
+          url: ${{ github.event.inputs.environment_url }}
+    outputs:
+      subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
+
   delete-unmanaged-solution-and-components-from-environment:
     uses: devkeydet/pva-alm/.github/workflows/zz-r-delete-unmanaged-solution-and-components-from-environment.yml@main
     with:
@@ -34,14 +44,14 @@ jobs:
       ref: ${{ github.event.inputs.ref }}
       solution_name: ${{ github.event.inputs.solution_name }}
       solution_version_major_minor: "0.0"
-      dev_build: true
+      dev_build: true  
 
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
-    needs: build-solution
+    needs: [build-solution,get-subdomain]
     with:
       solution_name: ${{ github.event.inputs.solution_name }}
-      environment: dev
+      environment: ${{ needs.get-subdomain.outputs.subdomain }}
       unmanaged: true
     secrets:
       environment_url: ${{ github.event.inputs.environment_url }}

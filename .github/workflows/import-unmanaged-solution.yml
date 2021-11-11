@@ -17,6 +17,16 @@ on:
         default: "main"
 
 jobs:
+  get-subdomain:
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-subdomain
+        uses: ./.github/actions/get-subdomain
+        with:
+          url: ${{ github.event.inputs.environment_url }}
+    outputs:
+      subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
+      
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/zz-r-build-solution.yml@main
     with:
@@ -27,10 +37,10 @@ jobs:
 
   deploy-solution:
     uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
-    needs: build-solution
+    needs: [build-solution,get-subdomain]
     with:
       solution_name: ${{ github.event.inputs.solution_name }}
-      environment: dev
+      environment: ${{ needs.get-subdomain.outputs.subdomain }}
       unmanaged: true
     secrets:
       environment_url: ${{ github.event.inputs.environment_url }}

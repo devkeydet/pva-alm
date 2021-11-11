@@ -12,5 +12,9 @@ jobs:
 
       - name: Run a multi-line script
         shell: pwsh
-        run: |
-          $foo = '${{ secrets.values() }}'
+        run: | 
+          $secrets = ConvertFrom-Json '${{ secrets.values() }}'
+          $props = Get-Member -InputObject $secrets -MemberType Properties
+          $props = $props | Where-Object{!$_.Name.Equals("github_token")}
+          $prop = $props[0].Name
+          $secrets.$prop

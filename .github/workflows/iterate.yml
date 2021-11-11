@@ -1,0 +1,16 @@
+
+name: iterate
+on:
+  workflow_dispatch:
+
+jobs:
+  iterate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run a multi-line script
+        shell: pwsh
+        run: |
+          echo ${{ secrets }}

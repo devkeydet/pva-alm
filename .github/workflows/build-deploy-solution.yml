@@ -49,7 +49,7 @@ jobs:
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
-          environment-url: ${{ secrets.inputs.environment_url }}
+          environment_url: ${{ secrets.inputs.environment_url }}
           solution_name: ${{ github.event.inputs.solution_name }}
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}

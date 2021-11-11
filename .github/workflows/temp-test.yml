@@ -17,5 +17,4 @@ jobs:
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
-          deployment_settings_file: src/pvaalm/deploymentSettings.json
           secrets: ${{ toJSON(secrets) }}

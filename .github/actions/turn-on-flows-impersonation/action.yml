@@ -17,9 +17,6 @@ inputs:
   solution_name: 
     description: 'name of the solution to turn flows on'
     required: true
-  deployment_settings_file:
-    description: "Specify the path and file name of the deployment settings file."
-    required: true
   secrets:
     description: "secrets for repace token to find values to populat deployment settings file."
     required: true
@@ -34,7 +31,7 @@ runs:
 
     - uses: cschleiden/replace-tokens@v1
       with:
-        files: '["${{ inputs.deployment_settings_file }}"]'
+        files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
 
     # Enable flows based on connection references
     # Flows can only be turned on if the user turning them on has permissions to connections being referenced by the connection reference
@@ -56,7 +53,7 @@ runs:
         app_id: ${{ inputs.app_id }}
         client_secret: ${{ inputs.client_secret }}
         solution_name: ${{ inputs.solution_name }}
-        deployment_settings_file: ${{ inputs.deployment_settings_file }}
+        deployment_settings_file: "src/${{ inputs.solution_name }}/deploymentSettings.json"
       run: |
         Import-Module Microsoft.Xrm.Data.PowerShell
         Import-Module  Microsoft.PowerApps.Administration.PowerShell

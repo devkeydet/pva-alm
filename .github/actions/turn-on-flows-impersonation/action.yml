@@ -39,6 +39,12 @@ runs:
         solution-name: ${{ inputs.solution-name }}
         deployment-settings-file: ${{ inputs.deployment-settings-file }}
       run: |
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
+        $xrmDataPowerShellVersion = "2.8.12"
+        Install-Module Microsoft.Xrm.Data.PowerShell -Force -RequiredVersion $xrmDataPowerShellVersion
+        $powerAppsAdminModuleVersion = "2.0.105"
+        Install-Module Microsoft.PowerApps.Administration.PowerShell -Force -RequiredVersion $powerAppsAdminModuleVersion
+        Set-PSRepository PSGallery -InstallationPolicy Trusted
         Import-Module Microsoft.PowerApps.Administration.PowerShell -Force -ArgumentList @{ NonInteractive = $true }
         Add-PowerAppsAccount -TenantID $env:tenant-id -ApplicationId $env:app-id -ClientSecret $env:client-secret
         Import-Module Microsoft.Xrm.Data.PowerShell -Force -ArgumentList @{ NonInteractive = $true }

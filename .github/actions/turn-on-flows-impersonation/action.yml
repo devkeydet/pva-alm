@@ -52,6 +52,7 @@ runs:
         $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
      
         $conn = Get-CrmConnection -ConnectionString $connectionString
+        echo $conn
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString
               
         $environmentName = $conn.EnvironmentId

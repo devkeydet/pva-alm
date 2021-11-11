@@ -13,4 +13,4 @@ jobs:
       - name: Run a multi-line script
         shell: pwsh
         run: |
-          echo "${{ toJSON(secrets.*) }}"
+          $foo = '${{ secrets.values() }}'

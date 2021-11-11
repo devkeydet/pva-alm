@@ -16,4 +16,4 @@ jobs:
           foo: hello
           name: foo
         run: |
-          echo ${{ env.${{ env.name }} }}
+          echo ${{ secrets.* }}

@@ -12,8 +12,5 @@ jobs:
 
       - name: Run a multi-line script
         shell: pwsh
-        env:
-          foo: hello
-          name: foo
         run: |
-          echo ${{ toJSON(secrets) }}
+          echo "${{ toJSON(secrets) }}"

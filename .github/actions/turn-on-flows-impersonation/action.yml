@@ -5,19 +5,19 @@ inputs:
   environment-url: 
     description: 'URL of Power Platform environment to connect with; e.g. "https://test-env.crm.dynamics.com"'
     required: true
-  tenant-id:
+  tenant_id:
     description: 'gets subdomain out of subdomain.domain.com'
     required: true
-  app-id:
-    description: 'The application id to authenticate with. Setting this input makes app-id, tenant-id and client-secret required; specifying alternate "username" credential set of inputs will result in an error.'
+  app_id:
+    description: 'The application id to authenticate with. Setting this input makes app_id, tenant_id and client_secret required; specifying alternate "username" credential set of inputs will result in an error.'
     required: true
-  client-secret: 
+  client_secret: 
     description: 'gets subdomain out of subdomain.domain.com'
     required: true
-  solution-name: 
+  solution_name: 
     description: 'name of the solution to turn flows on'
     required: true
-  deployment-settings-file:
+  deployment_settings_file:
     description: "Specify the path and file name of the deployment settings file."
     required: true
 
@@ -32,12 +32,12 @@ runs:
     - name: turn-on-flows-impersonation
       shell: powershell # windows, not cross platform pwsh
       env:
-        environment-url: ${{ inputs.environment-url }}
-        tenant-id: ${{ inputs.tenant-id }}
-        app-id: ${{ inputs.app-id }}
-        client-secret: ${{ inputs.client-secret }}
-        solution-name: ${{ inputs.solution-name }}
-        deployment-settings-file: ${{ inputs.deployment-settings-file }}
+        environment_url: ${{ inputs.environment_url }}
+        tenant_id: ${{ inputs.tenant_id }}
+        app_id: ${{ inputs.app_id }}
+        client_secret: ${{ inputs.client_secret }}
+        solution_name: ${{ inputs.solution_name }}
+        deployment_settings_file: ${{ inputs.deployment_settings_file }}
       run: |
         Set-PSRepository PSGallery -InstallationPolicy Trusted
         $xrmDataPowerShellVersion = "2.8.12"
@@ -46,19 +46,19 @@ runs:
         Install-Module Microsoft.PowerApps.Administration.PowerShell -Force -RequiredVersion $powerAppsAdminModuleVersion
         Set-PSRepository PSGallery -InstallationPolicy Trusted
         Import-Module Microsoft.PowerApps.Administration.PowerShell -Force -ArgumentList @{ NonInteractive = $true }
-        Add-PowerAppsAccount -TenantID $env:tenant-id -ApplicationId $env:app-id -ClientSecret $env:client-secret
+        Add-PowerAppsAccount -TenantID $env:tenant_id -ApplicationId $env:app_id -ClientSecret $env:client_secret
         Import-Module Microsoft.Xrm.Data.PowerShell -Force -ArgumentList @{ NonInteractive = $true }
-        $connectionString = "AuthType=ClientSecret;url=$env:environment-url;ClientId=$env:app-id;ClientSecret=$env:client-secret"
+        $connectionString = "AuthType=ClientSecret;url=$env:environment-url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
         $conn = Get-CrmConnection -ConnectionString $connectionString
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString
               
         $environmentName = $conn.EnviromentId
-        $solutions = Get-CrmRecords -conn $conn -EntityLogicalName solution -FilterAttribute "uniquename" -FilterOperator "eq" -FilterValue "$env:solution-name"
+        $solutions = Get-CrmRecords -conn $conn -EntityLogicalName solution -FilterAttribute "uniquename" -FilterOperator "eq" -FilterValue "$env:solution_name"
         if($solutions.Count -gt 0) {
             $solutionId = $solutions.CrmRecords[0].solutionid
             $result = Get-CrmRecords -conn $conn -EntityLogicalName solutioncomponent -FilterAttribute "solutionid" -FilterOperator "eq" -FilterValue $solutionId -Fields objectid,componenttype
             $solutionComponents = $result.CrmRecords
-            $deploymentSettingsJSON = Get-Content $env:deployment-settings-file
+            $deploymentSettingsJSON = Get-Content $env:deployment_settings_file
             $deploymentSettings = ConvertFrom-Json $deploymentSettingsJSON
             foreach ($connectionRefConfig in $deploymentSettings.ConnectionReferences) {
                 if($connectionRefConfig.LogicalName -ne '' -and $connectionRefConfig.ConnectionId -ne '') {

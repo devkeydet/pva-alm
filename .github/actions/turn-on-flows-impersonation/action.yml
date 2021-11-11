@@ -29,7 +29,7 @@ runs:
   steps:
     - uses: Firenza/secrets-to-env@v1.1.0
       with:
-          secrets: ${{ env.secrets }}
+          secrets: ${{ inputs.secrets }}
           secret_filter_regex: DKDT_*
 
     - uses: cschleiden/replace-tokens@v1

@@ -20,13 +20,14 @@ jobs:
   get-subdomain:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - id: get-subdomain
         uses: ./.github/actions/get-subdomain
         with:
           url: ${{ github.event.inputs.environment_url }}
     outputs:
       subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
-      
+
   build-solution:
     uses: devkeydet/pva-alm/.github/workflows/zz-r-build-solution.yml@main
     with:

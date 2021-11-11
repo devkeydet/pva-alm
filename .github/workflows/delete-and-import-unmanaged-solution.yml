@@ -20,6 +20,7 @@ jobs:
   get-subdomain:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - id: get-subdomain
         uses: ./.github/actions/get-subdomain
         with:

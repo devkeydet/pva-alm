@@ -13,7 +13,8 @@ jobs:
       - uses: Firenza/secrets-to-env@v1.1.0
         with:
             secrets: ${{ toJSON(secrets) }}
+            secret_filter_regex: PR_*
       - name: echo
         shell: pwsh
         run: |
-          echo ${{ env.CLIENT_ID }}
+          echo ${{ env.PR_DKDT_PVAMSNWEATHER }}

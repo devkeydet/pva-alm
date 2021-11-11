@@ -13,4 +13,6 @@ jobs:
       - name: Run a multi-line script
         shell: pwsh
         run: |
-          echo ${{ secrets }}
+          foreach (secret in secrets) {
+            echo ${{ secret }}
+          }

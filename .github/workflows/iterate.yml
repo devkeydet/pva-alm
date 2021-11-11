@@ -12,7 +12,7 @@ jobs:
 
       - name: Run a multi-line script
         shell: pwsh
+        env:
+          foo: "hello"
         run: |
-          foreach ($secret in ${{ secrets }}) {
-            echo $secret
-          }
+          echo ${{ env.foo }}

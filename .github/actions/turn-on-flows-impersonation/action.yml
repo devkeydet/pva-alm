@@ -62,8 +62,7 @@ runs:
             $result = Get-CrmRecords -conn $conn -EntityLogicalName solutioncomponent -FilterAttribute "solutionid" -FilterOperator "eq" -FilterValue $solutionId -Fields objectid,componenttype
             $solutionComponents = $result.CrmRecords
             echo $env:deployment_settings_file
-            $deploymentSettingsJSON = Get-Content $env:deployment_settings_file
-            $deploymentSettings = ConvertFrom-Json $deploymentSettingsJSON
+            $deploymentSettings = Get-Content $env:deployment_settings_file | ConvertFrom-Json
             foreach ($connectionRefConfig in $deploymentSettings.ConnectionReferences) {
                 if($connectionRefConfig.LogicalName -ne '' -and $connectionRefConfig.ConnectionId -ne '') {
                     # Get the connection reference

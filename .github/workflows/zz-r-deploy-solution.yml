@@ -26,6 +26,8 @@ on:
         required: true
       client_secret:
         required: true
+      secrets:
+        required: true
 
 jobs:
   deploy-solution:
@@ -61,7 +63,7 @@ jobs:
 
       - uses: Firenza/secrets-to-env@v1.1.0
         with:
-            secrets: ${{ toJSON(secrets) }}
+            secrets: ${{ secrets.secrets }}
             secret_filter_regex: DKDT_*
 
       - uses: cschleiden/replace-tokens@v1

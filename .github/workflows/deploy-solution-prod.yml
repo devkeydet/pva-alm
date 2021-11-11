@@ -39,7 +39,7 @@ jobs:
   
   turn-on-flows:
     runs-on: windows-latest
-    needs: [deploy-prod,get-solution-name-from-tag]
+    needs: [get-solution-name-from-tag,deploy-prod]
     environment: "prod"
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
           environment_url: ${{ github.event.inputs.environment_url }}
-          solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name}}
+          solution_name: pvaalm
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}

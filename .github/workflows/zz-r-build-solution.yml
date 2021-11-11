@@ -53,6 +53,10 @@ jobs:
           $buildNumber = "${{ inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
           echo "::set-output name=buildNumber::$buildNumber"
           echo "buildNumber: $buildNumber"
+      - id: dump
+        run: |
+          echo "ref: ${{ inputs.ref }}"
+          echo "dev_build: ${{ inputs.dev_build }}"
 
       - name: Create tag
         uses: actions/github-script@v3

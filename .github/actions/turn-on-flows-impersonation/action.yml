@@ -60,7 +60,8 @@ runs:
 
         Add-PowerAppsAccount -TenantID "$env:tenant_id" -ApplicationId "$env:app_id" -ClientSecret "$env:client_secret"
         
-        $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"     
+        $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
+        echo "connectionString: $connectionString"     
         $conn = Get-CrmConnection -ConnectionString $connectionString
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString
               

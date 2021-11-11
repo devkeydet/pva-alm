@@ -62,16 +62,17 @@ runs:
             $solutionId = $solutions.CrmRecords[0].solutionid
             $result = Get-CrmRecords -conn $conn -EntityLogicalName solutioncomponent -FilterAttribute "solutionid" -FilterOperator "eq" -FilterValue $solutionId -Fields objectid,componenttype
             $solutionComponents = $result.CrmRecords
-            echo $env:deployment_settings_file
+            
             $deploymentSettings = Get-Content $env:deployment_settings_file | ConvertFrom-Json
-            echo $deploymentSettings
-            # foreach ($connectionRefConfig in $deploymentSettings.ConnectionReferences) {
-            #     if($connectionRefConfig.LogicalName -ne '' -and $connectionRefConfig.ConnectionId -ne '') {
-            #         # Get the connection reference
-            #         $connRefs = Get-CrmRecords -conn $conn -EntityLogicalName connectionreference -FilterAttribute "connectionreferencelogicalname" -FilterOperator "eq" -FilterValue $connectionRefConfig.LogicalName
-            #         if($connRefs.Count -gt 0) {      
-            #             # Get connection
-            #             $connections = Get-AdminPowerAppConnection -EnvironmentName $environmentName -Filter $connectionRefConfig.ConnectionId
+            
+            foreach ($connectionRefConfig in $deploymentSettings.ConnectionReferences) {
+                if($connectionRefConfig.LogicalName -ne '' -and $connectionRefConfig.ConnectionId -ne '') {
+                    # Get the connection reference
+                    $connRefs = Get-CrmRecords -conn $conn -EntityLogicalName connectionreference -FilterAttribute "connectionreferencelogicalname" -FilterOperator "eq" -FilterValue $connectionRefConfig.LogicalName
+                    if($connRefs.Count -gt 0) {      
+                        # Get connection
+                        $connections = Get-AdminPowerAppConnection -EnvironmentName $environmentName -Filter $connectionRefConfig.ConnectionId
+                        echo "connection created by: $connections[0].CreatedBy.id"
             #             # Get Dataverse systemuserid for the system user that maps to the aad user guid that created the connection 
             #             $systemusers = Get-CrmRecords -conn $conn -EntityLogicalName systemuser -FilterAttribute "azureactivedirectoryobjectid" -FilterOperator "eq" -FilterValue $connections[0].CreatedBy.id
             #             if($systemusers.Count -gt 0) {
@@ -87,7 +88,7 @@ runs:
             #                     }
             #                 }
             #             }
-            #         }
-            #     }
-            #}
+                    }
+                }
+            }
         }

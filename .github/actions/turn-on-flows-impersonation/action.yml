@@ -54,7 +54,7 @@ runs:
         $conn = Get-CrmConnection -ConnectionString $connectionString
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString
               
-        $environmentName = $conn.EnviromentId
+        $environmentName = $conn.EnvironmentId
         echo "environmentName: $environmentName"
         $solutions = Get-CrmRecords -conn $conn -EntityLogicalName solution -FilterAttribute "uniquename" -FilterOperator "eq" -FilterValue "$env:solution_name"
         if($solutions.Count -gt 0) {

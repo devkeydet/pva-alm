@@ -10,11 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run a multi-line script
-        shell: pwsh
-        run: | 
-          $secrets = ConvertFrom-Json '${{ toJSON(secrets) }}'
-          $props = Get-Member -InputObject $secrets -MemberType Properties
-          $props = $props | Where-Object{!$_.Name.Equals("github_token")}
-          $prop = $props[0].Name
-          $secrets.$prop
+      - uses: Firenza/secrets-to-env@v1.1.0
+        with:
+            secrets: ${{ toJSON(secrets) }}

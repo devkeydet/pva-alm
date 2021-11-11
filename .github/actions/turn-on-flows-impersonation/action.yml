@@ -29,6 +29,13 @@ runs:
     # As of authoring this script, the Service Principal (SPN) we use to connect to the Dataverse API cannot turn on the Flow
     # The temporary workaround is use a brute force approach for now.  We use the identity of the connection for the first connection
     # reference we find to turn on the Flow.  This may have side effects or unintended consequences we haven't fully tested.
+    - name: Install and cache PowerShell modules
+      id: psmodulecache
+      uses: potatoqualitee/psmodulecache@v4
+      with:
+        modules-to-cache: Microsoft.Xrm.Data.PowerShell, Microsoft.PowerApps.Administration.PowerShell
+        shell: powershell
+
     - name: turn-on-flows-impersonation
       shell: powershell # windows, not cross platform pwsh
       env:
@@ -39,21 +46,10 @@ runs:
         solution_name: ${{ inputs.solution_name }}
         deployment_settings_file: ${{ inputs.deployment_settings_file }}
       run: |
-        echo "Set-PSRepository"
-        Set-PSRepository PSGallery -InstallationPolicy Trusted
-        $xrmDataPowerShellVersion = "2.8.12"
-        echo "Install-Module Microsoft.Xrm.Data.PowerShell"
-        Install-Module Microsoft.Xrm.Data.PowerShell -Force -RequiredVersion $xrmDataPowerShellVersion
-        $powerAppsAdminModuleVersion = "2.0.105"
-        echo "Install-Module Microsoft.PowerApps.Administration.PowerShell"
-        Install-Module Microsoft.PowerApps.Administration.PowerShell -Force -RequiredVersion $powerAppsAdminModuleVersion
-        echo "Import-Module Microsoft.PowerApps.Administration.PowerShell"
-        Import-Module Microsoft.PowerApps.Administration.PowerShell -Force -ArgumentList @{ NonInteractive = $true }
-        echo "Add-PowerAppsAccount"
-        Add-PowerAppsAccount -TenantID $env:tenant_id -ApplicationId $env:app_id -ClientSecret $env:client_secret
-        echo "Import-Module Microsoft.Xrm.Data.PowerShell"
-        Import-Module Microsoft.Xrm.Data.PowerShell -Force -ArgumentList @{ NonInteractive = $true }
-        $connectionString = "AuthType=ClientSecret;url=$env:environment-url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
+        Import-Module Microsoft.Xrm.Data.PowerShell
+        Microsoft.PowerApps.Administration.PowerShell
+        $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
+        echo $connectionString
         echo "Get-CrmConnection"
         $conn = Get-CrmConnection -ConnectionString $connectionString
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString

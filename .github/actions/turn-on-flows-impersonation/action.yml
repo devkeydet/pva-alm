@@ -47,7 +47,8 @@ runs:
         deployment_settings_file: ${{ inputs.deployment_settings_file }}
       run: |
         Import-Module Microsoft.Xrm.Data.PowerShell
-        Microsoft.PowerApps.Administration.PowerShell
+        Import-Module  Microsoft.PowerApps.Administration.PowerShell
+        
         $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
         echo $connectionString
         echo "Get-CrmConnection"

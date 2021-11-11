@@ -1,10 +1,10 @@
 {
-    "EnvironmentVariables": [],
-    "ConnectionReferences": [
-      {
-        "LogicalName": "dkdt_PVAMSNWeather",
-        "ConnectionId": "#{dkdt_pvamsnweather}#",
-        "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_msnweather"
-      }
-    ]
-  }
+  "EnvironmentVariables": [],
+  "ConnectionReferences": [
+    {
+      "LogicalName": "dkdt_PVAMSNWeather",
+      "ConnectionId": "#{DKDT_PVAMSNWEATHER}#",
+      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_msnweather"
+    }
+  ]
+}

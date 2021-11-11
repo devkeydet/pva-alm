@@ -66,22 +66,10 @@ jobs:
           path: ${{ runner.temp }}/${{ inputs.solution_name }}
         if: ${{ inputs.environment != 'prod' }}
 
-      - name: prepare deploymentSettings.js token variables
-        shell: pwsh
-        run: |
-          $csv = @"
-          ${{ secrets.deploymentsettings_tokens }}
-          "@
-          if (-Not [String]::IsNullOrWhiteSpace($csv)){
-            $tokenAarray = $csv.Split('\n')
-            foreach ($tokenValuePairString in $tokenAarray){
-              $tokenValuePair = $tokenValuePairString.Split(',')
-              $tokenName = $tokenValuePair[0]
-              $tokenValue = $tokenValuePair[1]
-              echo "$tokenName=$tokenValue" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-              echo "::add-mask::$tokenValue"
-            }
-          }
+      - uses: Firenza/secrets-to-env@v1.1.0
+        with:
+            secrets: ${{ toJSON(secrets) }}
+            secret_filter_regex: DKDT_*
         if: ${{ inputs.environment != 'dev' }}
 
       - uses: cschleiden/replace-tokens@v1

@@ -1,0 +1,19 @@
+name: temp-test
+
+on:
+  workflow_dispatch:
+
+jobs:  
+  turn-on-flows:
+    runs-on: windows-latest
+    environment: marcsc-alm-demo-dev
+    steps:
+      - uses: actions/checkout@v2
+      - id: turn-on-flows-impersonation
+        uses: ./.github/actions/turn-on-flows-impersonation
+        with:
+          environment-url: https://marcsc-alm-demo-dev.crm.dynamics.com
+          tenant-id: ${{ secrets.TENANT_ID }}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          deployment-settings-file: src/pvaalm/deploymentSettings.json

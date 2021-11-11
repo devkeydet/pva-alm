@@ -20,10 +20,22 @@ inputs:
   deployment_settings_file:
     description: "Specify the path and file name of the deployment settings file."
     required: true
+  secrets:
+    description: "secrets for repace token to find values to populat deployment settings file."
+    required: true
 
 runs:
   using: "composite"
   steps:
+    - uses: Firenza/secrets-to-env@v1.1.0
+      with:
+          secrets: ${{ env.secrets }}
+          secret_filter_regex: DKDT_*
+
+    - uses: cschleiden/replace-tokens@v1
+      with:
+        files: '["${{ inputs.deployment_settings_file }}"]'
+
     # Enable flows based on connection references
     # Flows can only be turned on if the user turning them on has permissions to connections being referenced by the connection reference
     # As of authoring this script, the Service Principal (SPN) we use to connect to the Dataverse API cannot turn on the Flow
@@ -72,7 +84,7 @@ runs:
                     if($connRefs.Count -gt 0) {      
                         # Get connection
                         $connections = Get-AdminPowerAppConnection -EnvironmentName $environmentName -Filter $connectionRefConfig.ConnectionId
-                        echo "connection created by: $connections[0].CreatedBy.id"
+                        echo "connection created by: " + $connections[0].CreatedBy.id
             #             # Get Dataverse systemuserid for the system user that maps to the aad user guid that created the connection 
             #             $systemusers = Get-CrmRecords -conn $conn -EntityLogicalName systemuser -FilterAttribute "azureactivedirectoryobjectid" -FilterOperator "eq" -FilterValue $connections[0].CreatedBy.id
             #             if($systemusers.Count -gt 0) {

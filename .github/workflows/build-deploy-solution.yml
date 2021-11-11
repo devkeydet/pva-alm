@@ -54,3 +54,4 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           deployment_settings_file: src/${{ github.event.inputs.solution_name }}/deploymentSettings.json
+          secrets: ${{ toJSON(secrets) }}

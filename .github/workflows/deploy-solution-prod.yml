@@ -51,5 +51,6 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           deployment_settings_file: src/${{ needs.get-solution-name-from-tag.outputs.solution_name}}/deploymentSettings.json
+          secrets: ${{ toJSON(secrets) }}
 
   #TODO: Create a release in GitHub

@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: dump
-      - shell: pwsh
+        shell: pwsh
         run: |
           echo "needs.get-solution-name-from-tag.outputs.solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}"
       - id: turn-on-flows-impersonation

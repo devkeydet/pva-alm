@@ -48,7 +48,7 @@ runs:
     - name: dump
       shell: pwsh
       run: |
-        echo "${{ inputs.environment_url }}"
+        echo "inputs.environment_url: ${{ inputs.environment_url }}"
 
     - name: turn-on-flows-impersonation
       shell: powershell # windows, not cross platform pwsh
@@ -60,6 +60,9 @@ runs:
         solution_name: ${{ inputs.solution_name }}
         deployment_settings_file: "src/${{ inputs.solution_name }}/deploymentSettings.json"
       run: |
+        echo "inputs.environment_url: ${{ inputs.environment_url }}"
+        echo "environment_url: ${{ $env:environment_url }}"
+
         Import-Module Microsoft.Xrm.Data.PowerShell
         Import-Module  Microsoft.PowerApps.Administration.PowerShell
 

@@ -11,7 +11,7 @@ on:
         description: "GitHub environment name to deploy to"
         default: prod
 jobs:
-  deploy-prod:  
+  deploy-solution:  
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     steps:
@@ -39,7 +39,7 @@ jobs:
   
   turn-on-flows:
     runs-on: windows-latest
-    needs: deploy-prod
+    needs: deploy-solution
     environment: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
           environment_url: ${{ secrets.ENVIRONMENT_URL }}
-          solution_name: ${{ needs.deploy-prod.outputs.solution_name }}
+          solution_name: ${{ needs.deploy-solution.outputs.solution_name }}
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}

@@ -16,34 +16,27 @@ on:
         required: true
         default: "main"
 
-jobs:
-  get-subdomain:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - id: get-subdomain
-        uses: ./.github/actions/get-subdomain
-        with:
-          url: ${{ github.event.inputs.environment_url }}
-    outputs:
-      subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
-
-  build-solution:
-    uses: devkeydet/pva-alm/.github/workflows/zz-r-build-solution.yml@main
-    with:
-      ref: ${{ github.event.inputs.ref }}
-      solution_name: ${{ github.event.inputs.solution_name }}
-      solution_version_major_minor: "0.0"
-      dev_build: true
-      
-  deploy-solution:  
+jobs:      
+  build-deploy-solution:  
     runs-on: ubuntu-latest
     environment: ${{ needs.get-subdomain.outputs.subdomain }}
     needs: [build-solution,get-subdomain]
     steps:
     # Solutions cannot be imported in parallel, so we queue
     - uses: ahmadnassri/action-workflow-queue@v1
-    - uses: actions/checkout@v2    
+    - uses: actions/checkout@v2
+    - id: build-solution
+      uses: ./.github/actions/build-solution
+      with:
+        ref: ${{ github.event.inputs.ref }}
+        solution_name: ${{ github.event.inputs.solution_name }}
+        solution_version_major_minor: "0.0"
+        dev_build: true
+        github_token: $${{ github.token }}
+    - id: get-subdomain
+      uses: ./.github/actions/get-subdomain
+      with:
+        url: ${{ github.event.inputs.environment_url }}    
     - name: deploy-solution
       uses: ./.github/actions/deploy-solution
       with:

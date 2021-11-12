@@ -1,0 +1,119 @@
+name: build-solution
+
+description: build-solution
+
+inputs:
+  ref:
+    required: true
+    description: ref
+  solution_name:
+    required: true
+    description: ref
+  solution_version_major_minor:
+    required: true
+    description: ref
+  dev_build:
+    required: false
+    description: ref
+  github_token:
+    required: false
+    description: ref  
+
+runs:
+  using: "composite"
+  steps:
+  - uses: actions/checkout@v2
+    with:
+      ref: ${{ inputs.ref }}
+
+  - name: update-pr-with-link-to-workflow
+    shell: pwsh
+    env:
+      GITHUB_TOKEN: ${{ inputs.github_token }}
+    run: |
+      $ref = "${{ inputs.ref }}"
+      if ($ref.Contains("refs/pull")) {
+        $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
+        $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        gh pr comment $prNumber --body "latest pr validation workflow: $runUrl"
+      }
+
+  # set environment and build number as output variables for further use
+  - id: setOutput
+    if: ${{ inputs.dev_build != true}}
+    shell: pwsh
+    run: |
+      echo "dev_build: ${{ inputs.dev_build }}"
+      echo "ref: ${{ inputs.ref }}"
+      $dateStamp = Get-Date -Format "yyyyMMdd"
+      $buildNumber = "${{ inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
+      echo "::set-output name=buildNumber::$buildNumber"
+      echo "buildNumber: $buildNumber"
+
+  - name: Create tag
+    uses: actions/github-script@v3
+    if: ${{ inputs.ref == 'refs/heads/main' && inputs.dev_build != true }}
+    with:
+      github-token: ${{ github.token }}
+      script: |
+        github.git.createRef({
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          ref: "refs/tags/${{ inputs.solution_name }}-${{ steps.setOutput.outputs.buildNumber }}",
+          sha: context.sha
+        })
+
+  - name: update solution version number
+    if: ${{ inputs.dev_build != true}}
+    shell: pwsh
+    run: |
+      Get-ChildItem -Path "${{ env.solution_package_source }}/Other/Solution.xml" | 
+      ForEach-Object {
+            (Get-Content $_.FullName) `
+                -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ steps.setOutput.outputs.buildNumber }}</Version>' |
+            Out-File $_.FullName
+      }
+
+  - name: Flatten JSON files
+    shell: pwsh
+    run: |
+      #When we unpack the solution files, we format Power Automate json files, but it causes solution import failures so we need to flatten the files
+      Get-ChildItem -Path "${{ env.solution_package_source }}/Workflows" -Recurse -Filter *.json |
+      ForEach-Object {
+          $fileContent = (Get-Content $_.FullName) -join ' '
+          if(-not [string]::IsNullOrWhiteSpace($fileContent)) {
+              Set-Content $_.FullName $fileContent
+          }
+      }
+
+  - id: get-pac-path
+    uses: ./.github/actions/get-pac-path
+
+  - name: pack msapp files
+    shell: pwsh
+    run: |
+      Get-ChildItem -Path "${{ env.solution_package_source }}/CanvasApps" -Recurse -Filter *_src | 
+      ForEach-Object {     
+        $unpackedPath = $_.FullName
+        $packedFileName = $unpackedPath.Replace("_msapp_src", ".msapp")
+        $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
+        pac canvas pack --sources $unpackedPath --msapp $packedFileName
+        Remove-Item -Path $unpackedPath -Recurse
+      }
+
+  - name: pack solution
+    uses: microsoft/powerplatform-actions/pack-solution@v0
+    with:
+      solution-folder: ${{ env.solution_package_source }}
+      solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}_${{ steps.setOutput.outputs.buildNumber }}.zip
+      solution-type: Both
+
+  # - name: copy deploymentSettings.json
+  #   shell: pwsh
+  #   run: |
+  #     Copy-Item "src/${{ inputs.solution_name }}/deploymentSettings.json" -Destination "${{ runner.temp }}/${{ env.solution_pack_folder }}"
+
+  # - uses: actions/upload-artifact@v2
+  #   with:
+  #     name: artifact
+  #     path: ${{ runner.temp }}/${{ env.solution_pack_folder }}

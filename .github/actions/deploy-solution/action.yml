@@ -3,6 +3,9 @@ name: 'deploy solution'
 description: 'deploy solution'
 
 inputs:
+  environment_url:
+    description: 'environment_url'
+    required: true
   solution_name:
     description: 'solution_name'
     required: true

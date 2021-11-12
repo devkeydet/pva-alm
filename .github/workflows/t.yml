@@ -3,12 +3,13 @@ name: t
 on:
   workflow_dispatch:
 
+env:
+  environment: prod
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: ./.github/actions/replace-tokens-with-secrets
-      with:
-        secrets: ${{ toJSON(secrets) }}
-        files: '["src/pvaalm/deploymentSettings.json"]'
+    - run: |
+        echo "${{ env.environment }}"

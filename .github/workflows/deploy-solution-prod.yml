@@ -12,14 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: setOutput
+        name: get-solution-name-from-tag
         run: |
           $tag = "${{ github.event.inputs.tag }}"
           $splitArray = $tag -split "-"
           $solutionName = $splitArray[0]
           echo "solution_name=$solutionName" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         shell: pwsh
-      - run: |
-          echo "${{ env.solution_name }}"
     outputs:
       solution_name: ${{ env.solution_name }}
 
@@ -27,7 +26,7 @@ jobs:
     needs: get-solution-name-from-tag
     uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
     with:
-      solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name}}
+      solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}
       environment: "prod"
       tag: ${{ github.event.inputs.tag }}
     secrets:
@@ -43,6 +42,10 @@ jobs:
     environment: "prod"
     steps:
       - uses: actions/checkout@v2
+      - name: dump
+      - shell: pwsh
+        run: |
+          echo "needs.get-solution-name-from-tag.outputs.solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}"
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:

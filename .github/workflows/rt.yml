@@ -1,12 +1,15 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: rt
 
 # Controls when the workflow will run
 on:
 
   # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    workflow_call:
+      secrets:
+        secrets:
+          required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,21 +22,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        shell: pwsh
-        env:
-          one: one
-          two: two
-          three: three
-        run: |
-          foreach ($e in $env){Write-Host $e}
-          echo $env
-          
+                
       - uses: Firenza/secrets-to-env@v1.1.0
         with:
-            secrets: ${{ toJSON(secrets) }}
+            secrets: ${{ secrets.secrets) }}
 
       - uses: cschleiden/replace-tokens@v1
         with:

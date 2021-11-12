@@ -10,7 +10,6 @@ on:
 jobs:
   deploy-prod:  
     runs-on: ubuntu-latest
-    needs: get-solution-name-from-tag
     environment: "prod"
     steps:
     # Solutions cannot be imported in parallel, so we queue

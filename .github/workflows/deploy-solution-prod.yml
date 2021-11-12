@@ -50,7 +50,7 @@ jobs:
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
           environment_url: ${{ github.event.inputs.environment_url }}
-          solution_name: pvaalm
+          solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}

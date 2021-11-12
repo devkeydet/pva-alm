@@ -45,6 +45,11 @@ runs:
         modules-to-cache: Microsoft.Xrm.Data.PowerShell, Microsoft.PowerApps.Administration.PowerShell
         shell: powershell
 
+    - name: dump
+      shell: pwsh
+      run: |
+        echo "${{ inputs.environment_url }}"
+
     - name: turn-on-flows-impersonation
       shell: powershell # windows, not cross platform pwsh
       env:

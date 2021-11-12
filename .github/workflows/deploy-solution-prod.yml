@@ -8,34 +8,33 @@ on:
         description: "GitHub tag for solution-version to deploy"
 
 jobs:
-  get-solution-name-from-tag:
-    runs-on: ubuntu-latest
-    steps:
-      - id: setOutput
-        name: get-solution-name-from-tag
-        run: |
-          $tag = "${{ github.event.inputs.tag }}"
-          $splitArray = $tag -split "-"
-          $solutionName = $splitArray[0]
-          echo "solution_name=$solutionName" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-        shell: pwsh
-    outputs:
-      solution_name: ${{ env.solution_name }}
-
   deploy-prod:  
     runs-on: ubuntu-latest
     needs: get-solution-name-from-tag
     environment: "prod"
     steps:
+    # Solutions cannot be imported in parallel, so we queue
+    - uses: ahmadnassri/action-workflow-queue@v1
+    - uses: actions/checkout@v2
+    - id: setOutput
+      name: get-solution-name-from-tag
+      run: |
+        $tag = "${{ github.event.inputs.tag }}"
+        $splitArray = $tag -split "-"
+        $solutionName = $splitArray[0]
+        echo "solution_name=$solutionName" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      shell: pwsh
     - uses: ./.github/actions/deploy-solution
       with:
         solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}
         environment: "prod"
         tag: ${{ github.event.inputs.tag }}
+    outputs:
+      solution_name: ${{ env.solution_name }}
   
   turn-on-flows:
     runs-on: windows-latest
-    needs: [get-solution-name-from-tag,deploy-prod]
+    needs: deploy-prod
     environment: "prod"
     steps:
       - uses: actions/checkout@v2
@@ -43,7 +42,7 @@ jobs:
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
           environment_url: ${{ secrets.ENVIRONMENT_URL }}
-          solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}
+          solution_name: ${{ needs.deploy-prod.outputs.solution_name }}
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}

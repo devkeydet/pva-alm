@@ -41,18 +41,13 @@ runs:
         path: ${{ runner.temp }}/${{ inputs.solution_name }}
       if: ${{ inputs.environment == 'prod' }}
 
-    - uses: actions/download-artifact@v2
-      with:
-        path: ${{ runner.temp }}/${{ inputs.solution_name }}
-      if: ${{ inputs.environment != 'prod' }}
-
     - uses: Firenza/secrets-to-env@v1.1.0
       with:
           secrets: ${{ inputs.secrets }}
 
     - uses: cschleiden/replace-tokens@v1
       with:
-        files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'
+        files: '["${{ runner.temp }}/${{ inputs.solution_name }}/deploymentSettings.json"]'
 
     - name: get solution zip
       id: get-solution-zip
@@ -60,10 +55,10 @@ runs:
       run: |
         # unmanaged means we are targeting a dev environment
         if ([System.Convert]::ToBoolean("${{ inputs.unmanaged }}")) {
-          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('.zip') -and !$_.Name.EndsWith('_managed.zip')}
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }} -Recurse" | Where-Object{$_.Name.EndsWith('.zip') -and !$_.Name.EndsWith('_managed.zip')}
         }
         else {
-          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('_managed.zip')}
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }} -Recurse" | Where-Object{$_.Name.EndsWith('_managed.zip')}
         }
         
         $solutionZip = $files[0].Name
@@ -76,6 +71,6 @@ runs:
         tenant-id: ${{ env.TENANT_ID }}
         app-id: ${{ env.CLIENT_ID }}
         client-secret: ${{ env.CLIENT_SECRET }}
-        solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/${{ steps.get-solution-zip.outputs.solution_zip }}
+        solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
         force-overwrite: true
-        deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json
+        deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json

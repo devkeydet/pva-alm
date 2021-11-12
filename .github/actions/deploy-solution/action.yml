@@ -55,10 +55,10 @@ runs:
       run: |
         # unmanaged means we are targeting a dev environment
         if ([System.Convert]::ToBoolean("${{ inputs.unmanaged }}")) {
-          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }} -Recurse" | Where-Object{$_.Name.EndsWith('.zip') -and !$_.Name.EndsWith('_managed.zip')}
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" -Recurse | Where-Object{$_.Name.EndsWith('.zip') -and !$_.Name.EndsWith('_managed.zip')}
         }
         else {
-          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }} -Recurse" | Where-Object{$_.Name.EndsWith('_managed.zip')}
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" -Recurse | Where-Object{$_.Name.EndsWith('_managed.zip')}
         }
         
         $solutionZip = $files[0].Name

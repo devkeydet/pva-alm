@@ -1,5 +1,7 @@
 name: 'get subdomain from url'
+
 description: 'get path to use for Power Platform CLI'
+
 inputs:
   url:
     description: 'gets subdomain out of subdomain.domain.com'
@@ -9,6 +11,7 @@ outputs:
   subdomain:
     description: "subdomain of url"
     value: ${{ steps.get-subdomain.outputs.subdomain }}
+
 runs:
   using: "composite"
   steps:

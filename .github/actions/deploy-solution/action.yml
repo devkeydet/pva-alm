@@ -1,0 +1,79 @@
+name: 'deploy solution'
+
+description: 'deploy solution'
+
+inputs:
+  solution_name:
+    description: 'solution_name'
+    required: true
+  environment:
+    description: 'environment'
+    required: true
+  unmanaged:
+    description: 'unmanaged'
+    required: false
+    default: 'false'
+  tag:
+    description: 'tag'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+      if: ${{ inputs.environment == 'prod' }}
+
+    - run: |
+        git fetch --all --tags
+        $commit = git rev-list -n 1 tags/${{ inputs.tag }}
+        echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      shell: pwsh
+      if: ${{ inputs.environment == 'prod' }}
+
+    - name: download prod artifact
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        workflow: build-deploy-solution.yml
+        commit: ${{ env.commit }}
+        path: ${{ runner.temp }}/${{ inputs.solution_name }}
+      if: ${{ inputs.environment == 'prod' }}
+
+    - uses: actions/download-artifact@v2
+      with:
+        path: ${{ runner.temp }}/${{ inputs.solution_name }}
+      if: ${{ inputs.environment != 'prod' }}
+
+    - uses: Firenza/secrets-to-env@v1.1.0
+      with:
+          secrets: ${{ toJSON(secrets) }}
+          secret_filter_regex: DKDT_*
+
+    - uses: cschleiden/replace-tokens@v1
+      with:
+        files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'
+
+    - name: get solution zip
+      id: get-solution-zip
+      shell: pwsh
+      run: |
+        # unmanaged means we are targeting a dev environment
+        if ([System.Convert]::ToBoolean("${{ inputs.unmanaged }}")) {
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('.zip') -and !$_.Name.EndsWith('_managed.zip')}
+        }
+        else {
+          $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}/artifact" | Where-Object{$_.Name.EndsWith('_managed.zip')}
+        }
+        
+        $solutionZip = $files[0].Name
+        echo "::set-output name=solution_zip::$solutionZip"      
+
+    - name: import solution to environment
+      uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
+      with:
+        environment-url: ${{ secrets.ENVIRONMENT_URL }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        app-id: ${{ secrets.CLIENT_ID }}
+        client-secret: ${{ secrets.CLIENT_SECRET }}
+        solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/${{ steps.get-solution-zip.outputs.solution_zip }}
+        force-overwrite: true
+        deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json

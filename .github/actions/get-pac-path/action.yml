@@ -1,6 +1,8 @@
 #comment
 name: 'get pac path'
+
 description: 'get path to use for Power Platform CLI'
+
 inputs:
   tag:
     description: 'which tag folder to use'
@@ -11,6 +13,7 @@ outputs:
   path:
     description: "location of pac.exe"
     value: ${{ steps.get-pac-path.outputs.path }}
+
 runs:
   using: "composite"
   steps:

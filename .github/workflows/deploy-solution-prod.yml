@@ -22,19 +22,16 @@ jobs:
     outputs:
       solution_name: ${{ env.solution_name }}
 
-  deploy-prod:
+  deploy-prod:  
+    runs-on: ubuntu-latest
     needs: get-solution-name-from-tag
-    uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
-    with:
-      solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}
-      environment: "prod"
-      tag: ${{ github.event.inputs.tag }}
-    secrets:
-      environment_url: ${{ secrets.ENVIRONMENT_URL }}
-      tenant_id: ${{ secrets.TENANT_ID }}
-      client_id: ${{ secrets.CLIENT_ID }}
-      client_secret: ${{ secrets.CLIENT_SECRET }}
-      secrets: ${{ toJSON(secrets) }}
+    environment: "prod"
+    steps:
+    - uses: ./.github/actions/deploy-solution
+      with:
+        solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}
+        environment: "prod"
+        tag: ${{ github.event.inputs.tag }}
   
   turn-on-flows:
     runs-on: windows-latest

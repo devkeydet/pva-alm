@@ -1,5 +1,7 @@
 name: 'replace tokens in file with secrets'
+
 description: 'replace tokens in file with secrets'
+
 inputs:
   secrets:
     description: 'secrets'

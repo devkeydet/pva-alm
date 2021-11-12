@@ -1,6 +1,8 @@
 # THIS IS A WINDOWS ONLY ACTION BECAUSE THE POWERSHELL MODULES USED REQUIRE WINDOWS POWERSHELL
 name: 'turn on flows using impersonation'
+
 description: 'turn on flows using impersonation'
+
 inputs:
   environment_url: 
     description: 'URL of Power Platform environment to connect with; e.g. "https://test-env.crm.dynamics.com"'

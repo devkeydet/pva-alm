@@ -35,20 +35,23 @@ jobs:
       solution_name: ${{ github.event.inputs.solution_name }}
       solution_version_major_minor: "0.0"
       dev_build: true
-
-  deploy-solution:
-    uses: devkeydet/pva-alm/.github/workflows/zz-r-deploy-solution.yml@main
+      
+  deploy-solution:  
+    runs-on: ubuntu-latest
+    environment: ${{ needs.get-subdomain.outputs.subdomain }}
     needs: [build-solution,get-subdomain]
-    with:
-      solution_name: ${{ github.event.inputs.solution_name }}
-      environment: ${{ needs.get-subdomain.outputs.subdomain }}
-      unmanaged: true
-    secrets:
-      environment_url: ${{ github.event.inputs.environment_url }}
-      tenant_id: ${{ secrets.TENANT_ID }}
-      client_id: ${{ secrets.CLIENT_ID }}
-      client_secret: ${{ secrets.CLIENT_SECRET }}
-      secrets: ${{ toJSON(secrets) }}
+    steps:
+    # Solutions cannot be imported in parallel, so we queue
+    - uses: ahmadnassri/action-workflow-queue@v1
+    - uses: actions/checkout@v2    
+    - name: deploy-solution
+      uses: ./.github/actions/deploy-solution
+      with:
+        environment_url: ${{ github.event.inputs.environment_url }}
+        solution_name: ${{ env.solution_name }}
+        environment: ${{ needs.get-subdomain.outputs.subdomain }}
+        unmanaged: true
+        secrets: ${{ toJSON(secrets) }}
 
   turn-on-flows:
     runs-on: windows-latest

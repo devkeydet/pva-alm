@@ -4,7 +4,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  call:
-    uses: devkeydet/pva-alm/.github/workflows/rt.yml@main
-    secrets:
-      secrets: ${{ toJSON(secrets) }}
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: ./.github/actions/turn-on-flows-impersonation
+      with:
+        secrets: ${{ toJSON(secrets) }}
+        files: '["src/pvaalm/deploymentSettings.json"]'

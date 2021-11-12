@@ -1,0 +1,22 @@
+name: 'replace tokens in file with secrets'
+description: 'replace tokens in file with secrets'
+inputs:
+  secrets:
+    description: 'secrets'
+    required: true
+  files:
+    description: 'files'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+                
+    - uses: Firenza/secrets-to-env@v1.1.0
+      with:
+        secrets: ${{ inputs.secrets }}
+
+    - uses: cschleiden/replace-tokens@v1
+      with:
+        files: ${{ inputs.files }}

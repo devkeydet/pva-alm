@@ -8,7 +8,7 @@ on:
         description: "GitHub tag for solution-version to deploy"
       environment:
         required: true
-        description: prod
+        description: "GitHub environment name to deploy to"
         default: prod
 jobs:
   deploy-prod:  

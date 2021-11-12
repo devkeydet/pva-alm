@@ -13,8 +13,6 @@ env:
 jobs:
   deploy-prod:  
     runs-on: ubuntu-latest
-    env:
-      environment: prod
     environment: ${{ env.environment }}
     steps:
     # Solutions cannot be imported in parallel, so we queue
@@ -32,7 +30,7 @@ jobs:
       uses: ./.github/actions/deploy-solution
       with:
         solution_name: ${{ env.solution_name }}
-        environment: "prod"
+        environment: ${{ env.environment }}
         tag: ${{ github.event.inputs.tag }}
         secrets: ${{ toJSON(secrets) }}
     outputs:
@@ -41,7 +39,7 @@ jobs:
   turn-on-flows:
     runs-on: windows-latest
     needs: deploy-prod
-    environment: "prod"
+    environment: ${{ env.environment }}
     steps:
       - uses: actions/checkout@v2
       - id: turn-on-flows-impersonation

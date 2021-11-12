@@ -41,7 +41,6 @@ jobs:
         environment_url: ${{ secrets.ENVIRONMENT_URL }}
         solution_name: ${{ github.event.inputs.solution_name }}
         environment: ${{ needs.get-subdomain.outputs.subdomain }}
-        unmanaged: true
         secrets: ${{ toJSON(secrets) }}
 
   turn-on-flows:

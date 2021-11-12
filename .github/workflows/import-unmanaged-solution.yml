@@ -42,6 +42,7 @@ jobs:
         environment_url: ${{ github.event.inputs.environment_url }}
         solution_name: ${{ env.solution_name }}
         environment: ${{ needs.get-subdomain.outputs.subdomain }}
+        solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
         unmanaged: true
         secrets: ${{ toJSON(secrets) }}
     outputs:

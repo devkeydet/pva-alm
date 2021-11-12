@@ -16,8 +16,11 @@ inputs:
     required: false
     description: ref
   github_token:
-    required: false
-    description: ref  
+    required: true
+    description: ref 
+  solution_package_source: 
+    required: true
+    description: solution_package_source
 
 runs:
   using: "composite"
@@ -67,7 +70,7 @@ runs:
     if: ${{ inputs.dev_build != true}}
     shell: pwsh
     run: |
-      Get-ChildItem -Path "${{ env.solution_package_source }}/Other/Solution.xml" | 
+      Get-ChildItem -Path "${{ inputs.solution_package_source }}/Other/Solution.xml" | 
       ForEach-Object {
             (Get-Content $_.FullName) `
                 -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ steps.setOutput.outputs.buildNumber }}</Version>' |
@@ -78,7 +81,7 @@ runs:
     shell: pwsh
     run: |
       #When we unpack the solution files, we format Power Automate json files, but it causes solution import failures so we need to flatten the files
-      Get-ChildItem -Path "${{ env.solution_package_source }}/Workflows" -Recurse -Filter *.json |
+      Get-ChildItem -Path "${{ inputs.solution_package_source }}/Workflows" -Recurse -Filter *.json |
       ForEach-Object {
           $fileContent = (Get-Content $_.FullName) -join ' '
           if(-not [string]::IsNullOrWhiteSpace($fileContent)) {
@@ -92,7 +95,7 @@ runs:
   - name: pack msapp files
     shell: pwsh
     run: |
-      Get-ChildItem -Path "${{ env.solution_package_source }}/CanvasApps" -Recurse -Filter *_src | 
+      Get-ChildItem -Path "${{ inputs.solution_package_source }}/CanvasApps" -Recurse -Filter *_src | 
       ForEach-Object {     
         $unpackedPath = $_.FullName
         $packedFileName = $unpackedPath.Replace("_msapp_src", ".msapp")
@@ -104,7 +107,7 @@ runs:
   - name: pack solution
     uses: microsoft/powerplatform-actions/pack-solution@v0
     with:
-      solution-folder: ${{ env.solution_package_source }}
+      solution-folder: ${{ inputs.solution_package_source }}
       solution-file: ${{ runner.temp }}/${{ env.solution_pack_folder }}/${{ inputs.solution_name }}_${{ steps.setOutput.outputs.buildNumber }}.zip
       solution-type: Both
 

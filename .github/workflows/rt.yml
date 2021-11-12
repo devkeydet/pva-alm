@@ -15,7 +15,7 @@ jobs:
                 
       - uses: Firenza/secrets-to-env@v1.1.0
         with:
-          secrets: ${{ secrets.secrets) }}
+          secrets: ${{ secrets.secrets }}
 
       - uses: cschleiden/replace-tokens@v1
         with:

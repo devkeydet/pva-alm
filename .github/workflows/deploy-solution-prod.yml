@@ -28,6 +28,7 @@ jobs:
         solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}
         environment: "prod"
         tag: ${{ github.event.inputs.tag }}
+        secrets: ${{ toJSON(secrets) }}
     outputs:
       solution_name: ${{ env.solution_name }}
   

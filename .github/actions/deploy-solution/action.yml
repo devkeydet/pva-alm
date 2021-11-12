@@ -16,6 +16,9 @@ inputs:
   tag:
     description: 'tag'
     required: false
+  secrets:
+    description: 'secrets'
+    required: false
 
 runs:
   using: "composite"
@@ -42,8 +45,7 @@ runs:
 
     - uses: Firenza/secrets-to-env@v1.1.0
       with:
-          secrets: ${{ toJSON(secrets) }}
-          secret_filter_regex: DKDT_*
+          secrets: ${{ input.secrets }}
 
     - uses: cschleiden/replace-tokens@v1
       with:
@@ -67,10 +69,10 @@ runs:
     - name: import solution to environment
       uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
       with:
-        environment-url: ${{ secrets.ENVIRONMENT_URL }}
-        tenant-id: ${{ secrets.TENANT_ID }}
-        app-id: ${{ secrets.CLIENT_ID }}
-        client-secret: ${{ secrets.CLIENT_SECRET }}
+        environment-url: ${{ env.ENVIRONMENT_URL }}
+        tenant-id: ${{ env.TENANT_ID }}
+        app-id: ${{ env.CLIENT_ID }}
+        client-secret: ${{ env.CLIENT_SECRET }}
         solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/${{ steps.get-solution-zip.outputs.solution_zip }}
         force-overwrite: true
         deployment-settings-file: ${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json

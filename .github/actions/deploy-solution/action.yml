@@ -62,7 +62,12 @@ runs:
         }
         
         $solutionZip = $files[0].Name
-        echo "::set-output name=solution_zip::$solutionZip"      
+        echo "::set-output name=solution_zip::$solutionZip"     
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+        path: src/${{ inputs.solution_name }}/deploymentSettings.json
 
     - name: import solution to environment
       uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0

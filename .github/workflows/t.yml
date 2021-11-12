@@ -9,6 +9,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: ${{ env.environment }}
     steps:
     - uses: actions/checkout@v2
     - run: |

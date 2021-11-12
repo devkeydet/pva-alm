@@ -29,3 +29,4 @@ jobs:
           three: three
         run: |
           foreach ($e in $env){Write-Host $e}
+          echo $env

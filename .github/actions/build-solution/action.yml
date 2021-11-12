@@ -43,7 +43,7 @@ runs:
 
   # set environment and build number as output variables for further use
   - id: setOutput
-    if: ${{ inputs.dev_build != true}}
+    if: ${{ inputs.dev_build != 'true'}}
     shell: pwsh
     run: |
       echo "dev_build: ${{ inputs.dev_build }}"

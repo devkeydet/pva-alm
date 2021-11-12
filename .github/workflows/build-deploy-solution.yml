@@ -38,7 +38,7 @@ jobs:
     - name: deploy-solution
       uses: ./.github/actions/deploy-solution
       with:
-        environment_url: ${{ github.event.inputs.environment_url }}
+        environment_url: ${{ secrets.ENVIRONMENT_URL }}
         solution_name: ${{ github.event.inputs.solution_name }}
         environment: ${{ needs.get-subdomain.outputs.subdomain }}
         unmanaged: true

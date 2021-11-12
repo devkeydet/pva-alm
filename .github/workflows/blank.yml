@@ -30,3 +30,11 @@ jobs:
         run: |
           foreach ($e in $env){Write-Host $e}
           echo $env
+          
+      - uses: Firenza/secrets-to-env@v1.1.0
+        with:
+            secrets: ${{ toJSON(secrets) }}
+
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["src/pvaalm/deploymentSettings.json"]'

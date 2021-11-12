@@ -1,4 +1,4 @@
-name: deploy-prod
+name: deploy-tagged-solution-to-environment
 
 on:
   workflow_dispatch:

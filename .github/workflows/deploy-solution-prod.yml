@@ -42,10 +42,6 @@ jobs:
     environment: "prod"
     steps:
       - uses: actions/checkout@v2
-      - name: dump
-        shell: pwsh
-        run: |
-          echo "needs.get-solution-name-from-tag.outputs.solution_name: ${{ needs.get-solution-name-from-tag.outputs.solution_name }}"
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:

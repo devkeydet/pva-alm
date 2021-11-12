@@ -69,10 +69,6 @@ jobs:
       - uses: cschleiden/replace-tokens@v1
         with:
           files: '["${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"]'
-      
-      # - run: |
-      #     Get-Content "${{ runner.temp }}/${{ inputs.solution_name }}/artifact/deploymentSettings.json"
-      #   shell: pwsh
 
       - name: get solution zip
         id: get-solution-zip

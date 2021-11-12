@@ -45,11 +45,6 @@ runs:
         modules-to-cache: Microsoft.Xrm.Data.PowerShell, Microsoft.PowerApps.Administration.PowerShell
         shell: powershell
 
-    - name: dump
-      shell: pwsh
-      run: |
-        echo "inputs.environment_url: ${{ inputs.environment_url }}"
-
     - name: turn-on-flows-impersonation
       shell: powershell # windows, not cross platform pwsh
       env:
@@ -60,21 +55,16 @@ runs:
         solution_name: ${{ inputs.solution_name }}
         deployment_settings_file: "src/${{ inputs.solution_name }}/deploymentSettings.json"
       run: |
-        echo "inputs.environment_url: ${{ inputs.environment_url }}"
-        echo "environment_url: $env:environment_url"
-
         Import-Module Microsoft.Xrm.Data.PowerShell
         Import-Module  Microsoft.PowerApps.Administration.PowerShell
 
         Add-PowerAppsAccount -TenantID "$env:tenant_id" -ApplicationId "$env:app_id" -ClientSecret "$env:client_secret"
         
         $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
-        echo "connectionString: $connectionString"     
         $conn = Get-CrmConnection -ConnectionString $connectionString
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString
               
         $environmentName = $conn.EnvironmentId
-        echo "solution_name: $env:solution_name"
         $solutions = Get-CrmRecords -conn $conn -EntityLogicalName solution -FilterAttribute "uniquename" -FilterOperator "eq" -FilterValue "$env:solution_name"
         if($solutions.Count -gt 0) {
             $solutionId = $solutions.CrmRecords[0].solutionid

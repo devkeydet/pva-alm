@@ -24,14 +24,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: Firenza/secrets-to-env@v1.1.0
-      with:
-          secrets: ${{ inputs.secrets }}
-          secret_filter_regex: DKDT_*
+    # - uses: Firenza/secrets-to-env@v1.1.0
+    #   with:
+    #       secrets: ${{ inputs.secrets }}
+    #       secret_filter_regex: DKDT_*
 
-    - uses: cschleiden/replace-tokens@v1
-      with:
-        files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
+    # - uses: cschleiden/replace-tokens@v1
+    #   with:
+    #     files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
 
     # Enable flows based on connection references
     # Flows can only be turned on if the user turning them on has permissions to connections being referenced by the connection reference

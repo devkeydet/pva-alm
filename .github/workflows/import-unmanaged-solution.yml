@@ -20,7 +20,6 @@ jobs:
   build-deploy-solution:  
     runs-on: ubuntu-latest
     environment: ${{ needs.get-subdomain.outputs.subdomain }}
-    needs: [build-solution,get-subdomain]
     steps:
     # Solutions cannot be imported in parallel, so we queue
     - uses: ahmadnassri/action-workflow-queue@v1
@@ -45,11 +44,13 @@ jobs:
         environment: ${{ needs.get-subdomain.outputs.subdomain }}
         unmanaged: true
         secrets: ${{ toJSON(secrets) }}
+    outputs:
+      subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
 
   turn-on-flows:
     runs-on: windows-latest
-    needs: [deploy-solution,get-subdomain]
-    environment: ${{ needs.get-subdomain.outputs.subdomain }}
+    needs: build-deploy-solution
+    environment: ${{ needs.build-deploy-solution.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
       - id: turn-on-flows-impersonation

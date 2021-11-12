@@ -21,7 +21,7 @@ inputs:
     required: false
   secrets:
     description: 'secrets'
-    required: false
+    required: true
 
 runs:
   using: "composite"

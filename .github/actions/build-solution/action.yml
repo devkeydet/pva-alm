@@ -111,12 +111,7 @@ runs:
       solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_${{ steps.setOutput.outputs.buildNumber }}.zip
       solution-type: Both
 
-  # - name: copy deploymentSettings.json
-  #   shell: pwsh
-  #   run: |
-  #     Copy-Item "src/${{ inputs.solution_name }}/deploymentSettings.json" -Destination "${{ runner.temp }}/${{ env.solution_pack_folder }}"
-
-  # - uses: actions/upload-artifact@v2
-  #   with:
-  #     name: artifact
-  #     path: ${{ runner.temp }}/${{ env.solution_pack_folder }}
+  - uses: actions/upload-artifact@v2
+    with:
+      name: artifact
+      path: ${{ runner.temp }}/${{ inputs.solution_name }}

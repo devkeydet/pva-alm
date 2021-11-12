@@ -3,13 +3,10 @@ name: t
 on:
   workflow_dispatch:
 
-env:
-  environment: prod
-
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: ${{ env.environment }}
+    environment: prod
     steps:
     - uses: actions/checkout@v2
     - run: |

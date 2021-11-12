@@ -6,14 +6,14 @@ on:
       tag:
         required: true
         description: "GitHub tag for solution-version to deploy"
-
-env:
-  environment: prod
-
+      environment:
+        required: true
+        description: prod
+        default: prod
 jobs:
   deploy-prod:  
     runs-on: ubuntu-latest
-    environment: ${{ env.environment }}
+    environment: ${{ github.event.inputs.environment }}
     steps:
     # Solutions cannot be imported in parallel, so we queue
     - uses: ahmadnassri/action-workflow-queue@v1
@@ -30,7 +30,7 @@ jobs:
       uses: ./.github/actions/deploy-solution
       with:
         solution_name: ${{ env.solution_name }}
-        environment: ${{ env.environment }}
+        environment: ${{ github.event.inputs.environment }}
         tag: ${{ github.event.inputs.tag }}
         secrets: ${{ toJSON(secrets) }}
     outputs:
@@ -39,7 +39,7 @@ jobs:
   turn-on-flows:
     runs-on: windows-latest
     needs: deploy-prod
-    environment: ${{ env.environment }}
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v2
       - id: turn-on-flows-impersonation

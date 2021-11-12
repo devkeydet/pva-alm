@@ -29,24 +29,23 @@ runs:
     - uses: Firenza/secrets-to-env@v1.1.0
       with:
           secrets: ${{ inputs.secrets }}
-          secret_filter_regex: DKDT_*
 
     - uses: cschleiden/replace-tokens@v1
       with:
         files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
 
-    # Enable flows based on connection references
-    # Flows can only be turned on if the user turning them on has permissions to connections being referenced by the connection reference
-    # As of authoring this script, the Service Principal (SPN) we use to connect to the Dataverse API cannot turn on the Flow
-    # The temporary workaround is use a brute force approach for now.  We use the identity of the connection for the first connection
-    # reference we find to turn on the Flow.  This may have side effects or unintended consequences we haven't fully tested.
     - name: Install and cache PowerShell modules
       id: psmodulecache
       uses: potatoqualitee/psmodulecache@v4
       with:
         modules-to-cache: Microsoft.Xrm.Data.PowerShell, Microsoft.PowerApps.Administration.PowerShell
         shell: powershell
-
+        
+    # Enable flows based on connection references
+    # Flows can only be turned on if the user turning them on has permissions to connections being referenced by the connection reference
+    # As of authoring this script, the Service Principal (SPN) we use to connect to the Dataverse API cannot turn on the Flow
+    # The temporary workaround is use a brute force approach for now.  We use the identity of the connection for the first connection
+    # reference we find to turn on the Flow.  This may have side effects or unintended consequences we haven't fully tested.
     - name: turn-on-flows-impersonation
       shell: powershell # windows, not cross platform pwsh
       env:

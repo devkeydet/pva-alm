@@ -47,7 +47,7 @@ runs:
 
     - uses: cschleiden/replace-tokens@v1
       with:
-        files: '["${{ runner.temp }}/${{ inputs.solution_name }}/deploymentSettings.json"]'
+        files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
 
     - name: get solution zip
       id: get-solution-zip

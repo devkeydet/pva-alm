@@ -71,15 +71,15 @@ runs:
         $solutionZip = $files[0].Name
         echo "::set-output name=solution_zip::$solutionZip"     
 
-    # - name: import solution to environment
-    #   #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
-    #   uses: microsoft/powerplatform-actions/import-solution@main
-    #   with:
-    #     environment-url: ${{ inputs.environment_url }}
-    #     tenant-id: ${{ env.TENANT_ID }}
-    #     app-id: ${{ env.CLIENT_ID }}
-    #     client-secret: ${{ env.CLIENT_SECRET }}
-    #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
-    #     force-overwrite: true
-    #     use-deployment-settings-file: true
-    #     deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json
+    - name: import solution to environment
+      #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
+      uses: microsoft/powerplatform-actions/import-solution@main
+      with:
+        environment-url: ${{ inputs.environment_url }}
+        tenant-id: ${{ env.TENANT_ID }}
+        app-id: ${{ env.CLIENT_ID }}
+        client-secret: ${{ env.CLIENT_SECRET }}
+        solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
+        force-overwrite: true
+        use-deployment-settings-file: true
+        deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json

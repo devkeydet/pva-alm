@@ -71,7 +71,7 @@ runs:
 
     - name: import solution to environment
       #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
-      uses: microsoft/powerplatform-actions/import-solution@v0
+      uses: microsoft/powerplatform-actions/import-solution@main
       with:
         environment-url: ${{ inputs.environment_url }}
         tenant-id: ${{ env.TENANT_ID }}

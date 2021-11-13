@@ -28,10 +28,8 @@ runs:
   steps:
     - name: mask-inputs
       shell: bash
-      env:
-        environment_url: ${{ inputs.environment_url }}
       run: |
-        echo "::add-mask::$environment_url"      
+        echo "::add-mask::${{ inputs.environment_url }}"      
         
     - run: |
         git fetch --all --tags

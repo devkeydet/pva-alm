@@ -28,7 +28,8 @@ runs:
   - uses: actions/checkout@v2
     with:
       ref: ${{ inputs.ref }}
-
+  - run: echo ${{ inputs.github_token }}
+    shell: pwsh
   - name: update-pr-with-link-to-workflow
     shell: pwsh
     env:

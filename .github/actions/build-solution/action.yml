@@ -28,9 +28,6 @@ runs:
   - uses: actions/checkout@v2
     with:
       ref: ${{ inputs.ref }}
-  - run: echo ${{ inputs.github_token }}
-    shell: pwsh 
-
   - id:  set-pr-number-run-url
     name: get-pr-number
     shell: pwsh
@@ -41,7 +38,6 @@ runs:
         $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         echo "::set-output name=pr_number::$prNumber"
         echo "::set-output name=run_url::$runUrl"
-        #gh pr comment $prNumber --body "latest pr validation workflow: $runUrl"
       }
 
   - name: update-pr-with-link-to-workflow
@@ -56,12 +52,9 @@ runs:
     if: ${{ inputs.dev_build != 'true'}}
     shell: pwsh
     run: |
-      echo "dev_build: ${{ inputs.dev_build }}"
-      echo "ref: ${{ inputs.ref }}"
       $dateStamp = Get-Date -Format "yyyyMMdd"
       $buildNumber = "${{ inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
       echo "::set-output name=buildNumber::$buildNumber"
-      echo "buildNumber: $buildNumber"
 
   - name: Create tag
     uses: actions/github-script@v3

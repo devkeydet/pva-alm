@@ -73,8 +73,8 @@ jobs:
 
             $ref = "${{ github.ref }}"
 
-            gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
-            
+            #gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
+            New-Item ./src/trigger.txt -ItemType File -Value $env:GITHUB_RUN_ID -Force
             echo "pipeline queued for $solutionName"
             echo $ref
           }

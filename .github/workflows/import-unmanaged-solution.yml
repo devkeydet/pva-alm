@@ -18,7 +18,7 @@ on:
 
 jobs:
   # Needs it's own job in order for build-deploy-solution->environment value to be used.
-  get-subdomain:
+  get-environment-from-domain:
     runs-on: ubuntu-latest
     steps:
     # Solutions cannot be imported in parallel, so we queue
@@ -54,14 +54,11 @@ jobs:
         environment: ${{ needs.get-subdomain.outputs.subdomain }}
         unmanaged: true
         secrets: ${{ toJSON(secrets) }}
-    # Setting Environment on turn-on-flows causes two approvals.
-    # So we pass the Environment secrets as an outpout for that job to use
-    outputs:
-      secrets: ${{ toJSON(secrets) }} 
 
   turn-on-flows:
     runs-on: windows-latest
     needs: [get-subdomain,build-deploy-solution]
+    environment: ${{ needs.get-subdomain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
       - id: turn-on-flows-impersonation
@@ -72,4 +69,4 @@ jobs:
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
-          secrets: ${{ needs.build-deploy-solution.outputs.secrets }}
+          secrets: ${{ toJSON(secrets) }}

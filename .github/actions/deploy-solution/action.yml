@@ -79,4 +79,4 @@ runs:
         solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
         force-overwrite: true
         use-deployment-settings-file: true
-        deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json
+        deployment-settings-file: ${{ runner.temp }}/deploymentSettings.json

@@ -29,9 +29,9 @@ runs:
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
         environment-url: ${{ inputs.environment_url}}
-        app-id: ${{ unputs.client_id }}
-        client-secret: ${{ unputs.client_secret }}
-        tenant-id: ${{ unputs.tenant_id }}
+        app-id: ${{ inputs.client_id }}
+        client-secret: ${{ inputs.client_secret }}
+        tenant-id: ${{ inputs.tenant_id }}
         solution-name: ${{ inputs.solution_name }}
         solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}.zip
         managed: false
@@ -40,9 +40,9 @@ runs:
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
         environment-url: ${{ inputs.environment_url}}
-        app-id: ${{ unputs.client_id }}
-        client-secret: ${{ unputs.client_secret }}
-        tenant-id: ${{ unputs.tenant_id }}
+        app-id: ${{ inputs.client_id }}
+        client-secret: ${{ inputs.client_secret }}
+        tenant-id: ${{ inputs.tenant_id }}
         solution-name: ${{ inputs.solution_name }}
         solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
         managed: true
@@ -63,16 +63,16 @@ runs:
       shell: pwsh
       run: |
         $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
-        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ unputs.tenant_id }} --applicationId ${{ unputs.client_id }} --clientSecret ${{ unputs.client_secret }}
+        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
         pac solution delete --solution-name ${{ inputs.solution_name }}
         
     # - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
     #   uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
     #   with:
     #     environment-url: ${{ inputs.environment_url}}
-    #     app-id: ${{ unputs.client_id }}
-    #     client-secret: ${{ unputs.client_secret }}
-    #     tenant-id: ${{ unputs.tenant_id }}
+    #     app-id: ${{ inputs.client_id }}
+    #     client-secret: ${{ inputs.client_secret }}
+    #     tenant-id: ${{ inputs.tenant_id }}
     #     solution-name: ${{ inputs.solution_name }}
 
     - name: import-managed-solution-to-environment
@@ -81,16 +81,16 @@ runs:
         echo $env:PATH
         $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
         echo $env:PATH
-        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ unputs.tenant_id }} --applicationId ${{ unputs.client_id }} --clientSecret ${{ unputs.client_secret }}
+        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
         pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip"
     
     # - name: import-managed-solution-to-environment
     #   uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
     #   with:
     #     environment-url: ${{ inputs.environment_url}}
-    #     tenant-id: ${{ unputs.tenant_id }}
-    #     app-id: ${{ unputs.client_id }}
-    #     client-secret: ${{ unputs.client_secret }}
+    #     tenant-id: ${{ inputs.tenant_id }}
+    #     app-id: ${{ inputs.client_id }}
+    #     client-secret: ${{ inputs.client_secret }}
     #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
     #     force-overwrite: true
     #     convert-to-managed: true
@@ -110,14 +110,14 @@ runs:
       shell: pwsh
       run: |
         $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
-        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ unputs.tenant_id }} --applicationId ${{ unputs.client_id }} --clientSecret ${{ unputs.client_secret }}
+        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
         pac solution delete --solution-name ${{ inputs.solution_name }}
 
   #   - name: delete-managed-solution
   #     uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
   #     with:
   #       environment-url: ${{ inputs.environment_url}}
-  #       app-id: ${{ unputs.client_id }}
-  #       client-secret: ${{ unputs.client_secret }}
-  #       tenant-id: ${{ unputs.tenant_id }}
+  #       app-id: ${{ inputs.client_id }}
+  #       client-secret: ${{ inputs.client_secret }}
+  #       tenant-id: ${{ inputs.tenant_id }}
   #       solution-name: ${{ inputs.solution_name }}

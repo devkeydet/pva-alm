@@ -21,13 +21,14 @@ jobs:
 
     steps:
       - name: update-pr-with-check-comment
+        if: contains(github.ref, 'pull')
         uses: peter-evans/create-or-update-comment@v1.4.5
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             PR NOT READY FOR APPROVAL
             - Wait for another comment to appear after this one.
-            - The workflow triggered by this PR starts another workflow that represents the actual PR validation workflow.
+            - The workflow triggered by this PR starts another workflow that represents the actual PR validation workflow.        
       - uses: actions/checkout@v2
       # determine if the build should go to the PR or UAT environment
       - name: uat env var

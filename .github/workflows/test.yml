@@ -1,0 +1,22 @@
+name: test
+on:
+  pull_request:
+    branches: 
+      - main
+    paths:
+      - 'src/*/build-deploy-trigger.txt'
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: echo ref
+        run: | 
+          ${{ github.ref }}
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: csv

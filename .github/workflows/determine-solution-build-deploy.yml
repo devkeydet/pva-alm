@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - src/**
+      - '!src/*/build-deploy-trigger.txt'
   push:
     branches:
       - main
     paths:
       - src/**
+      - '!src/*/build-deploy-trigger.txt'
 
 env:
   solution_version_major_minor: "1.0"

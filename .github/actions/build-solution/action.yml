@@ -28,19 +28,19 @@ runs:
   - uses: actions/checkout@v2
     with:
       ref: ${{ inputs.ref }}
-  - id:  set-pr-number-run-url
+  - if: contains(github.ref, 'refs/pull')
+    id:  set-pr-number-run-url    
     name: get-pr-number
     shell: pwsh
     run: |
       $ref = "${{ inputs.ref }}"
-      if ($ref.Contains("refs/pull")) {
-        $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
-        $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        echo "::set-output name=pr_number::$prNumber"
-        echo "::set-output name=run_url::$runUrl"
-      }
+      $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
+      $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      echo "::set-output name=pr_number::$prNumber"
+      echo "::set-output name=run_url::$runUrl"
 
-  - name: update-pr-with-link-to-workflow
+  - if: contains(github.ref, 'refs/pull')
+    name: update-pr-with-link-to-workflow
     uses: peter-evans/create-or-update-comment@v1.4.5
     with:
       issue-number: ${{ steps.set-pr-number-run-url.outputs.pr_number}}

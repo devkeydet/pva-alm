@@ -62,6 +62,7 @@ jobs:
         solution_name: ${{  github.event.inputs.solution_name }}
         environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
         unmanaged: true
+        secrets: ${{ toJSON(secrets) }}
   
   turn-on-flows:
     runs-on: windows-latest

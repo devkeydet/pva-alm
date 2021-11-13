@@ -17,7 +17,7 @@ on:
         default: "main"
 
 jobs:
-   # Needs it's own job in order for build-deploy-solution->environment value to be used.
+   # Needs it's own job in order for delete-build-deploy-solution->environment value to be used.
   get-environment-from-domain:
     runs-on: ubuntu-latest
     steps:
@@ -31,22 +31,20 @@ jobs:
     outputs:
       subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
 
-  delete-unmanaged-solution-and-components-from-environment:
-    uses: devkeydet/pva-alm/.github/workflows/zz-r-delete-unmanaged-solution-and-components-from-environment.yml@main
-    with:
-      solution_name: ${{ github.event.inputs.solution_name }}
-      environment_url: ${{ github.event.inputs.environment_url }}
-    secrets:
-      tenant_id: ${{ secrets.TENANT_ID }}
-      client_id: ${{ secrets.CLIENT_ID }}
-      client_secret: ${{ secrets.CLIENT_SECRET }}
-
-  build-deploy-solution:
+  delete-build-deploy-solution:
     runs-on: ubuntu-latest
     needs: [get-environment-from-domain,delete-unmanaged-solution-and-components-from-environment]
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
     - uses: actions/checkout@v2
+    - id: delete-unmanaged-solution-and-components-from-environment
+      uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment
+      with:
+        solution_name: ${{ github.event.inputs.solution_name }}
+        environment_url: ${{ github.event.inputs.environment_url }}
+        tenant_id: ${{ secrets.TENANT_ID }}
+        client_id: ${{ secrets.CLIENT_ID }}
+        client_secret: ${{ secrets.CLIENT_SECRET }}
     - id: build-solution
       uses: ./.github/actions/build-solution
       with:
@@ -66,7 +64,7 @@ jobs:
   
   turn-on-flows:
     runs-on: windows-latest
-    needs: [get-environment-from-domain,build-deploy-solution]
+    needs: [get-environment-from-domain,delete-build-deploy-solution]
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2

@@ -19,7 +19,7 @@ on:
 jobs:      
   build-deploy-solution:  
     runs-on: ubuntu-latest
-    environment: ${{ needs.get-subdomain.outputs.subdomain }}
+    environment: ${{ steps.get-subdomain.outputs.subdomain }}
     steps:
     # Solutions cannot be imported in parallel, so we queue
     - uses: ahmadnassri/action-workflow-queue@v1
@@ -42,7 +42,7 @@ jobs:
       with:
         environment_url: ${{ github.event.inputs.environment_url }}
         solution_name: ${{  github.event.inputs.solution_name }}
-        environment: ${{ needs.get-subdomain.outputs.subdomain }}
+        environment: ${{ steps.get-subdomain.outputs.subdomain }}
         unmanaged: true
         secrets: ${{ toJSON(secrets) }}
     outputs:

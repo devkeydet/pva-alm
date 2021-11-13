@@ -33,8 +33,8 @@ jobs:
 
   build-deploy-solution:
     runs-on: ubuntu-latest
-    needs: get-subdomain  
-    environment: ${{ needs.get-subdomain.outputs.subdomain }}
+    needs: get-environment-from-domain  
+    environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
     - uses: actions/checkout@v2
     - id: build-solution
@@ -51,14 +51,14 @@ jobs:
       with:
         environment_url: ${{ github.event.inputs.environment_url }}
         solution_name: ${{  github.event.inputs.solution_name }}
-        environment: ${{ needs.get-subdomain.outputs.subdomain }}
+        environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
         unmanaged: true
         secrets: ${{ toJSON(secrets) }}
 
   turn-on-flows:
     runs-on: windows-latest
-    needs: [get-subdomain,build-deploy-solution]
-    environment: ${{ needs.get-subdomain.outputs.subdomain }}
+    needs: [get-environment-from-domain,build-deploy-solution]
+    environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
       - id: turn-on-flows-impersonation

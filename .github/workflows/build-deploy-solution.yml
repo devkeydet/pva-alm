@@ -18,23 +18,22 @@ on:
         description: "environment where the build will be deployed"
 
 jobs:
-  build-solution:
-    name: build solution
-    uses: devkeydet/pva-alm/.github/workflows/zz-r-build-solution.yml@main
-    with:
-      ref: ${{ github.event.inputs.ref }}
-      solution_name: ${{ github.event.inputs.solution_name }}
-      solution_version_major_minor: "${{ github.event.inputs.solution_version_major_minor }}"
-
-  deploy-solution:
+  build-deploy-solution:
     runs-on: ubuntu-latest
     name: deploy solution to ${{ github.event.inputs.environment }} environment
     environment: ${{ github.event.inputs.environment }}
-    needs: build-solution
     steps:
     # Solutions cannot be imported in parallel, so we queue
     - uses: ahmadnassri/action-workflow-queue@v1
-    - uses: actions/checkout@v2    
+    - uses: actions/checkout@v2
+    - id: build-solution
+      uses: ./.github/actions/build-solution
+      with:
+        ref: ${{ github.event.inputs.ref }}
+        solution_name: ${{ github.event.inputs.solution_name }}
+        solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
+        solution_version_major_minor: "0.0"
+        github_token: $${{ github.token }}
     - name: deploy-solution
       uses: ./.github/actions/deploy-solution
       with:
@@ -45,7 +44,7 @@ jobs:
 
   turn-on-flows:
     runs-on: windows-latest
-    needs: deploy-solution
+    needs: build-deploy-solution
     environment: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v2

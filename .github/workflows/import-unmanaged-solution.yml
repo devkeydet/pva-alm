@@ -46,16 +46,12 @@ jobs:
         solution_version_major_minor: "0.0"
         dev_build: true
         github_token: $${{ github.token }}
-    - id: get-subdomain
-      uses: ./.github/actions/get-subdomain
-      with:
-        url: ${{ github.event.inputs.environment_url }}    
     - name: deploy-solution
       uses: ./.github/actions/deploy-solution
       with:
         environment_url: ${{ github.event.inputs.environment_url }}
         solution_name: ${{  github.event.inputs.solution_name }}
-        environment: ${{ steps.get-subdomain.outputs.subdomain }}
+        environment: ${{ needs.get-subdomain.outputs.subdomain }}
         unmanaged: true
         secrets: ${{ toJSON(secrets) }}
     # Setting Environment on turn-on-flows causes two approvals.

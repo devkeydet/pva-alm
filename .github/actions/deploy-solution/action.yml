@@ -26,6 +26,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: mask-inputs
+      env:
+        environment_url: ${{ inputs.environment_url }}
+      run: |
+        echo "::add-mask::$environment_url"      
+        
     - run: |
         git fetch --all --tags
         $commit = git rev-list -n 1 tags/${{ inputs.tag }}
@@ -65,7 +71,8 @@ runs:
         echo "::set-output name=solution_zip::$solutionZip"     
 
     - name: import solution to environment
-      uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
+      #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
+      uses: microsoft/powerplatform-actions/import-solution@main
       with:
         environment-url: ${{ inputs.environment_url }}
         tenant-id: ${{ env.TENANT_ID }}

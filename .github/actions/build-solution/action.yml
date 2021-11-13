@@ -8,16 +8,13 @@ inputs:
     description: ref
   solution_name:
     required: true
-    description: ref
+    description: solution_name
   solution_version_major_minor:
     required: true
-    description: ref
+    description: solution_version_major_minor
   dev_build:
     required: false
-    description: ref
-  github_token:
-    required: true
-    description: ref 
+    description: dev_build
   solution_package_source: 
     required: true
     description: solution_package_source

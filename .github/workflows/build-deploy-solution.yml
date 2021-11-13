@@ -33,7 +33,6 @@ jobs:
         solution_name: ${{ github.event.inputs.solution_name }}
         solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
         solution_version_major_minor: "0.0"
-        github_token: $${{ secrets.GITHUB_TOKEN }}
     - name: deploy-solution
       uses: ./.github/actions/deploy-solution
       with:

@@ -43,7 +43,7 @@ jobs:
 
   build-deploy-solution:
     runs-on: ubuntu-latest
-    needs: get-environment-from-domain  
+    needs: [get-environment-from-domain,delete-unmanaged-solution-and-components-from-environment]
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
     - uses: actions/checkout@v2

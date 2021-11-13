@@ -14,7 +14,7 @@ jobs:
       
       - name: echo ref
         run: | 
-          ${{ github.ref }}
+          echo ${{ github.ref }}
 
       - id: files
         uses: jitterbit/get-changed-files@v1

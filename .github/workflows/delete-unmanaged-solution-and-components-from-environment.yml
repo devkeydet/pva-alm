@@ -20,14 +20,14 @@ on:
 
 jobs:
   delete-unmanaged-solution-and-components-from-environment:
-    uses: devkeydet/pva-alm/.github/workflows/zz-r-delete-unmanaged-solution-and-components-from-environment.yml@main
-    with:
-      solution_name: ${{ github.event.inputs.solution_name }}
-      environment_url: ${{ github.event.inputs.environment_url }}
-    secrets:      
-      tenant_id: ${{ secrets.TENANT_ID }}
-      client_id: ${{ secrets.CLIENT_ID }}
-      client_secret: ${{ secrets.CLIENT_SECRET }}
-
-  # x:
-  #   runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2   
+    - id: delete-unmanaged-solution-and-components-from-environment
+      uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment
+      with:
+        solution_name: ${{ github.event.inputs.solution_name }}
+        environment_url: ${{ github.event.inputs.environment_url }}
+        tenant_id: ${{ secrets.TENANT_ID }}
+        client_id: ${{ secrets.CLIENT_ID }}
+        client_secret: ${{ secrets.CLIENT_SECRET }}

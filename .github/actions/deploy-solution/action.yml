@@ -73,7 +73,7 @@ runs:
 
     - name: import solution to environment
       #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0
-      uses: microsoft/powerplatform-actions/import-solution@main
+      uses: microsoft/powerplatform-actions/import-solution@v0
       with:
         environment-url: ${{ inputs.environment_url }}
         tenant-id: ${{ env.TENANT_ID }}
@@ -81,5 +81,5 @@ runs:
         client-secret: ${{ env.CLIENT_SECRET }}
         solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
         force-overwrite: true
-        use-deployment-settings-file: true
-        deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json
+        #use-deployment-settings-file: true
+        #deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json

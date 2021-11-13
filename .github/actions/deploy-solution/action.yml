@@ -47,7 +47,7 @@ runs:
 
     - uses: cschleiden/replace-tokens@v1
       with:
-        files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
+        files: '["${{ runner.temp }}/deploymentSettings.json"]'
 
     - name: get solution zip
       id: get-solution-zip
@@ -67,7 +67,7 @@ runs:
     - uses: actions/upload-artifact@v2
       with:
         name: artifact
-        path: src/${{ inputs.solution_name }}/deploymentSettings.json
+        path: ${{ runner.temp }}/deploymentSettings.json
 
     - name: import solution to environment
       uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because deployment-settings-file isn't officially released, therefore won't be in v0

@@ -21,7 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # Solutions cannot be imported in parallel, so we queue
-    - uses: ahmadnassri/action-workflow-queue@v1    
+    - uses: ahmadnassri/action-workflow-queue@v1 
+    - uses: actions/checkout@v2   
     - id: get-subdomain
       uses: ./.github/actions/get-subdomain
       with:
@@ -34,8 +35,6 @@ jobs:
     needs: get-subdomain  
     environment: ${{ needs.get-subdomain.outputs.subdomain }}
     steps:
-    # Solutions cannot be imported in parallel, so we queue
-    - uses: ahmadnassri/action-workflow-queue@v1
     - uses: actions/checkout@v2
     - id: build-solution
       uses: ./.github/actions/build-solution

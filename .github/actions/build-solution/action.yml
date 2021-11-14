@@ -3,9 +3,6 @@ name: build-solution
 description: build-solution
 
 inputs:
-  ref:
-    required: true
-    description: ref
   solution_name:
     required: true
     description: solution_name
@@ -22,10 +19,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - uses: actions/checkout@v2
-    with:
-      ref: ${{ inputs.ref }}  
-
   # set environment and build number as output variables for further use
   - id: setOutput
     if: ${{ inputs.dev_build != 'true'}}

@@ -53,7 +53,6 @@ jobs:
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
           github_ref: ${{ github.ref }}
           pr_head_ref: ${{ github.event.pull_request.head.ref }}
-          github_sha: ${{ github.sha }}
         run: |
           $files = "${{ steps.files.outputs.all }}"
           $filesArray = $files -split ','
@@ -81,7 +80,7 @@ jobs:
 
             echo "ref: $ref"
 
-            gh workflow run build-deploy-solution --ref $env:github_sha -f ref=$env:github_sha -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
+            gh workflow run build-deploy-solution --ref $ref -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
             echo "pipeline queued for $solutionName"           
           }

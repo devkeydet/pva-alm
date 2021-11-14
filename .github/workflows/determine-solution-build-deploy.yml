@@ -52,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
           github_ref: ${{ github.ref }}
-          pr-head-ref: ${{ github.event.pull_request.head.ref }}
+          pr_head_ref: ${{ github.event.pull_request.head.ref }}
         run: |
           $files = "${{ steps.files.outputs.all }}"
           $filesArray = $files -split ','
@@ -72,7 +72,7 @@ jobs:
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
 
             if ($env:github_ref.Contains("pull")) {
-              $ref = $env:pr-head-ref
+              $ref = $env:pr_head_ref
             }
             else {
               $ref = $env:github_ref

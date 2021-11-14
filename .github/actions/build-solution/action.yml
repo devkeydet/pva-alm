@@ -22,25 +22,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - if: contains(inputs.ref, 'refs/pull')
-    id:  set-pr-number-run-url    
-    name: set-pr-number-run-url
-    shell: pwsh
-    run: |
-      $ref = "${{ inputs.ref }}"
-      $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
-      $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-      echo "::set-output name=pr_number::$prNumber"
-      echo "::set-output name=run_url::$runUrl"
-
-  - if: contains(inputs.ref, 'refs/pull')
-    name: update-pr-with-link-to-workflow
-    uses: peter-evans/create-or-update-comment@v1.4.5
-    with:
-      issue-number: ${{ steps.set-pr-number-run-url.outputs.pr_number}}
-      body: |
-        PR validation workflow: ${{ steps.set-pr-number-run-url.outputs.run_url}}
-
   - uses: actions/checkout@v2
     with:
       ref: ${{ inputs.ref }}  

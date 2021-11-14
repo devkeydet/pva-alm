@@ -27,20 +27,19 @@ jobs:
       shell: pwsh
       run: |
         echo "github.ref: ${{ github.ref }}"
-        echo "inputs.ref: ${{ inputs.ref }}"
-        echo "inputs: ${{ toJSON(inputs) }}"
-    - if: contains(inputs.ref, 'refs/pull')
+        echo "github.event.inputs.ref: ${{ github.event.inputs.ref }}"
+    - if: contains(github.event.inputs.ref, 'refs/pull')
       id:  set-pr-number-run-url    
       name: set-pr-number-run-url
       shell: pwsh
       run: |
-        $ref = "${{ inputs.ref }}"
+        $ref = "${{ github.event.inputs.ref }}"
         $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
         $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         echo "::set-output name=pr_number::$prNumber"
         echo "::set-output name=run_url::$runUrl"
 
-    - if: contains(inputs.ref, 'refs/pull')
+    - if: contains(github.event.inputs.ref, 'refs/pull')
       name: update-pr-with-link-to-workflow
       uses: peter-evans/create-or-update-comment@v1.4.5
       with:

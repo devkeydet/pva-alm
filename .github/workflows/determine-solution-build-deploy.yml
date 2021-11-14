@@ -6,13 +6,11 @@ on:
       - main
     paths:
       - src/**
-      - '!src/*/build-deploy-trigger.txt'
   push:
     branches:
       - main
     paths:
       - src/**
-      - '!src/*/build-deploy-trigger.txt'
 
 env:
   solution_version_major_minor: "1.0"
@@ -43,9 +41,10 @@ jobs:
         shell: bash
         run: |
           echo "environment=pr" >> $GITHUB_ENV
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v11.6
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: csv
       # check for file changes in solution source folder(s)
       # if found, queue build and deply workflow
       - shell: pwsh
@@ -53,17 +52,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
         run: |
-          echo "files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}"
           $files = "${{ steps.files.outputs.all }}"
           $filesArray = $files -split ','
 
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
-          foreach ($file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}) {         
+          foreach ($file in $filesArray) {         
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
               $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
               $solutionDirectoriesArray.Add($solutionDirectory)
-              echo "solutionDirectory: $solutionDirectory"
             }        
           }
 
@@ -71,18 +68,10 @@ jobs:
 
           foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
-            echo "solutionName: $solutionName"
 
             $ref = "${{ github.ref }}"
 
-            #gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
-            
-            # New-Item "./src/$solutionName/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
-
-            # git config --global user.name ${{ github.actor }}   
-            # git add --all
-            # git commit -am "trigger build-deploy-solution"
-            # git push
+            gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
             echo "pipeline queued for $solutionName"
             echo $ref

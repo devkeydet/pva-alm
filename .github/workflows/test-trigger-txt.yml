@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'pr**'
+      - main
     paths:
       - 'src/*/build-deploy-trigger.txt'
           

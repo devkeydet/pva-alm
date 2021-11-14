@@ -33,12 +33,12 @@ jobs:
             - The workflow triggered by this PR starts another workflow that represents the actual PR validation workflow.        
       - uses: actions/checkout@v2
       # determine if the build should go to the PR or UAT environment
-      - name: uat env var
+      - name: uat-env-var
         if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
           echo "environment=uat" >> $GITHUB_ENV
-      - name: pr env var
+      - name: pr-env-var
         if: github.ref != 'refs/heads/main'
         shell: bash
         run: |
@@ -47,8 +47,9 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v11.6
       # check for file changes in solution source folder(s)
-      # if found, queue build and deply workflow
-      - shell: pwsh
+      # if found, trigger build and deploy workflow
+      - name: trigger-build-deploy-solution-if-changes
+        shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
           files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}

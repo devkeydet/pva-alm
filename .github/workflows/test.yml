@@ -11,9 +11,9 @@ jobs:
       - name: modify and push
         shell: pwsh
         run: |
-          New-Item "./src/$solutionName/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
+          New-Item "./src/pvaalm/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
 
           git config --global user.name ${{ github.actor }}   
           git add --all
           git commit -am "trigger build-deploy-solution"
-          git push
+          git push 

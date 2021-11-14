@@ -61,7 +61,8 @@ jobs:
 
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
-          foreach ($file in $filesArray) {         
+          foreach ($file in $filesArray) {     
+            echo "file: $file"    
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
               $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
               $solutionDirectoriesArray.Add($solutionDirectory)

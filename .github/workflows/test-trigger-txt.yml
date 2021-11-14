@@ -1,9 +1,15 @@
 name: test-trigger-txt
-on:        
-  push:
+on:
+  pull_request:
     branches:
-      - 'pr**'
       - main
+      - 'pr**'
+    paths:
+      - 'src/*/build-deploy-trigger.txt'        
+  push:
+    branches:      
+      - main
+      - 'pr**'
     paths:
       - 'src/*/build-deploy-trigger.txt'
           

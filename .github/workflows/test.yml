@@ -12,7 +12,6 @@ jobs:
         shell: pwsh
         run: |
           New-Item "./src/pvaalm/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
-
           git config --global user.name ${{ github.actor }}   
           git add --all
           git commit -am "trigger build-deploy-solution"

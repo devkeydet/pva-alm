@@ -16,4 +16,4 @@ jobs:
           git config --global user.name ${{ github.actor }}   
           git add --all
           git commit -am "trigger build-deploy-solution"
-          git push 
+          git push

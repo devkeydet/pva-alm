@@ -28,6 +28,7 @@ jobs:
       run: |
         echo "github.ref: ${{ github.ref }}"
         echo "inputs.ref: ${{ inputs.ref }}"
+        echo "inputs: ${{ toJSON(inputs) }}"
     - if: contains(inputs.ref, 'refs/pull')
       id:  set-pr-number-run-url    
       name: set-pr-number-run-url

@@ -60,11 +60,9 @@ jobs:
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
           foreach ($file in $filesArray) {     
-            echo "file: $file"    
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
               $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
               $solutionDirectoriesArray.Add($solutionDirectory)
-              echo "solutionDirectory: $solutionDirectory"
             }        
           }
 
@@ -72,19 +70,17 @@ jobs:
 
           foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
-            echo "solutionName: $solutionName"
 
             $ref = "${{ github.ref }}"
 
             #gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
-            # New-Item "./src/$solutionName/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
+            New-Item "./src/$solutionName/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
 
-            # git config --global user.name ${{ github.actor }}   
-            # git add --all
-            # git commit -am "trigger build-deploy-solution"
-            # git push
+            git config --global user.name ${{ github.actor }}   
+            git add --all
+            git commit -am "trigger build-deploy-solution"
+            git push
             
-            echo "pipeline queued for $solutionName"
-            echo $ref
+            echo "pipeline triggered for $solutionName"
           }

@@ -43,10 +43,9 @@ jobs:
         shell: bash
         run: |
           echo "environment=pr" >> $GITHUB_ENV
-      - id: files
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: csv
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v11.6
       # check for file changes in solution source folder(s)
       # if found, queue build and deply workflow
       - shell: pwsh
@@ -59,10 +58,11 @@ jobs:
 
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
-          foreach ($file in $filesArray) {         
+          foreach ($file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}) {         
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
               $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
               $solutionDirectoriesArray.Add($solutionDirectory)
+              echo $solutionDirectory
             }        
           }
 

@@ -23,6 +23,10 @@ jobs:
     name: deploy solution to ${{ github.event.inputs.environment }} environment
     environment: ${{ github.event.inputs.environment }}
     steps:
+    - name: echo-github-ref
+      shell: pwsh
+      run: |
+        echo "github.ref: ${{ github.ref }}"
     - if: contains(inputs.ref, 'refs/pull')
       id:  set-pr-number-run-url    
       name: set-pr-number-run-url

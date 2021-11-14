@@ -1,11 +1,7 @@
 name: test
 on:        
-  pull_request:
-    branches: 
-      - main
-    paths:
-      - 'src/*/build-deploy-trigger.txt'
-      
+  workflow_dispatch:
+          
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,3 +17,13 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_and_modified_files }}; do
             echo "$file was modified"
           done
+      
+      - name: modify and push
+        shell: pwsh
+        run: |
+          New-Item "./src/$solutionName/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
+
+          git config --global user.name ${{ github.actor }}   
+          git add --all
+          git commit -am "trigger build-deploy-solution"
+          git push

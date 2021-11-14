@@ -71,7 +71,7 @@ jobs:
           foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
 
-            if ($env:github_ref.Contains("pull") {
+            if ($env:github_ref.Contains("pull")) {
               $ref = $env:github_ref
             }
             else {

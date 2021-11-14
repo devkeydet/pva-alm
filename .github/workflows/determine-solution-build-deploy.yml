@@ -51,14 +51,11 @@ jobs:
       - name: trigger-build-deploy-solution-if-changes
         shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
+          #GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
           files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
         run: |
-          echo "changed-files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}"
-          echo "files: $env:files"
-          $files = "${{ steps.changed-files.outputs.all_changed_and_modified_files }}"
-          $filesArray = $files -split '\n'
+          $filesArray = $env:files -split ' '
 
           $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 

@@ -72,7 +72,7 @@ jobs:
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
 
             if ($env:github_ref.Contains("pull")) {
-              $ref = $env:github_ref
+              $ref = $env:pr-head-ref
             }
             else {
               $ref = $env:github_ref

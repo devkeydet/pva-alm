@@ -54,7 +54,7 @@ jobs:
           files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
         run: |
-          echo "files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}"
+          echo "changed-files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}"
           echo "files: $env:files"
           $files = "${{ steps.changed-files.outputs.all_changed_and_modified_files }}"
           $filesArray = $files -split '\n'
@@ -64,7 +64,7 @@ jobs:
           foreach ($file in $filesArray) {         
             if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
               $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
-              $solutionDirectoriesArray.Add($solutionDirector
+              $solutionDirectoriesArray.Add($solutionDirectory)
               echo "solutionDirectory: $solutionDirectory"
             }        
           }

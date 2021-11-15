@@ -4,7 +4,7 @@ on:
           
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       
@@ -31,6 +31,4 @@ jobs:
         run: |
           $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
           $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}
-          foreach ($item in $array) {
-            echo $item.FullName
-          }
+          echo $array[0].FullName

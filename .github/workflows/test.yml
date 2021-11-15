@@ -26,11 +26,31 @@ jobs:
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
       
-      - name: set-pac-path
-        uses: ./.github/actions/set-pac-path
+      # - name: set-pac-path
+      #   uses: ./.github/actions/set-pac-path
+
+      - id: get-pac-path
+        name: get-pac-path
+        shell: pwsh
+        run: |
+          
+          $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
+          $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}
+          
+          $pacPath = $array[0].Directory.FullName
+          echo "pacPath: $pacPath"
+
+          echo "::set-output name=pac_path::$pacPath"     
+
+      - name: Create tag
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            core.addPath('${{ steps.get-pac-path.outputs.pac_path }}')
       
       - name: test-pac
         shell: pwsh
         run: |
           echo $env:GITHUB_PATH
-          pac
+          #pac

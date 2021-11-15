@@ -7,7 +7,8 @@ runs:
   using: "composite"
   steps:
     # hack, but necessary until GitHub Actions for Power Platform support all pac commands
-    - name: force-downloading-pac
+    - if: ${{ false }} # this will never run, but will force powerplatform-actions to download 
+      name: force-pac-download
       uses: microsoft/powerplatform-actions/unpack-solution@v0
       with:
         solution-file: fake.zip

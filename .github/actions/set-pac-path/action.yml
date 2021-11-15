@@ -7,45 +7,18 @@ runs:
   using: "composite"
   steps:
     # hack, but necessary until GitHub Actions for Power Platform support all pac commands
-    - id: get-pac-path
-      name: get-pac-path
-      shell: pwsh
-      run: |        
-        $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
-        if ($env:RUNNER_OS -eq "Windows") {
-          $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac\tools\pac.exe')}
-        }
-        else {
-          $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac_linux/tools/pac')}
-        }
-
-        if ($array -eq $null) {
-          $pacPath = ""
-        }
-        else {
-          $pacPath = $array[0].Directory.FullName
-        }        
-        
-        echo "pacPath: $pacPath"
-
-        echo "::set-output name=pac_path::$pacPath"     
-
-    # In order to get the path to call pac directly, we need to use at least on action from microsoft/powerplatform-actions.
-    # WhoAmI seems to be the best option.
-    # TODO: remove this when we no longer need to use pac directly
-    - if: ${{ steps.get-pac-path.outputs.pac_path == "" }} #only do this 
-      name: who-am-i
-      uses: microsoft/powerplatform-actions/who-am-i@v0
+    - name: force-downloading-pac
+      continue-on-error: true
+      uses: microsoft/powerplatform-actions/unpack-solution@v0
       with:
-        environment-url: ${{ inputs.environment_url }}
-        tenant-id: ${{ env.TENANT_ID }}
-        app-id: ${{ env.CLIENT_ID }}
-        client-secret: ${{ env.CLIENT_SECRET }}
-    
+        solution-file: fake.zip
+        solution-folder: fake
+
     - id: get-pac-path
       name: get-pac-path
       shell: pwsh
-      run: |        
+      run: |
+        
         $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
         if ($env:RUNNER_OS -eq "Windows") {
           $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac\tools\pac.exe')}
@@ -53,18 +26,12 @@ runs:
         else {
           $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac_linux/tools/pac')}
         }
-
-        if ($array -eq $null) {
-          $pacPath = ""
-        }
-        else {
-          $pacPath = $array[0].Directory.FullName
-        }        
         
+        $pacPath = $array[0].Directory.FullName
         echo "pacPath: $pacPath"
 
         echo "::set-output name=pac_path::$pacPath"
-    
+
     - id: set-pac-path
       name: set-pac-path
       shell: bash

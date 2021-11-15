@@ -29,6 +29,7 @@ jobs:
       - name: set-pac-path
         shell: pwsh
         run: |
+          echo $env:PATH
           $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
           $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}
           echo $array[0].FullName | Out-File -FilePath $env:GITHUB_PATH -Append
@@ -36,4 +37,5 @@ jobs:
       - name: test-pac
         shell: pwsh
         run: |
+          echo $env:PATH
           pac

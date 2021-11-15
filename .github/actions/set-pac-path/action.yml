@@ -8,13 +8,13 @@ runs:
   steps:
     # hack, but necessary until GitHub Actions for Power Platform support all pac commands
     - name: force-downloading-pac
-      continue-on-error: true
       uses: microsoft/powerplatform-actions/unpack-solution@v0
       with:
         solution-file: fake.zip
         solution-folder: fake
 
-    - id: get-pac-path
+    - if: ${{ always() }}
+      id: get-pac-path
       name: get-pac-path
       shell: pwsh
       run: |
@@ -32,7 +32,8 @@ runs:
 
         echo "::set-output name=pac_path::$pacPath"
 
-    - id: set-pac-path
+    - if: ${{ always() }}
+      id: set-pac-path
       name: set-pac-path
       shell: bash
       run: |

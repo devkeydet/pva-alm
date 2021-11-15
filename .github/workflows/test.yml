@@ -26,18 +26,22 @@ jobs:
       #     app-id: ${{ secrets.CLIENT_ID }}
       #     client-secret: ${{ secrets.CLIENT_SECRET }}
       
-      - name: set-pac-path
-        uses: ./.github/actions/set-pac-path
+      # - name: set-pac-path
+      #   continue-on-error: true #
+      #   uses: ./.github/actions/set-pac-path
       
-      - name: test-pac
-        shell: pwsh
-        run: |
-          pac
+      # - name: test-pac
+      #   shell: pwsh
+      #   run: |
+      #     pac
 
-      # - name: unpack
-      #   continue-on-error: true
-      #   uses: microsoft/powerplatform-actions/unpack-solution@v0
-      #   with:
-      #     solution-file: fake.zip
-      #     solution-folder: fake
+      - if: ${{ false }}
+        name: unpack
+        continue-on-error: true
+        uses: microsoft/powerplatform-actions/unpack-solution@v0
+        with:
+          solution-file: fake.zip
+          solution-folder: fake
+      
+      - run: echo "hello"
           

@@ -21,7 +21,7 @@ runs:
       shell: pwsh
       run: |
         # hack, but necessary until GitHub Actions for Power Platform support all pac commands
-        $env:PATH
-        $gitHubTemp = "${{ runner.temp }}"
-        $pacPath = $githubTemp.Replace("_temp","_actions") + "/microsoft/powerplatform-actions/${{ inputs.tag }}/dist/pac_linux/tools"
+        $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
+        $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}       
+        $pacPath = $array[0].FullName
         echo "::set-output name=path::$pacPath"

@@ -21,12 +21,12 @@ jobs:
       - name: who-am-i
         uses: microsoft/powerplatform-actions/who-am-i@v0
         with:
-          environment-url: ${{ inputs.environment_url }}
+          environment-url: "https://marcsc-alm-demo-prod.crm.dynamics.com"
           tenant-id: ${{ secrets.TENANT_ID }}
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
       
-      - name: ech0-debug
+      - name: echo-debug
         shell: pwsh
         run: |
           $gitHubTemp = "${{ runner.temp }}"

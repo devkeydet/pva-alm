@@ -23,46 +23,51 @@ jobs:
     name: deploy solution to ${{ github.event.inputs.environment }} environment
     environment: ${{ github.event.inputs.environment }}
     steps:
-    - name: echo-github-ref
-      shell: pwsh
-      run: |
-        echo "github.ref: ${{ github.ref }}"
-        echo "github.event.inputs.ref: ${{ github.event.inputs.ref }}"
-    - if: contains(github.event.inputs.ref, 'refs/pull')
-      id:  set-pr-number-run-url    
-      name: set-pr-number-run-url
-      shell: pwsh
-      run: |
-        $ref = "${{ github.event.inputs.ref }}"
-        $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
-        $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-        echo "::set-output name=pr_number::$prNumber"
-        echo "::set-output name=run_url::$runUrl"
+      - name: echo-github-ref
+        shell: pwsh
+        run: |
+          echo "github.ref: ${{ github.ref }}"
+          echo "github.event.inputs.ref: ${{ github.event.inputs.ref }}"
+      - if: contains(github.event.inputs.ref, 'refs/pull')
+        id: set-pr-number-run-url
+        name: set-pr-number-run-url
+        shell: pwsh
+        run: |
+          $ref = "${{ github.event.inputs.ref }}"
+          $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
+          $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "::set-output name=pr_number::$prNumber"
+          echo "::set-output name=run_url::$runUrl"
 
-    - if: contains(github.event.inputs.ref, 'refs/pull')
-      name: update-pr-with-link-to-workflow
-      uses: peter-evans/create-or-update-comment@v1.4.5
-      with:
-        issue-number: ${{ steps.set-pr-number-run-url.outputs.pr_number}}
-        body: |
-          PR validation workflow: ${{ steps.set-pr-number-run-url.outputs.run_url}}
-    # Solutions cannot be imported in parallel, so we queue
-    - uses: ahmadnassri/action-workflow-queue@v1
-    - uses: actions/checkout@v2
-    - id: build-solution
-      uses: ./.github/actions/build-solution
-      with:
-        ref: ${{ github.event.inputs.ref }}
-        solution_name: ${{ github.event.inputs.solution_name }}
-        solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-        solution_version_major_minor: ${{ github.event.inputs.solution_version_major_minor }}
-    - name: deploy-solution
-      uses: ./.github/actions/deploy-solution
-      with:
-        environment_url: ${{ secrets.ENVIRONMENT_URL }}
-        solution_name: ${{ github.event.inputs.solution_name }}
-        environment: ${{ needs.get-subdomain.outputs.subdomain }}
-        secrets: ${{ toJSON(secrets) }}
+      - if: contains(github.event.inputs.ref, 'refs/pull')
+        name: update-pr-with-link-to-workflow
+        uses: peter-evans/create-or-update-comment@v1.4.5
+        with:
+          issue-number: ${{ steps.set-pr-number-run-url.outputs.pr_number}}
+          body: |
+            PR validation workflow: ${{ steps.set-pr-number-run-url.outputs.run_url}}
+      # Solutions cannot be imported in parallel, so we queue
+      - uses: ahmadnassri/action-workflow-queue@v1
+      - uses: actions/checkout@v2
+      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+      # for certain commands, we need to use it directly.  So we set the path to pac
+      # that ships with the Actions
+      - name: set-pac-path
+        uses: ./.github/actions/set-pac-path
+      - id: build-solution
+        uses: ./.github/actions/build-solution
+        with:
+          ref: ${{ github.event.inputs.ref }}
+          solution_name: ${{ github.event.inputs.solution_name }}
+          solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
+          solution_version_major_minor: ${{ github.event.inputs.solution_version_major_minor }}
+      - name: deploy-solution
+        uses: ./.github/actions/deploy-solution
+        with:
+          environment_url: ${{ secrets.ENVIRONMENT_URL }}
+          solution_name: ${{ github.event.inputs.solution_name }}
+          environment: ${{ needs.get-subdomain.outputs.subdomain }}
+          secrets: ${{ toJSON(secrets) }}
 
   turn-on-flows:
     runs-on: windows-latest

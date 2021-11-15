@@ -1,26 +1,26 @@
-name: 'deploy solution'
+name: "deploy solution"
 
-description: 'deploy solution'
+description: "deploy solution"
 
 inputs:
   environment_url:
-    description: 'environment_url'
+    description: "environment_url"
     required: true
   solution_name:
-    description: 'solution_name'
+    description: "solution_name"
     required: true
   environment:
-    description: 'environment'
+    description: "environment"
     required: true
   unmanaged:
-    description: 'unmanaged'
+    description: "unmanaged"
     required: false
-    default: 'false'
+    default: "false"
   tag:
-    description: 'tag'
+    description: "tag"
     required: false
   secrets:
-    description: 'secrets'
+    description: "secrets"
     required: true
 
 runs:
@@ -29,8 +29,8 @@ runs:
     - name: mask-inputs
       shell: bash
       run: |
-        echo "::add-mask::${{ inputs.environment_url }}"      
-        
+        echo "::add-mask::${{ inputs.environment_url }}"
+
     - run: |
         git fetch --all --tags
         $commit = git rev-list -n 1 tags/${{ inputs.tag }}
@@ -48,7 +48,7 @@ runs:
 
     - uses: Firenza/secrets-to-env@v1.1.0
       with:
-          secrets: ${{ inputs.secrets }}
+        secrets: ${{ inputs.secrets }}
 
     - uses: cschleiden/replace-tokens@v1
       with:
@@ -65,9 +65,9 @@ runs:
         else {
           $files = Get-ChildItem -Path "${{ runner.temp }}/${{ inputs.solution_name }}" -Recurse | Where-Object{$_.Name.EndsWith('_managed.zip')}
         }
-        
-        $solutionZip = $files[0].Name
-        echo "::set-output name=solution_zip::$solutionZip"     
+
+        $solutionZip = $files[0].FullName
+        echo "::set-output name=solution_zip::$solutionZip"
 
     # In order to get the path to call pac directly, we need to use at least on action from microsoft/powerplatform-actions.
     # WhoAmI seems to be the best option.
@@ -82,24 +82,11 @@ runs:
 
     # need to drop to pac because actions don't yet support deployment-settings-file
     # TODO: use import-solution when deployment-settings-file is available
-    - name: get-pac-path
-      id: get-pac-path
-      uses: ./.github/actions/get-pac-path
-    
-    - name: debug-pac-path
-      shell: pwsh
-      run: |
-        echo "steps.get-pac-path.outputs.path: ${{ steps.get-pac-path.outputs.path }}"
-        Get-ChildItem ${{ steps.get-pac-path.outputs.path }}
-
-    # need to drop to pac because actions don't yet support deployment-settings-file
-    # TODO: use import-solution when deployment-settings-file is available
     - name: import-solution-to-environment
       shell: pwsh
       run: |
-        $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
         pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ env.TENANT_ID }} --applicationId ${{ env.CLIENT_ID }} --clientSecret ${{ env.CLIENT_SECRET }}
-        pac solution import --path ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }} --force-overwrite true --settings-file src/${{ inputs.solution_name }}/deploymentSettings.json
+        pac solution import --path ${{ steps.get-solution-zip.outputs.solution_zip }} --force-overwrite true --settings-file src/${{ inputs.solution_name }}/deploymentSettings.json
 
     # - name: import-solution-to-environment
     #   uses: microsoft/powerplatform-actions/import-solution@v0

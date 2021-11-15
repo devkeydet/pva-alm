@@ -4,16 +4,14 @@ on:
           
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       
-      - name: modify and push
+      - name: set-pac-path
+        uses: ./.github/actions/set-pac-path
+      
+      - name: test-pac
         shell: pwsh
         run: |
-          New-Item "./src/pvaalm/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
-
-          git config --global user.name ${{ github.actor }}   
-          git add --all
-          git commit -am "trigger build-deploy-solution"
-          git push
+          pac

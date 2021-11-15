@@ -86,6 +86,12 @@ runs:
     - name: get-pac-path
       id: get-pac-path
       uses: ./.github/actions/get-pac-path
+    
+    - name: debug-pac-path
+      shell: pwsh
+      run: |
+        echo "steps.get-pac-path.outputs.path: ${{ steps.get-pac-path.outputs.path }}"
+        Get-ChildItem ${{ steps.get-pac-path.outputs.path }}
 
     - name: import-solution-to-environment
       shell: pwsh

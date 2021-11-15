@@ -35,7 +35,7 @@ jobs:
         run: |
           
           $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
-          if ($env:RUNNER_OS == "Windows"){
+          if ($env:RUNNER_OS -eq "Windows") {
             $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac\tools\pac.exe')}
           }
           else {

@@ -29,22 +29,28 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      solution_export_folder: solution-export-temp      
+      solution_export_folder: solution-export-temp
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
 
     steps:
       # Solutions cannot be exported/imported in parallel, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1
-      
+
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}
+
+      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+      # for certain commands, we need to use it directly.  So we set the path to pac
+      # that ships with the Actions
+      - id: set-pac-path
+        uses: ./.github/actions/set-pac-path
 
       - name: create new git branch
         if: github.event.inputs.branch_to_create != ''
         run: |
           git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
-      
+
       # - name: publish customizations
       #   uses: microsoft/powerplatform-actions/publish-solution@v0
       #   with:
@@ -52,7 +58,7 @@ jobs:
       #     app-id: ${{ secrets.CLIENT_ID }}
       #     client-secret: ${{ secrets.CLIENT_SECRET }}
       #     tenant-id: ${{ secrets.TENANT_ID }}
-      
+
       - name: export-unmanaged-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
         with:
@@ -93,16 +99,12 @@ jobs:
                 Out-File $_.FullName
           }
 
-      - id: get-pac-path
-        uses: ./.github/actions/get-pac-path
-
       - name: unpack msapp files
         shell: pwsh
         run: |
           Get-ChildItem -Path "${{ env.solution_package_source }}/CanvasApps" -Recurse -Filter *.msapp | 
           ForEach-Object {
               $unpackedPath = $_.FullName.Replace(".msapp", "_msapp_src")
-              $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
               pac canvas unpack --msapp $_.FullName --sources $unpackedPath
               del $_.FullName
           }

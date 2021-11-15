@@ -1,27 +1,16 @@
 #comment
-name: 'get pac path'
+name: set-pac-path
 
-description: 'get path to use for Power Platform CLI'
-
-inputs:
-  tag:
-    description: 'which tag folder to use'
-    default: v0
-    required: false
-
-outputs:
-  path:
-    description: "location of pac.exe"
-    value: ${{ steps.get-pac-path.outputs.path }}
+description: "add pac cli to path so we can use it directly"
 
 runs:
   using: "composite"
   steps:
-    - id: get-pac-path
+    - id: set-pac-path
       shell: pwsh
       run: |
         # hack, but necessary until GitHub Actions for Power Platform support all pac commands
         $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
-        $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}       
-        $pacPath = $array[0].FullName
-        echo "::set-output name=path::$pacPath"
+        $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}
+        $pacPath = $array[0].Directory.FullName
+        echo $pacPath | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append

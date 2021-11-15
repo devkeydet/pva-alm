@@ -22,7 +22,12 @@ jobs:
   delete-unmanaged-solution-and-components-from-environment:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2   
+    - uses: actions/checkout@v2
+    # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+    # for certain commands, we need to use it directly.  So we set the path to pac
+    # that ships with the Actions
+    - id: set-pac-path
+      uses: ./.github/actions/set-pac-path   
     - id: delete-unmanaged-solution-and-components-from-environment
       uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment
       with:

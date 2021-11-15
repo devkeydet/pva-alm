@@ -37,6 +37,11 @@ jobs:
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
     - uses: actions/checkout@v2
+    # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+    # for certain commands, we need to use it directly.  So we set the path to pac
+    # that ships with the Actions
+    - id: set-pac-path
+      uses: ./.github/actions/set-pac-path
     - id: build-solution
       uses: ./.github/actions/build-solution
       with:

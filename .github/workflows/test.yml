@@ -39,7 +39,7 @@ jobs:
             $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac\tools\pac.exe')}
           }
           else {
-            $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac_linux/tools/pac.exe')}
+            $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac_linux/tools/pac')}
           }
           
           

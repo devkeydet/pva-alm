@@ -6,7 +6,7 @@ description: "add pac cli to path so we can use it directly"
 runs:
   using: "composite"
   steps:
-    - id: set-pac-path
+    - name: set-pac-path
       shell: pwsh
       run: |
         # hack, but necessary until GitHub Actions for Power Platform support all pac commands

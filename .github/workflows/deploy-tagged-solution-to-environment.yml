@@ -16,45 +16,45 @@ jobs:
     steps:
       # Solutions cannot be imported in parallel, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1
-  deploy-solution-turn-on-flows:  
+  deploy-solution-turn-on-flows:
     # Using Windows in this case because splitting across jobs targetting the same
     # GitHub Environment causes an approval for each job.  The turn-on-flows-impersonation
     # action uses PowerShell cmdlets that still require Windows.
     runs-on: windows-latest
     needs: queue
     environment: ${{ github.event.inputs.environment }}
-    steps:    
-    - uses: actions/checkout@v2
-    # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
-    # for certain commands, we need to use it directly.  So we set the path to pac
-    # that ships with the Actions
-    - id: set-pac-path
-      uses: ./.github/actions/set-pac-path
-    - id: setOutput
-      name: get-solution-name-from-tag
-      run: |
-        $tag = "${{ github.event.inputs.tag }}"
-        $splitArray = $tag -split "-"
-        $solutionName = $splitArray[0]
-        echo "solution_name=$solutionName" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-      shell: pwsh
-    - name: deploy-solution
-      uses: ./.github/actions/deploy-solution
-      with:
-        environment_url: ${{ secrets.ENVIRONMENT_URL }}
-        solution_name: ${{ env.solution_name }}
-        environment: ${{ github.event.inputs.environment }}
-        tag: ${{ github.event.inputs.tag }}
-        secrets: ${{ toJSON(secrets) }}
-    - name: turn-on-flows-impersonation
-      id: turn-on-flows-impersonation
-      uses: ./.github/actions/turn-on-flows-impersonation
-      with:
-        environment_url: ${{ secrets.ENVIRONMENT_URL }}
-        solution_name: ${{ env.solution_name }}
-        tenant_id: ${{ secrets.TENANT_ID }}
-        app_id: ${{ secrets.CLIENT_ID }}
-        client_secret: ${{ secrets.CLIENT_SECRET }}
-        secrets: ${{ toJSON(secrets) }}
-      
+    steps:
+      - uses: actions/checkout@v2
+      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+      # for certain commands, we need to use it directly.  So we set the path to pac
+      # that ships with the Actions
+      - name: set-pac-path
+        uses: ./.github/actions/set-pac-path
+      - id: setOutput
+        name: get-solution-name-from-tag
+        run: |
+          $tag = "${{ github.event.inputs.tag }}"
+          $splitArray = $tag -split "-"
+          $solutionName = $splitArray[0]
+          echo "solution_name=$solutionName" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+        shell: pwsh
+      - name: deploy-solution
+        uses: ./.github/actions/deploy-solution
+        with:
+          environment_url: ${{ secrets.ENVIRONMENT_URL }}
+          solution_name: ${{ env.solution_name }}
+          environment: ${{ github.event.inputs.environment }}
+          tag: ${{ github.event.inputs.tag }}
+          secrets: ${{ toJSON(secrets) }}
+      - name: turn-on-flows-impersonation
+        id: turn-on-flows-impersonation
+        uses: ./.github/actions/turn-on-flows-impersonation
+        with:
+          environment_url: ${{ secrets.ENVIRONMENT_URL }}
+          solution_name: ${{ env.solution_name }}
+          tenant_id: ${{ secrets.TENANT_ID }}
+          app_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          secrets: ${{ toJSON(secrets) }}
+
   #TODO: Create a release in GitHub

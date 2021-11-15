@@ -17,17 +17,17 @@ on:
         default: "main"
 
 jobs:
-   # Needs it's own job in order for delete-build-deploy-solution->environment value to be used.
+  # Needs it's own job in order for delete-build-deploy-solution->environment value to be used.
   get-environment-from-domain:
     runs-on: ubuntu-latest
     steps:
-    # Solutions cannot be imported in parallel, so we queue
-    - uses: ahmadnassri/action-workflow-queue@v1 
-    - uses: actions/checkout@v2   
-    - id: get-subdomain
-      uses: ./.github/actions/get-subdomain
-      with:
-        url: ${{ github.event.inputs.environment_url }}    
+      # Solutions cannot be imported in parallel, so we queue
+      - uses: ahmadnassri/action-workflow-queue@v1
+      - uses: actions/checkout@v2
+      - id: get-subdomain
+        uses: ./.github/actions/get-subdomain
+        with:
+          url: ${{ github.event.inputs.environment_url }}
     outputs:
       subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
 
@@ -36,40 +36,40 @@ jobs:
     needs: get-environment-from-domain
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
-    - uses: actions/checkout@v2
-    # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
-    # for certain commands, we need to use it directly.  So we set the path to pac
-    # that ships with the Actions
-    - id: set-pac-path
-      uses: ./.github/actions/set-pac-path
-    - id: delete-unmanaged-solution-and-components-from-environment
-      uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment
-      with:
-        solution_name: ${{ github.event.inputs.solution_name }}
-        environment_url: ${{ github.event.inputs.environment_url }}
-        tenant_id: ${{ secrets.TENANT_ID }}
-        client_id: ${{ secrets.CLIENT_ID }}
-        client_secret: ${{ secrets.CLIENT_SECRET }}
-    - id: build-solution
-      uses: ./.github/actions/build-solution
-      with:
-        ref: ${{ github.event.inputs.ref }}
-        solution_name: ${{ github.event.inputs.solution_name }}
-        solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-        solution_version_major_minor: "0.0"
-        dev_build: true
-    - name: deploy-solution
-      uses: ./.github/actions/deploy-solution
-      with:
-        environment_url: ${{ github.event.inputs.environment_url }}
-        solution_name: ${{  github.event.inputs.solution_name }}
-        environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
-        unmanaged: true
-        secrets: ${{ toJSON(secrets) }}
-  
+      - uses: actions/checkout@v2
+      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+      # for certain commands, we need to use it directly.  So we set the path to pac
+      # that ships with the Actions
+      - name: set-pac-path
+        uses: ./.github/actions/set-pac-path
+      - id: delete-unmanaged-solution-and-components-from-environment
+        uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment
+        with:
+          solution_name: ${{ github.event.inputs.solution_name }}
+          environment_url: ${{ github.event.inputs.environment_url }}
+          tenant_id: ${{ secrets.TENANT_ID }}
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+      - id: build-solution
+        uses: ./.github/actions/build-solution
+        with:
+          ref: ${{ github.event.inputs.ref }}
+          solution_name: ${{ github.event.inputs.solution_name }}
+          solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
+          solution_version_major_minor: "0.0"
+          dev_build: true
+      - name: deploy-solution
+        uses: ./.github/actions/deploy-solution
+        with:
+          environment_url: ${{ github.event.inputs.environment_url }}
+          solution_name: ${{  github.event.inputs.solution_name }}
+          environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+          unmanaged: true
+          secrets: ${{ toJSON(secrets) }}
+
   turn-on-flows:
     runs-on: windows-latest
-    needs: [get-environment-from-domain,delete-build-deploy-solution]
+    needs: [get-environment-from-domain, delete-build-deploy-solution]
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
@@ -82,4 +82,3 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           secrets: ${{ toJSON(secrets) }}
-

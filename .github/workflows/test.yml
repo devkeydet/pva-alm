@@ -8,12 +8,29 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: modify and push
+      # - name: modify and push
+      #   shell: pwsh
+      #   run: |
+      #     New-Item "./src/pvaalm/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
+
+      #     git config --global user.name ${{ github.actor }}   
+      #     git add --all
+      #     git commit -am "trigger build-deploy-solution"
+      #     git push
+
+      - name: who-am-i
+        uses: microsoft/powerplatform-actions/who-am-i@v0
+        with:
+          environment-url: ${{ inputs.environment_url }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+      
+      - name: ech0-debug
         shell: pwsh
         run: |
-          New-Item "./src/pvaalm/build-deploy-trigger.txt" -ItemType File -Value $env:GITHUB_RUN_ID -Force
-
-          git config --global user.name ${{ github.actor }}   
-          git add --all
-          git commit -am "trigger build-deploy-solution"
-          git push
+          $gitHubTemp = "${{ runner.temp }}"
+          $array = Get-ChildItem $gitHubTemp -Recurse 
+          foreach ($item in $array) {
+            echo $item.FullName
+          }

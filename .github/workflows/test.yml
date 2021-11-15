@@ -42,7 +42,7 @@ jobs:
 
           echo "::set-output name=pac_path::$pacPath"     
 
-      - name: Create tag
+      - name: add-path
         uses: actions/github-script@v3
         with:
           github-token: ${{ github.token }}
@@ -52,5 +52,5 @@ jobs:
       - name: test-pac
         shell: pwsh
         run: |
-          echo $env:GITHUB_PATH
-          #pac
+          #echo $env:GITHUB_PATH
+          pac

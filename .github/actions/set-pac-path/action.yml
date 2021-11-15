@@ -13,7 +13,12 @@ runs:
       run: |
         
         $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
-        $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}
+        if ($env:RUNNER_OS -eq "Windows") {
+          $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac\tools\pac.exe')}
+        }
+        else {
+          $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac_linux/tools/pac')}
+        }
         
         $pacPath = $array[0].Directory.FullName
         echo "pacPath: $pacPath"

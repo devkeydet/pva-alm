@@ -29,6 +29,7 @@ jobs:
       - name: echo-debug
         shell: pwsh
         run: |
+          echo "$PATH"
           $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
           $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}
           echo $array[0].FullName

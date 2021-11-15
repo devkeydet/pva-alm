@@ -69,18 +69,17 @@ runs:
         $solutionZip = $files[0].Name
         echo "::set-output name=solution_zip::$solutionZip"     
 
-    # - name: import-solution-to-environment
-    #   uses: microsoft/powerplatform-actions/import-solution@v0
-    #   with:
-    #     environment-url: ${{ inputs.environment_url }}
-    #     tenant-id: ${{ env.TENANT_ID }}
-    #     app-id: ${{ env.CLIENT_ID }}
-    #     client-secret: ${{ env.CLIENT_SECRET }}
-    #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
-    #     force-overwrite: true
-    #     use-deployment-settings-file: true
-    #     deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json
-    
+    # In order to get the path to call pac directly, we need to use at least on action from microsoft/powerplatform-actions.
+    # WhoAmI seems to be the best option.
+    # TODO: remove this when we no longer need to use pac directly
+    - name: who-am-i
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{ inputs.environment_url }}
+        tenant-id: ${{ env.TENANT_ID }}
+        app-id: ${{ env.CLIENT_ID }}
+        client-secret: ${{ env.CLIENT_SECRET }}
+
     # need to drop to pac because actions don't yet support deployment-settings-file
     # TODO: use import-solution when deployment-settings-file is available
     - name: get-pac-path
@@ -93,9 +92,23 @@ runs:
         echo "steps.get-pac-path.outputs.path: ${{ steps.get-pac-path.outputs.path }}"
         Get-ChildItem ${{ steps.get-pac-path.outputs.path }}
 
+    # need to drop to pac because actions don't yet support deployment-settings-file
+    # TODO: use import-solution when deployment-settings-file is available
     - name: import-solution-to-environment
       shell: pwsh
       run: |
         $env:PATH = $env:PATH + ":${{ steps.get-pac-path.outputs.path }}"
         pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ env.TENANT_ID }} --applicationId ${{ env.CLIENT_ID }} --clientSecret ${{ env.CLIENT_SECRET }}
         pac solution import --path ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }} --force-overwrite true --settings-file src/${{ inputs.solution_name }}/deploymentSettings.json
+
+    # - name: import-solution-to-environment
+    #   uses: microsoft/powerplatform-actions/import-solution@v0
+    #   with:
+    #     environment-url: ${{ inputs.environment_url }}
+    #     tenant-id: ${{ env.TENANT_ID }}
+    #     app-id: ${{ env.CLIENT_ID }}
+    #     client-secret: ${{ env.CLIENT_SECRET }}
+    #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
+    #     force-overwrite: true
+    #     use-deployment-settings-file: true
+    #     deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json

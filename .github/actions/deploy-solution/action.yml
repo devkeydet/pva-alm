@@ -69,17 +69,6 @@ runs:
         $solutionZip = $files[0].FullName
         echo "::set-output name=solution_zip::$solutionZip"
 
-    # In order to get the path to call pac directly, we need to use at least on action from microsoft/powerplatform-actions.
-    # WhoAmI seems to be the best option.
-    # TODO: remove this when we no longer need to use pac directly
-    - name: who-am-i
-      uses: microsoft/powerplatform-actions/who-am-i@v0
-      with:
-        environment-url: ${{ inputs.environment_url }}
-        tenant-id: ${{ env.TENANT_ID }}
-        app-id: ${{ env.CLIENT_ID }}
-        client-secret: ${{ env.CLIENT_SECRET }}
-
     # need to drop to pac because actions don't yet support deployment-settings-file
     # TODO: use import-solution when deployment-settings-file is available
     - name: import-solution-to-environment

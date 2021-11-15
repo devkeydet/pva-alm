@@ -42,12 +42,17 @@ jobs:
 
           echo "::set-output name=pac_path::$pacPath"     
 
-      - name: add-path
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            core.addPath('${{ steps.get-pac-path.outputs.pac_path }}')
+      # - name: add-path
+      #   uses: actions/github-script@v3
+      #   with:
+      #     github-token: ${{ github.token }}
+      #     script: |
+      #       core.addPath('${{ steps.get-pac-path.outputs.pac_path }}')
+
+      - name: set-pac-path
+        shell: bash
+        run: |
+          echo "${{ steps.get-pac-path.outputs.pac_path }}" >> $GITHUB_PATH
       
       - name: test-pac
         shell: pwsh

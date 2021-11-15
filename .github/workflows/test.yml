@@ -63,5 +63,6 @@ jobs:
       - name: test-pac
         shell: pwsh
         run: |
+          echo "foo"
           echo $env:PATH
           pac

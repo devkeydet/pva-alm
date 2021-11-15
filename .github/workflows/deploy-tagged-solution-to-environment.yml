@@ -29,7 +29,7 @@ jobs:
       # for certain commands, we need to use it directly.  So we set the path to pac
       # that ships with the Actions
       - name: set-pac-path
-        uses: ./.github/actions/set-pac-pathth
+        uses: ./.github/actions/set-pac-path
       - id: setOutput
         name: get-solution-name-from-tag
         run: |

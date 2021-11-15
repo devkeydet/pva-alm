@@ -58,4 +58,4 @@ jobs:
         shell: pwsh
         run: |
           echo $env:PATH
-          #pac
+          pac

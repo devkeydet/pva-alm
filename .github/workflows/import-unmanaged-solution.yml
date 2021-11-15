@@ -42,7 +42,7 @@ jobs:
       # that ships with the Actions
       - name: set-pac-path
         uses: ./.github/actions/set-pac-path
-      - id: build-solution
+      - name: build-solution
         uses: ./.github/actions/build-solution
         with:
           ref: ${{ github.event.inputs.ref }}

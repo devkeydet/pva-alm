@@ -28,7 +28,7 @@ jobs:
       # that ships with the Actions
       - name: set-pac-path
         uses: ./.github/actions/set-pac-path
-      - id: delete-unmanaged-solution-and-components-from-environment
+      - name: delete-unmanaged-solution-and-components-from-environment
         uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment
         with:
           solution_name: ${{ github.event.inputs.solution_name }}

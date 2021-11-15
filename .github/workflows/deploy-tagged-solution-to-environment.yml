@@ -11,8 +11,11 @@ on:
         description: "GitHub environment name to deploy to"
         default: prod
 jobs:
-  deploy-solution:  
-    runs-on: ubuntu-latest
+  deploy-solution-turn-on-flows:  
+    # Using Windows in this case because splitting across jobs targetting the same
+    # GitHub Environment causes an approval for each job.  The turn-on-flows-impersonation
+    # action uses PowerShell cmdlets that still require Windows.
+    runs-on: windows-latest
     environment: ${{ github.event.inputs.environment }}
     steps:
     # Solutions cannot be imported in parallel, so we queue
@@ -34,23 +37,14 @@ jobs:
         environment: ${{ github.event.inputs.environment }}
         tag: ${{ github.event.inputs.tag }}
         secrets: ${{ toJSON(secrets) }}
-    outputs:
-      solution_name: ${{ env.solution_name }}
-  
-  turn-on-flows:
-    runs-on: windows-latest
-    needs: deploy-solution
-    environment: ${{ github.event.inputs.environment }}
-    steps:
-      - uses: actions/checkout@v2
-      - id: turn-on-flows-impersonation
-        uses: ./.github/actions/turn-on-flows-impersonation
-        with:
-          environment_url: ${{ secrets.ENVIRONMENT_URL }}
-          solution_name: ${{ needs.deploy-solution.outputs.solution_name }}
-          tenant_id: ${{ secrets.TENANT_ID }}
-          app_id: ${{ secrets.CLIENT_ID }}
-          client_secret: ${{ secrets.CLIENT_SECRET }}
-          secrets: ${{ toJSON(secrets) }}
-
+    - id: turn-on-flows-impersonation
+      uses: ./.github/actions/turn-on-flows-impersonation
+      with:
+        environment_url: ${{ secrets.ENVIRONMENT_URL }}
+        solution_name: ${{ env.solution_name }}
+        tenant_id: ${{ secrets.TENANT_ID }}
+        app_id: ${{ secrets.CLIENT_ID }}
+        client_secret: ${{ secrets.CLIENT_SECRET }}
+        secrets: ${{ toJSON(secrets) }}
+      
   #TODO: Create a release in GitHub

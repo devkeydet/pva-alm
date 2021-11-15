@@ -32,5 +32,5 @@ jobs:
       - name: test-pac
         shell: pwsh
         run: |
-          echo $env:PATH
+          echo $env:GITHUB_PATH
           pac

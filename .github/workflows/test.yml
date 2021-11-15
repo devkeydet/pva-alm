@@ -32,8 +32,9 @@ jobs:
           echo $env:GITHUB_PATH
           $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
           $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.Name.EndsWith('pac.exe')}
-          echo $array[0].FullName
-          echo $array[0].FullName | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $pacPath = $array[0].Directory.FullName
+          echo $pacPath
+          echo $pacPath | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       
       - name: test-pac
         shell: pwsh

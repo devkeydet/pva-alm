@@ -28,7 +28,7 @@ jobs:
           body: |
             PR NOT READY FOR APPROVAL
             - Wait for another comment to appear after this one.
-            - The workflow triggered by this PR starts another workflow that represents the actual PR validation workflow.        
+            - The workflow triggered by this PR starts another workflow that represents the actual PR validation workflow.
       - uses: actions/checkout@v2
       # determine if the build should go to the PR or UAT environment
       - name: uat env var
@@ -51,6 +51,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
+          github_ref: ${{ github.ref }}
+          pr_head_ref: ${{ github.event.pull_request.head.ref }}
+          github_sha: ${{ github.sha }}
         run: |
           $files = "${{ steps.files.outputs.all }}"
           $filesArray = $files -split ','
@@ -69,10 +72,18 @@ jobs:
           foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
 
-            $ref = "${{ github.ref }}"
+            if ($env:github_ref.Contains("pull")) {
+              $ref = $env:pr_head_ref
+            }
+            else {
+              $ref = $env:github_ref
+            }
 
-            gh workflow run build-deploy-solution -f ref=$ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
+            echo "github_ref: $env:github_ref"
+            echo "ref: $ref"
+            echo "sha: $env:github_sha"
+
+            gh workflow run build-deploy-solution --ref $ref -f ref=$env:github_ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
-            echo "pipeline queued for $solutionName"
-            echo $ref
+            echo "pipeline queued for $solutionName"           
           }

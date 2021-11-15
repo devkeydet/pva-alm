@@ -22,31 +22,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - name: echo-ref
-    shell: bash
-    run: |
-      echo "ref: ${{ inputs.ref }}"
   - uses: actions/checkout@v2
     with:
-      ref: ${{ inputs.ref }}
-  - if: contains(github.ref, 'refs/pull')
-    id:  set-pr-number-run-url    
-    name: get-pr-number
-    shell: pwsh
-    run: |
-      $ref = "${{ inputs.ref }}"
-      $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
-      $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-      echo "::set-output name=pr_number::$prNumber"
-      echo "::set-output name=run_url::$runUrl"
-
-  - if: contains(github.ref, 'refs/pull')
-    name: update-pr-with-link-to-workflow
-    uses: peter-evans/create-or-update-comment@v1.4.5
-    with:
-      issue-number: ${{ steps.set-pr-number-run-url.outputs.pr_number}}
-      body: |
-        PR validation workflow: ${{ steps.set-pr-number-run-url.outputs.run_url}}
+      ref: ${{ inputs.ref }}  
 
   # set environment and build number as output variables for further use
   - id: setOutput

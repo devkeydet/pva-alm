@@ -34,10 +34,10 @@ jobs:
       #   run: |
       #     pac
 
-      - name: unpack
-        continue-on-error: true
-        uses: microsoft/powerplatform-actions/unpack-solution@v0
-        with:
-          solution-file: fake.zip
-          solution-folder: fake
+      # - name: unpack
+      #   continue-on-error: true
+      #   uses: microsoft/powerplatform-actions/unpack-solution@v0
+      #   with:
+      #     solution-file: fake.zip
+      #     solution-folder: fake
           

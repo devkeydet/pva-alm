@@ -30,7 +30,7 @@ jobs:
         shell: pwsh
         run: |
           $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
-          $array = Get-ChildItem $gitHubTemp -Recurse 
+          $array = Get-ChildItem $actionsPath -Recurse 
           foreach ($item in $array) {
             echo $item.FullName
           }

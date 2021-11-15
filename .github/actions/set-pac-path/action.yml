@@ -29,5 +29,4 @@ runs:
       name: set-pac-path
       shell: bash
       run: |
-        echo "${{ steps.get-pac-path.outputs.pac_path }}"
         echo "${{ steps.get-pac-path.outputs.pac_path }}" >> $GITHUB_PATH    

@@ -26,43 +26,10 @@ jobs:
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
       
-      # - name: set-pac-path
-      #   uses: ./.github/actions/set-pac-path
-
-      - id: get-pac-path
-        name: get-pac-path
-        shell: pwsh
-        run: |
-          
-          $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
-          if ($env:RUNNER_OS -eq "Windows") {
-            $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac\tools\pac.exe')}
-          }
-          else {
-            $array = Get-ChildItem $actionsPath -Recurse | Where-Object{$_.FullName.EndsWith('pac_linux/tools/pac')}
-          }
-          
-          
-          $pacPath = $array[0].Directory.FullName
-          echo "pacPath: $pacPath"
-
-          echo "::set-output name=pac_path::$pacPath"     
-
-      # - name: add-path
-      #   uses: actions/github-script@v3
-      #   with:
-      #     github-token: ${{ github.token }}
-      #     script: |
-      #       core.addPath('${{ steps.get-pac-path.outputs.pac_path }}')
-
       - name: set-pac-path
-        shell: bash
-        run: |
-          echo "${{ steps.get-pac-path.outputs.pac_path }}" >> $GITHUB_PATH
+        uses: ./.github/actions/set-pac-path
       
       - name: test-pac
         shell: pwsh
         run: |
-          echo "foo"
-          echo $env:PATH
           pac

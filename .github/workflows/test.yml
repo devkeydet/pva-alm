@@ -29,7 +29,7 @@ jobs:
       - name: echo-debug
         shell: pwsh
         run: |
-          $gitHubTemp = "${{ runner.temp }}"
+          $actionsPath = "${{ runner.temp }}".Replace("_temp","_actions")
           $array = Get-ChildItem $gitHubTemp -Recurse 
           foreach ($item in $array) {
             echo $item.FullName

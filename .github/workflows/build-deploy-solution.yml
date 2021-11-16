@@ -30,18 +30,23 @@ jobs:
         name: update-commit-status
         id: update-commit-status
         uses: actions/github-script@v5
+        env:
+          CONTEXT_TO_USE: build-deploy-${{ github.event.inputs.solution_name }}
+          SHA: ${{ github.event.inputs.sha }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
           script: |
-            console.log("build-deploy-${{ github.event.inputs.solution_name }}")
-            console.log("${{ github.event.inputs.sha }}")
-            let contextToUse = "build-deploy-${{ github.event.inputs.solution_name }}"
+            console.log(CONTEXT_TO_USE)
+            console.log(SHA)
+            console.log(TARGET_URL)
             
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: "${{ github.event.inputs.sha }}",
-              context: contextToUse,
-              state: "pending"
+              sha: SHA,
+              context: CONTEXT_TO_USE,
+              state: "pending",
+              target_url: TARGET_URL
             })
             
       # Solutions cannot be imported in parallel, so we queue

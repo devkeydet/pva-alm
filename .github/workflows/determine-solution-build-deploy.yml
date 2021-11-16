@@ -49,8 +49,8 @@ jobs:
       # if found, queue build and deply workflow
       - shell: pwsh
         env:
+          # Workflows cannot be dispatched with the standard GITHUB_TOKEN, so we use a token that can
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #TODO: get working with GITHUB_TOKEN
           github_ref: ${{ github.ref }}
           pr_head_ref: ${{ github.event.pull_request.head.ref }}
           github_sha: ${{ github.sha }}

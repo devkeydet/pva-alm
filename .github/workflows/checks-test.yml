@@ -45,7 +45,7 @@ jobs:
               sha: context.payload.pull_request.head.sha,
               context: "test-two",
               state: "pending"
-            })    
+            })
 
       # - name: Get result id
       #   run: |

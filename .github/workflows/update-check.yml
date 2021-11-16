@@ -3,8 +3,8 @@ name: update-check # test
 on:
   workflow_dispatch:
     inputs:
-      check_id:
-        description: "check_id"
+      sha:
+        description: "sha"
         required: true
       status:
         description: "status"
@@ -13,12 +13,17 @@ jobs:
   checks-test:
     runs-on: ubuntu-latest
     steps:
-      - name: GitHub Checks
-        if: always()
-        uses: LouisBrunner/checks-action@v1.2.0
+      - name: gh-script
+        id: gh-script
+        uses: actions/github-script@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          check_id: ${{ github.event.inputs.check_id }}
-          status: ${{ github.event.inputs.status }}
-          conclusion: ${{ job.status }}
+          result-encoding: string
+          script: |
+            var checkResult = await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: "${{ github.event.inputs.sha}}",
+              context: "test-two",
+              state: context.job.state
+            })
  

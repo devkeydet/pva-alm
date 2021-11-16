@@ -38,7 +38,12 @@ jobs:
               sum += item;
             }
 
-            return sum
+            var result = github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+
+            return result
       - name: Get result
         run: |
           echo "sum: ${{steps.gh-script.outputs.result}}"

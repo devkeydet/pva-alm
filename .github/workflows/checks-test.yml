@@ -8,19 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # - id: add-check
-      #   name: add-check
-      #   uses: LouisBrunner/checks-action@v1.2.0
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     name: devkeydet-test-check
-      #     status: queued
-      #     details_url: https://www.microsoft.com
-      
       - name: gh-script
         id: gh-script
         uses: actions/github-script@v5
-        with:
+        with:          
+          # details_url cannot be set with the default GITHUB_TOKEN 
+          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} 
           result-encoding: string
           script: |
             var checkResult = await github.rest.checks.create({
@@ -28,7 +21,7 @@ jobs:
               repo: context.repo.repo,
               head_sha: context.payload.pull_request.head.sha,
               name: "test name",
-              status: "queued"
+              status: "queued",
               details_url: "https://microsoft.com"
             })     
 

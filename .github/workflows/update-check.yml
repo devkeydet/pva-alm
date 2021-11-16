@@ -16,6 +16,5 @@ jobs:
         with:
           result-encoding: string
           script: |
-            console.log(context.job)
-            
+            console.log(context.job.status)            
  

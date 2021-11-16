@@ -7,6 +7,9 @@ on:
       ref:
         required: true
         description: "ref to build from"
+      sha:
+        required: true
+        description: "sha"
       solution_name:
         required: true
         description: "solution to build"
@@ -23,29 +26,29 @@ jobs:
     name: deploy solution to ${{ github.event.inputs.environment }} environment
     environment: ${{ github.event.inputs.environment }}
     steps:
-      - name: echo-github-ref
-        shell: pwsh
-        run: |
-          echo "github.ref: ${{ github.ref }}"
-          echo "github.event.inputs.ref: ${{ github.event.inputs.ref }}"
       - if: contains(github.event.inputs.ref, 'refs/pull')
-        id: set-pr-number-run-url
-        name: set-pr-number-run-url
-        shell: pwsh
-        run: |
-          $ref = "${{ github.event.inputs.ref }}"
-          $prNumber = $ref.Replace("refs/pull/","").Replace("/merge","")
-          $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          echo "::set-output name=pr_number::$prNumber"
-          echo "::set-output name=run_url::$runUrl"
-
-      - if: contains(github.event.inputs.ref, 'refs/pull')
-        name: update-pr-with-link-to-workflow
-        uses: peter-evans/create-or-update-comment@v1.4.5
+        name: update-commit-status
+        id: update-commit-status
+        uses: actions/github-script@v5
+        env:
+          CONTEXT_TO_USE: build-deploy-${{ github.event.inputs.solution_name }}
+          SHA: ${{ github.event.inputs.sha }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
-          issue-number: ${{ steps.set-pr-number-run-url.outputs.pr_number}}
-          body: |
-            PR validation workflow: ${{ steps.set-pr-number-run-url.outputs.run_url}}
+          script: |
+            console.log(process.env.CONTEXT_TO_USE)
+            console.log(process.env.SHA)
+            console.log(process.env.TARGET_URL)
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: process.env.SHA,
+              context: process.env.CONTEXT_TO_USE,
+              state: "pending",
+              target_url: process.env.TARGET_URL
+            })
+            
       # Solutions cannot be imported in parallel, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1
       - uses: actions/checkout@v2
@@ -83,4 +86,23 @@ jobs:
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
-          secrets: ${{ toJSON(secrets) }}
+          secrets: ${{ toJSON(secrets) }}      
+      - if: contains(github.event.inputs.ref, 'refs/pull')
+        name: update-commit-status
+        id: update-commit-status
+        uses: actions/github-script@v5
+        env:
+          CONTEXT_TO_USE: build-deploy-${{ github.event.inputs.solution_name }}
+          SHA: ${{ github.event.inputs.sha }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          JOB_STATUS: ${{ job.status }}
+        with:
+          script: |            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: process.env.SHA,
+              context: process.env.CONTEXT_TO_USE,
+              state: process.env.JOB_STATUS,
+              target_url: process.env.TARGET_URL
+            })

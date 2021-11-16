@@ -1,23 +1,56 @@
-name: update-check
+name: update-check # test
 
 on:
   workflow_dispatch:
     inputs:
-      check_id:
-        description: "check_id"
-        required: true
-      status:
-        description: "status"
+      sha:
+        description: "sha"
         required: true
 jobs:
   checks-test:
     runs-on: ubuntu-latest
     steps:
-      - name: GitHub Checks
-        if: always()
-        uses: LouisBrunner/checks-action@v1.2.0
+      - uses: actions/checkout@v2      
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          check_id: ${{ github.event.inputs.check_id }}
-          status: ${{ github.event.inputs.status }}
+          ref: ${{ github.event.inputs.sha}}
+      # - id: set-run-url
+      #   name: set-run-url
+      #   shell: pwsh
+      #   run: |
+      #     $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      #     echo "::set-output name=run_url::$runUrl"
+
+      # - name: gh-script
+      #   id: gh-script
+      #   uses: actions/github-script@v5
+      #   with:
+      #     result-encoding: string
+      #     script: |
+      #       console.log("${{ job.status }}")
+      #       var checkResult = await github.rest.repos.createCommitStatus({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         sha: "${{ github.event.inputs.sha}}",
+      #         context: "test-two",
+      #         state: "${{ job.status }}",
+      #         target_url: "${{ steps.set-run-url.outputs.run_url }}"
+      #       })            
+      
+      - name: gh-script
+        id: gh-script
+        uses: actions/github-script@v5
+        with:
+          result-encoding: string
+          script: |
+            let solutionName = "foo"
+            let contextToUse = "build-deploy-" + solutionName
+            console.log("contextToUse:")
+            console.log(contextToUse)
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: "${{ github.event.inputs.sha }}",
+              context: contextToUse,
+              state: "pending"
+            })     
  

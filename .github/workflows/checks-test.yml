@@ -35,9 +35,8 @@ jobs:
               head_sha: context.payload.pull_request.head.sha,
               name: "test name",
               status: "queued"
-            })
-
-            console.log(checkResult)     
+              target_url: "https://microsoft.com"
+            })     
 
             return checkResult.data.id
             

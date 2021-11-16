@@ -49,7 +49,7 @@ jobs:
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: ${{ github.event.inputs.sha}},
+              sha: "${{ github.event.inputs.sha }}",
               context: contextToUse,
               state: "pending"
             })     

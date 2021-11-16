@@ -36,11 +36,11 @@ jobs:
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: ${{ github.event.inputs.sha }},
+              sha: "${{ github.event.inputs.sha }}"",
               context: contextToUse,
               state: "pending",
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            })   
+            })
       # Solutions cannot be imported in parallel, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1
       - uses: actions/checkout@v2

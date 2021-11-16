@@ -9,7 +9,10 @@ on:
 jobs:
   checks-test:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
+      - uses: actions/checkout@v2      
+        with:
+          ref: ${{ github.event.inputs.sha}}
       - id: set-run-url
         name: set-run-url
         shell: pwsh

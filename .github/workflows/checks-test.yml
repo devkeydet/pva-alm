@@ -47,7 +47,9 @@ jobs:
               state: "pending"
             })
 
-      # - name: Get result id
-      #   run: |
-      #     echo "check id: ${{steps.gh-script.outputs.result}}"
+            return context.payload.pull_request.head.sha
+
+      - name: Get result id
+        run: |
+          echo "check id: ${{steps.gh-script.outputs.result}}"
             

@@ -100,8 +100,10 @@ jobs:
 
             solutionNamesArray.forEach(createCommitStatus)
 
-            function createCommitStatus(solutionName) {
+            function createCommitStatus(solutionName) {              
               let contextToUse = "build-deploy-" + solutionName
+              console.log("contextToUse:")
+              console.log(contextToUse)
               await github.rest.repos.createCommitStatus({
                 owner: context.repo.owner,
                 repo: context.repo.repo,

@@ -38,9 +38,13 @@ jobs:
               sum += item;
             }
 
-            var result = await github.rest.checks.create({
+            var result = await github.rest.checks.create({              
               owner: context.repo.owner,
               repo: context.repo.repo,
+              name: "test name",
+              sha: ${{ github.sha }}
+              status: "queued",
+              details_url: "https://devkeydet.blog"
             })
 
             return result

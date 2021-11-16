@@ -29,5 +29,5 @@ jobs:
             
       - name: Get result id
         run: |
-          echo "sum: ${{steps.gh-script.outputs.result}}"
+          echo "check id: ${{steps.gh-script.outputs.result}}"
             

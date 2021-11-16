@@ -40,7 +40,7 @@ jobs:
             })
 
             console.log(result)
-            return result.id
+            return result.data.id
             
       - name: Get result id
         run: |

@@ -30,7 +30,7 @@ jobs:
           #github-token: ${{ github.token }}
           result-encoding: string
           script: |
-            const pull = github.context
+            const pull = context.payload.pull_request
             console.log(pull)
             
       - name: Get result id

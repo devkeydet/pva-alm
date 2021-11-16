@@ -3,24 +3,26 @@ name: checks-test
 on:
   workflow_dispatch:
     inputs:
-      ref:
-        description: "ref" #temp
+      sha:
+        description: "sha"
         required: true
-        default: main
+      status:
+        description: "status"
+        required: true
 jobs:
   checks-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:          
-          ref: ${{ github.event.inputs.ref }}
+          ref: ${{ github.event.inputs.sha }}
       - name: GitHub Checks
         if: always()
         uses: LouisBrunner/checks-action@v1.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Devkeydet Test
-          conclusion: ${{ job.status }}
-          output: |
-            {"summary":"This is a summary", "teext_description":"This is a description"}
+          sha: ${{ github.event.inputs.sha }}
+          name: devkeydet-test-check
+          status: ${{ github.event.inputs.status }}
+          details_url: https://www.microsoft.com
  

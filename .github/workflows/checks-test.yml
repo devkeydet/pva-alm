@@ -29,16 +29,14 @@ jobs:
       - name: gh-script
         id: gh-script
         uses: actions/github-script@v5
-        with:          
-          # details_url cannot be set with the default GITHUB_TOKEN 
-          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} 
+        with:
           result-encoding: string
           script: |
             var checkResult = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.payload.pull_request.head.sha,
-              description: "test name",
+              context: "test-name",
               state: "pending",
               target_url: "https://microsoft.com"
             })     

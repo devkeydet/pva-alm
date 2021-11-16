@@ -27,7 +27,7 @@ jobs:
         id: gh-script
         uses: actions/github-script@v5
         with:
-          github-token: ${{ github.token }}
+          #github-token: ${{ github.token }}
           result-encoding: string
           script: |
             let sum = 0;
@@ -35,17 +35,8 @@ jobs:
             numbers.forEach(myFunction);
 
             function myFunction(item) {
-              sum += item;
-            }
-
-            var result = await github.rest.checks.create({              
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: "test name",
-              sha: ${{ github.sha }}
-              status: "queued",
-              details_url: "https://devkeydet.blog"
-            })
+              result += item;
+            }           
 
             return result
       - name: Get result

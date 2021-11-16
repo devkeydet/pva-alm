@@ -23,5 +23,6 @@ jobs:
         shell: pwsh
         run: |
           echo "Authorization: token ${{ github.token }}"
+          echo "Authorization: token $env:GITHUB_TOKEN"
           curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token $env:GITHUB_TOKEN" https://api.github.com/repos/$env:GITHUB_REPOSITORY/check-runs -d '{"name":"pwsh","head_sha":"${{ github.sha }}"}'
  

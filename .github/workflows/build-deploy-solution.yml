@@ -91,21 +91,6 @@ jobs:
         name: update-commit-status
         id: update-commit-status
         uses: actions/github-script@v5
-        with:
-          script: |
-            let contextToUse = "build-deploy-${{ github.event.inputs.solution_name }}"
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: ${{ github.event.inputs.sha }},
-              context: contextToUse,
-              state: "${{ job.status }}",
-              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            })
-      - if: contains(github.event.inputs.ref, 'refs/pull')
-        name: update-commit-status
-        id: update-commit-status
-        uses: actions/github-script@v5
         env:
           CONTEXT_TO_USE: build-deploy-${{ github.event.inputs.solution_name }}
           SHA: ${{ github.event.inputs.sha }}

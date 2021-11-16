@@ -9,7 +9,14 @@ on:
 jobs:
   checks-test:
     runs-on: ubuntu-latest
-    steps:
+    steps:      
+      - id: set-run-url
+        name: set-run-url
+        shell: pwsh
+        run: |
+          $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "::set-output name=run_url::$runUrl"
+
       - name: gh-script
         id: gh-script
         uses: actions/github-script@v5
@@ -22,6 +29,7 @@ jobs:
               repo: context.repo.repo,
               sha: "${{ github.event.inputs.sha}}",
               context: "test-two",
-              state: "${{ job.status }}"
+              state: "${{ job.status }}",
+              target_url: "${{ steps.set-run-url.outputs.run_url }}"
             })            
  

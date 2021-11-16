@@ -30,7 +30,7 @@ jobs:
           #github-token: ${{ github.token }}
           result-encoding: string
           script: |
-            var result = await github.request('POST /repos/{owner}/{repo}/check-runs', {
+            var result = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head_sha: context.payload.pull_request.head.sha,

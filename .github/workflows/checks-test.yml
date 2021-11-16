@@ -41,7 +41,7 @@ jobs:
 
             //console.log(result)
 
-            await githubrest.actions.createWorkflowDispatch({
+            await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: "update-check",

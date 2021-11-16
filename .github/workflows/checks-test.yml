@@ -39,6 +39,7 @@ jobs:
               details_url: "https://devkeydet.blog"
             })
 
+            console.log(result)
             return result.id
             
       - name: Get result id

@@ -34,14 +34,7 @@ jobs:
           script: |
             console.log("build-deploy-${{ github.event.inputs.solution_name }}")
             let contextToUse = "build-deploy-${{ github.event.inputs.solution_name }}"
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: "${{ github.event.inputs.sha }}"",
-              context: contextToUse,
-              state: "pending",
-              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            })
+            
       # Solutions cannot be imported in parallel, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1
       - uses: actions/checkout@v2

@@ -27,7 +27,6 @@ jobs:
         id: gh-script
         uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
           result-encoding: string
           script: |
             var checkResult = await github.rest.checks.create({
@@ -40,7 +39,7 @@ jobs:
             })
 
             console.log(checkResult)     
-            
+
             return checkResult.data.id
             
       - name: Get result id

@@ -35,10 +35,10 @@ jobs:
             numbers.forEach(myFunction);
 
             function myFunction(item) {
-              result += item;
+              sum += item;
             }           
 
-            return result
+            return sum
       - name: Get result
         run: |
           echo "sum: ${{steps.gh-script.outputs.result}}"

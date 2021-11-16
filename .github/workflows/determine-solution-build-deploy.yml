@@ -95,7 +95,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            let solutionNamesString = ""${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}""
+            let solutionNamesString = "${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}"
             let solutionNamesArray = solutionNamesString.split(",")
 
             solutionNamesArray.forEach(createCommitStatus)

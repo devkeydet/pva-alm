@@ -39,7 +39,7 @@ jobs:
               details_url: "https://devkeydet.blog"
             })
 
-            //console.log(result)
+            console.log(result)
 
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,

@@ -1,4 +1,4 @@
-name: update-check
+name: update-check # test
 
 on:
   workflow_dispatch:

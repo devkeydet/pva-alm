@@ -1,8 +1,12 @@
 name: checks-test
 
 on:
-  [push]
-
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "ref"
+        required: true
+        default: main
 jobs:
   checks-test:
     runs-on: ubuntu-latest

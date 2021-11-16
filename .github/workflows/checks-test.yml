@@ -38,7 +38,7 @@ jobs:
               sum += item;
             }           
 
-            return sum
+            // return sum
       - name: Get result
         run: |
           echo "sum: ${{steps.gh-script.outputs.result}}"

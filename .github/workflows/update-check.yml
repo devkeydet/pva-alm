@@ -20,4 +20,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           check_id: ${{ github.event.inputs.check_id }}
           status: ${{ github.event.inputs.status }}
+          conclusion: ${{ job.status }}
  

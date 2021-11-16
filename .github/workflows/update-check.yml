@@ -16,5 +16,5 @@ jobs:
         with:
           result-encoding: string
           script: |
-            console.log(context.job.status)            
+            console.log(${{ job.status }})            
  

@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:          
+          ref: ${{ github.event.inputs.ref }}
       - name: GitHub Checks
         if: always()
         uses: LouisBrunner/checks-action@v1.2.0

@@ -38,7 +38,7 @@ jobs:
               sum += item;
             }
 
-            var result = github.rest.checks.create({
+            var result = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
             })

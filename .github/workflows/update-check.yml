@@ -42,13 +42,15 @@ jobs:
         with:
           result-encoding: string
           script: |
-            console.log("${{ job.status }}")
-            var checkResult = await github.rest.repos.createCommitStatus({
+            let solutionName = "foo"
+            let contextToUse = "build-deploy-" + solutionName
+            console.log("contextToUse:")
+            console.log(contextToUse)
+            await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: "${{ github.event.inputs.sha}}",
-              context: "test-two",
-              state: "${{ job.status }}",
-              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            })            
+              sha: ${{ github.event.inputs.sha}},
+              context: contextToUse,
+              state: "pending"
+            })     
  

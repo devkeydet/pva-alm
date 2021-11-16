@@ -33,7 +33,7 @@ jobs:
         with:
           script: |
             console.log("build-deploy-${{ github.event.inputs.solution_name }}")
-            consple.log("${{ github.event.inputs.sha }}")
+            console.log("${{ github.event.inputs.sha }}")
             let contextToUse = "build-deploy-${{ github.event.inputs.solution_name }}"
             
             

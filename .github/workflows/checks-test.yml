@@ -34,7 +34,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: "test name",
-              sha: ${{ github.sha }}
               status: "queued",
               details_url: "https://devkeydet.blog"
             })

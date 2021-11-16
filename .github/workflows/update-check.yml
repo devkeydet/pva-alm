@@ -6,9 +6,6 @@ on:
       sha:
         description: "sha"
         required: true
-      status:
-        description: "status"
-        required: true
 jobs:
   checks-test:
     runs-on: ubuntu-latest
@@ -24,6 +21,6 @@ jobs:
               repo: context.repo.repo,
               sha: "${{ github.event.inputs.sha}}",
               context: "test-two",
-              state: context.job.state
+              state: context.job.status
             })
  

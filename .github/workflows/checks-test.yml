@@ -31,7 +31,7 @@ jobs:
           result-encoding: string
           script: |
             const pull = context.payload.pull_request
-            console.log(pull)
+            console.log(pull.head.sha)
             
       - name: Get result id
         run: |

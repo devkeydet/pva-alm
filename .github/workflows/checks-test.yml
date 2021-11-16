@@ -39,7 +39,17 @@ jobs:
               details_url: "https://devkeydet.blog"
             })
 
-            console.log(result)
+            //console.log(result)
+
+            await githubrest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: "update-check",
+              ref: context.ref,
+              inputs: {check_id: result.data.id, status: "completed"}
+            });
+
+
             return result.data.id
             
       - name: Get result id

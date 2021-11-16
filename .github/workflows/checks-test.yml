@@ -23,8 +23,9 @@ jobs:
       #   shell: pwsh
       #   run: |
       #     curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ github.token }}" https://api.github.com/repos/${{ github.repository }}/check-runs -d '{"name":"pwsh","head_sha":"${{ github.sha }}"}'
-      - name: run scriot
-        uses: actions/github-script@v3
+      - name: gh-script
+        id: gh-script
+        uses: actions/github-script@v5
         with:
           github-token: ${{ github.token }}
           result-encoding: string
@@ -40,5 +41,5 @@ jobs:
             return sum
       - name: Get result
         run: |
-          echo "sum: ${{steps.set-result.outputs.result}}"
+          echo "sum: ${{steps.gh-script.outputs.result}}"
             

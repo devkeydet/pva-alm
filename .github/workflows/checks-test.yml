@@ -8,15 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - id: add-check
-        name: add-check
-        uses: LouisBrunner/checks-action@v1.2.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: devkeydet-test-check
-          status: queued
-          details_url: https://www.microsoft.com
-      - name: echo-check-id
+      # - id: add-check
+      #   name: add-check
+      #   uses: LouisBrunner/checks-action@v1.2.0
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     name: devkeydet-test-check
+      #     status: queued
+      #     details_url: https://www.microsoft.com
+      # - name: echo-check-id
+      #   run: |
+      #     echo "check_id: ${{ steps.add-check.outputs.check_id }}"
+      - name: add-check-pwsh
+        shell: pwsh
         run: |
-          echo "check_id: ${{ steps.add-check.outputs.check_id }}"
+          curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/$env:GITHUB_REPOSITORY/commits/$env:GITHUB_REF/check-runs
  

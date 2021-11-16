@@ -35,19 +35,19 @@ jobs:
             var checkResult = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: context.payload.pull_request.head.sha,
+              sha: context.sha,
               context: "test-one",
               state: "pending"
             })     
             var checkResult = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: context.payload.pull_request.head.sha,
+              sha: context.sha,
               context: "test-two",
               state: "pending"
             })
 
-            return context.payload.pull_request.head.sha
+            return context.sha
 
       - name: Get result id
         run: |

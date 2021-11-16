@@ -13,13 +13,29 @@ jobs:
       - uses: actions/checkout@v2      
         with:
           ref: ${{ github.event.inputs.sha}}
-      - id: set-run-url
-        name: set-run-url
-        shell: pwsh
-        run: |
-          $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          echo "::set-output name=run_url::$runUrl"
+      # - id: set-run-url
+      #   name: set-run-url
+      #   shell: pwsh
+      #   run: |
+      #     $runUrl = "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      #     echo "::set-output name=run_url::$runUrl"
 
+      # - name: gh-script
+      #   id: gh-script
+      #   uses: actions/github-script@v5
+      #   with:
+      #     result-encoding: string
+      #     script: |
+      #       console.log("${{ job.status }}")
+      #       var checkResult = await github.rest.repos.createCommitStatus({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         sha: "${{ github.event.inputs.sha}}",
+      #         context: "test-two",
+      #         state: "${{ job.status }}",
+      #         target_url: "${{ steps.set-run-url.outputs.run_url }}"
+      #       })            
+      
       - name: gh-script
         id: gh-script
         uses: actions/github-script@v5
@@ -33,6 +49,6 @@ jobs:
               sha: "${{ github.event.inputs.sha}}",
               context: "test-two",
               state: "${{ job.status }}",
-              target_url: "${{ steps.set-run-url.outputs.run_url }}"
+              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             })            
  

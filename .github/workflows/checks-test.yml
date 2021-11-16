@@ -30,16 +30,6 @@ jobs:
           #github-token: ${{ github.token }}
           result-encoding: string
           script: |
-            let result = 0;
-            const numbers = [65, 44, 12, 4];
-            numbers.forEach(myFunction);
-
-            function myFunction(item) {
-              result += item;
-            }           
-
-            // return result
-
             var result = await github.rest.checks.create({              
               owner: context.repo.owner,
               repo: context.repo.repo,

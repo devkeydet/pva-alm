@@ -39,8 +39,8 @@ jobs:
               details_url: "https://devkeydet.blog"
             })
 
-            return result
-      - name: Get result
+            return result.id
+      - name: Get result id
         run: |
           echo "sum: ${{steps.gh-script.outputs.result}}"
             

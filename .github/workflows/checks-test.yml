@@ -27,7 +27,7 @@ jobs:
         id: gh-script
         uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} # target_url cannot be set with the default GITHUB_TOKEN 
+          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} # details_url cannot be set with the default GITHUB_TOKEN 
           result-encoding: string
           script: |
             var checkResult = await github.rest.checks.create({
@@ -36,7 +36,7 @@ jobs:
               head_sha: context.payload.pull_request.head.sha,
               name: "test name",
               status: "queued"
-              target_url: "https://microsoft.com"
+              details_url: "https://microsoft.com"
             })     
 
             return checkResult.data.id

@@ -89,26 +89,28 @@ jobs:
           $csv = $solutionNameArray -join ","
           echo "::set-output name=solution_names::$csv"
 
-      - name: create-commit-statuses
-        id: create-commit-statuses
-        if: contains(github.ref, 'pull')
-        uses: actions/github-script@v5
-        with:
-          script: |
-            let solutionNamesString = "${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}"
-            let solutionNamesArray = solutionNamesString.split(",")
+      # - name: create-commit-statuses
+      #   id: create-commit-statuses
+      #   if: contains(github.ref, 'pull')
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       let solutionNamesString = "${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}"
+      #       console.log(solutionNamesString)
 
-            solutionNamesArray.forEach(createCommitStatus)
+      #       let solutionNamesArray = solutionNamesString.split(",")
 
-            function createCommitStatus(solutionName) {              
-              let contextToUse = "build-deploy-" + solutionName
-              console.log("contextToUse:")
-              console.log(contextToUse)
-              await github.rest.repos.createCommitStatus({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                sha: context.payload.pull_request.head.sha,
-                context: contextToUse,
-                state: "pending"
-              })     
-            }
+      #       solutionNamesArray.forEach(createCommitStatus)
+
+      #       function createCommitStatus(solutionName) {              
+      #         let contextToUse = "build-deploy-" + solutionName
+      #         console.log("contextToUse:")
+      #         console.log(contextToUse)
+      #         await github.rest.repos.createCommitStatus({
+      #           owner: context.repo.owner,
+      #           repo: context.repo.repo,
+      #           sha: context.payload.pull_request.head.sha,
+      #           context: contextToUse,
+      #           state: "pending"
+      #         })     
+      #       }

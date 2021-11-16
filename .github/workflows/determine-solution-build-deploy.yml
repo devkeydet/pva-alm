@@ -100,9 +100,9 @@ jobs:
 
             let solutionNamesArray = solutionNamesString.split(",")
 
-            solutionNamesArray.forEach(createCommitStatus)
+            await solutionNamesArray.forEach(createCommitStatus)
 
-            function createCommitStatus(solutionName) {              
+            async function createCommitStatus(solutionName) {              
               let contextToUse = "build-deploy-" + solutionName
               console.log("contextToUse:")
               console.log(contextToUse)

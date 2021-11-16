@@ -47,7 +47,9 @@ jobs:
           format: csv
       # check for file changes in solution source folder(s)
       # if found, queue build and deply workflow
-      - shell: pwsh
+      - name: dispatch-build-deploy-solution
+        id: dispatch-build-deploy-solution
+        shell: pwsh
         env:
           # Workflows cannot be dispatched with the standard GITHUB_TOKEN, so we use a token that can
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
@@ -69,8 +71,11 @@ jobs:
 
           $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
 
+          $solutionNameArray = @()
+
           foreach ($dir in $uniqueSolutionDirectories) {            
             $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
+            $solutionNameArray = $solutionNameArray + $solutionName
 
             if ($env:github_ref.Contains("pull")) {
               $ref = $env:pr_head_ref
@@ -87,3 +92,18 @@ jobs:
             
             echo "pipeline queued for $solutionName"           
           }
+
+          $csv = $solutionNameArray -join ","
+          echo "::set-output name=solution_names::$csv"
+
+      - name: gh-script
+        id: gh-script
+        uses: actions/github-script@v5
+        with:
+          result-encoding: string
+          script: |
+            console.log("solution_names:")
+            console.log("${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}")
+
+            console.log("context.payload.pull_request.head.sha")
+            console.log(context.payload.pull_request.head.sha)

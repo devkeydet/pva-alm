@@ -36,11 +36,18 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.payload.pull_request.head.sha,
-              context: "test-name",
+              context: "test-one",
               state: "pending"
             })     
-            return checkResult.data.id      
-      - name: Get result id
-        run: |
-          echo "check id: ${{steps.gh-script.outputs.result}}"
+            var checkResult = await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.payload.pull_request.head.sha,
+              context: "test-two",
+              state: "pending"
+            })    
+
+      # - name: Get result id
+      #   run: |
+      #     echo "check id: ${{steps.gh-script.outputs.result}}"
             

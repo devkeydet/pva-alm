@@ -36,17 +36,17 @@ jobs:
           TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         with:
           script: |
-            console.log(CONTEXT_TO_USE)
-            console.log(SHA)
-            console.log(TARGET_URL)
+            console.log(process.env.CONTEXT_TO_USE)
+            console.log(process.env.SHA)
+            console.log(process.env.TARGET_URL)
             
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: SHA,
-              context: CONTEXT_TO_USE,
+              sha: process.env.SHA,
+              context: process.env.CONTEXT_TO_USE,
               state: "pending",
-              target_url: TARGET_URL
+              target_url: process.env.TARGET_URL
             })
             
       # Solutions cannot be imported in parallel, so we queue
@@ -101,4 +101,23 @@ jobs:
               context: contextToUse,
               state: "${{ job.status }}",
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            })     
+            })
+      - if: contains(github.event.inputs.ref, 'refs/pull')
+        name: update-commit-status
+        id: update-commit-status
+        uses: actions/github-script@v5
+        env:
+          CONTEXT_TO_USE: build-deploy-${{ github.event.inputs.solution_name }}
+          SHA: ${{ github.event.inputs.sha }}
+          TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          JOB_STATUS: ${{ job.status }}
+        with:
+          script: |            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: process.env.SHA,
+              context: process.env.CONTEXT_TO_USE,
+              state: process.env.JOB_STATUS,
+              target_url: process.env.TARGET_URL
+            })

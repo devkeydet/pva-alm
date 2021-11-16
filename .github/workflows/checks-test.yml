@@ -30,7 +30,7 @@ jobs:
           #github-token: ${{ github.token }}
           result-encoding: string
           script: |
-            var result = await github.rest.checks.create({
+            var checkResult = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               head_sha: context.payload.pull_request.head.sha,
@@ -39,18 +39,19 @@ jobs:
               details_url: "https://devkeydet.blog"
             })
 
-            console.log(result)
+            console.log(checkResult)
 
-            await github.rest.actions.createWorkflowDispatch({
+            var dispatchResult = await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: "update-check",
               ref: context.ref,
-              inputs: {check_id: result.data.id, status: "completed"}
+              inputs: {check_id: checkResult.data.id, status: "completed"}
             });
 
+            console.log(dispatchResult)
 
-            return result.data.id
+            return checkResult.data.id
             
       - name: Get result id
         run: |

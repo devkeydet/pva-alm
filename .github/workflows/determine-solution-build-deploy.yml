@@ -87,6 +87,7 @@ jobs:
             echo "github_ref: $env:github_ref"
             echo "ref: $ref"
             echo "sha: $env:github_sha"
+            echo "github.event.pull_request.head.sha: ${{ github.event.pull_request.head.sha }}"
 
             gh workflow run build-deploy-solution --ref $ref -f ref=$env:github_ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }}
             
@@ -98,12 +99,10 @@ jobs:
 
       - name: gh-script
         id: gh-script
+        if: contains(github.ref, 'pull')
         uses: actions/github-script@v5
         with:
           result-encoding: string
           script: |
-            console.log("solution_names:")
-            console.log("${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}")
-
-            console.log("context.payload.pull_request.head.sha")
+            console.log("context.payload.pull_request.head.sha:")
             console.log(context.payload.pull_request.head.sha)

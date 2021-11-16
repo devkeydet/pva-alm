@@ -1,28 +1,22 @@
 name: checks-test
 
 on:
-  workflow_dispatch:
-    inputs:
-      sha:
-        description: "sha"
-        required: true
-      status:
-        description: "status"
-        required: true
+  pull_request:
+    
 jobs:
   checks-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:          
-          ref: ${{ github.event.inputs.sha }}
-      - name: GitHub Checks
-        if: always()
+      - id: add-check
+        name: add-check
         uses: LouisBrunner/checks-action@v1.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          sha: ${{ github.event.inputs.sha }}
           name: devkeydet-test-check
-          status: ${{ github.event.inputs.status }}
+          status: queued
           details_url: https://www.microsoft.com
+      - name: echo-check-id
+        run: |
+          echo "check_id: ${{ steps.add-check.outputs.check_id }}"
  

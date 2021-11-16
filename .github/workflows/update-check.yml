@@ -1,0 +1,23 @@
+name: update-check
+
+on:
+  workflow_dispatch:
+    inputs:
+      check_id:
+        description: "check_id"
+        required: true
+      status:
+        description: "status"
+        required: true
+jobs:
+  checks-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Checks
+        if: always()
+        uses: LouisBrunner/checks-action@v1.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          check_id: ${{ github.event.inputs.check_id }}
+          status: ${{ github.event.inputs.status }}
+ 

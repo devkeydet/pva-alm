@@ -27,7 +27,7 @@ jobs:
         id: gh-script
         uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} # target_url cannot be set with the default GITHUB_TOKEN
+          github-token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }} # target_url cannot be set with the default GITHUB_TOKEN 
           result-encoding: string
           script: |
             var checkResult = await github.rest.checks.create({

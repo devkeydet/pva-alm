@@ -106,5 +106,11 @@ jobs:
               let contextToUse = "build-deploy-" + solutionName
               console.log("contextToUse:")
               console.log(contextToUse)
-              
+              await github.rest.repos.createCommitStatus({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                sha: context.payload.pull_request.head.sha,
+                context: contextToUse,
+                state: "pending"
+              })     
             }

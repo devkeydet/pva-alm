@@ -1,0 +1,20 @@
+name: checks-test
+
+on:
+  [push]
+
+jobs:
+  checks-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: GitHub Checks
+        if: always()
+        uses: LouisBrunner/checks-action@v1.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Devkeydet Test
+          conclusion: ${{ job.status }}
+          output: |
+            {"summary":"This is a summary", "teext_description":"This is a description"}
+ 

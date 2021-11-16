@@ -29,8 +29,8 @@ jobs:
         with:
           #github-token: ${{ github.token }}
           result-encoding: string
-          script: |
-            var result = await github.rest.checks.create({              
+          script: |       
+            var result = await github.request('POST /repos/{owner}/{repo}/check-runs', {
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: "test name",
@@ -38,6 +38,8 @@ jobs:
               status: "queued",
               details_url: "https://devkeydet.blog"
             })
+
+            return result
       - name: Get result
         run: |
           echo "sum: ${{steps.gh-script.outputs.result}}"

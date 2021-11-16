@@ -16,5 +16,12 @@ jobs:
         with:
           result-encoding: string
           script: |
-            console.log(${{ job.status }})            
+            console.log("${{ job.status }}")
+            var checkResult = await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: "${{ github.event.inputs.sha}}",
+              context: "test-two",
+              state: "${{ job.status }}"
+            })            
  

@@ -30,8 +30,16 @@ jobs:
           #github-token: ${{ github.token }}
           result-encoding: string
           script: |
-            const pull = context.payload.pull_request
-            console.log(pull.head.sha)
+            var result = await github.request('POST /repos/{owner}/{repo}/check-runs', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head_sha: context.payload.pull_request.head.sha,
+              name: "test name",
+              status: "queued",
+              details_url: "https://devkeydet.blog"
+            })
+
+            return result.id
             
       - name: Get result id
         run: |

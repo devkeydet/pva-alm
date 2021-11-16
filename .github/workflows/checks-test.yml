@@ -27,6 +27,7 @@ jobs:
         uses: actions/github-script@v3
         with:
           github-token: ${{ github.token }}
+          result-encoding: string
           script: |
             let sum = 0;
             const numbers = [65, 44, 12, 4];
@@ -35,4 +36,9 @@ jobs:
             function myFunction(item) {
               sum += item;
             }
+
+            return sum
+      - name: Get result
+        run: |
+          echo "sum: ${{steps.set-result.outputs.result}}"
             

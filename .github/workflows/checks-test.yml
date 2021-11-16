@@ -30,15 +30,24 @@ jobs:
           #github-token: ${{ github.token }}
           result-encoding: string
           script: |
-            let sum = 0;
+            let result = 0;
             const numbers = [65, 44, 12, 4];
             numbers.forEach(myFunction);
 
             function myFunction(item) {
-              sum += item;
+              result += item;
             }           
 
-            // return sum
+            // return result
+
+            var result = await github.rest.checks.create({              
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: "test name",
+              sha: ${{ github.sha }}
+              status: "queued",
+              details_url: "https://devkeydet.blog"
+            })
       - name: Get result
         run: |
           echo "sum: ${{steps.gh-script.outputs.result}}"

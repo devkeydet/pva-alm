@@ -129,11 +129,21 @@ jobs:
           git commit -am "${{ github.event.inputs.commit_message }}"
 
       - name: push to ${{ github.event.inputs.source_branch }}
+        env:
+          # Workflows cannot cause another workflow event with the standard GITHUB_TOKEN.
+          # By default, any event that would fire as a reult of logic in a GitHub workflow
+          # will not fire.  So we use a token that can
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
         if: github.event.inputs.branch_to_create == ''
         run: |
           git push
 
       - name: push to ${{ github.event.inputs.branch_to_create }}
+        env:
+          # Workflows cannot cause another workflow event with the standard GITHUB_TOKEN.
+          # By default, any event that would fire as a reult of logic in a GitHub workflow
+          # will not fire.  So we use a token that can
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
         if: github.event.inputs.branch_to_create != ''
         run: |
           git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}

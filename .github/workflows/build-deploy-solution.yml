@@ -8,7 +8,7 @@ on:
         required: true
         description: "ref to build from"
       sha:
-        required: true
+        required: false
         description: "sha"
       solution_name:
         required: true

@@ -39,6 +39,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}
+          # Workflows cannot cause another workflow event to fire with the standard GITHUB_TOKEN.
+          # By default, any event that would fire as a reult of logic in a GitHub workflow
+          # will not fire.  Since this workflow pushes code to the remote repo, we use a token that can
+          token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
 
       # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
       # for certain commands, we need to use it directly.  So we set the path to pac
@@ -129,21 +133,11 @@ jobs:
           git commit -am "${{ github.event.inputs.commit_message }}"
 
       - name: push to ${{ github.event.inputs.source_branch }}
-        env:
-          # Workflows cannot cause another workflow event with the standard GITHUB_TOKEN.
-          # By default, any event that would fire as a reult of logic in a GitHub workflow
-          # will not fire.  So we use a token that can
-          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
         if: github.event.inputs.branch_to_create == ''
         run: |
           git push
 
       - name: push to ${{ github.event.inputs.branch_to_create }}
-        env:
-          # Workflows cannot cause another workflow event with the standard GITHUB_TOKEN.
-          # By default, any event that would fire as a reult of logic in a GitHub workflow
-          # will not fire.  So we use a token that can
-          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
         if: github.event.inputs.branch_to_create != ''
         run: |
           git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}

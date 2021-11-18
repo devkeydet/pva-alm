@@ -2,6 +2,9 @@ name: test-cmd
 
 on:
   workflow_dispatch:
+  push:
+    branches: 
+    - "dkdt-136"
     
 jobs:
   test:

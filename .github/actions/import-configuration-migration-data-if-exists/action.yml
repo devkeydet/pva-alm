@@ -47,6 +47,9 @@ runs:
 
           echo "::set-output name=common_zip_path::$destinationPath"
         }
+        else {
+          echo "No $commonFolderName folder found."
+        }
 
         if ($env:environment -notin "pr","uat","prod") {
           $environment = "dev"
@@ -70,6 +73,9 @@ runs:
 
           echo "::set-output name=environment_zip_path::$destinationPath"
         }
+        else {
+          echo "No $environmentFolderName folder found."
+        }
     
     - name: Install and cache PowerShell modules
       id: psmodulecache
@@ -79,8 +85,8 @@ runs:
         modules-to-cache: Microsoft.Xrm.Tooling.ConfigurationMigration
         shell: powershell
       
-    - id: import-common-configuration-migration-data-exists
-      name: import-common-configuration-migration-data-exists
+    - id: import-common-configuration-migration-data
+      name: import-common-configuration-migration-data
       if: ${{ steps.check-if-data-exists.outputs.common_zip_path != '' }}
       shell: powershell
       env:
@@ -92,8 +98,8 @@ runs:
         $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
         Import-CrmDataFile -CrmConnection $connectionString -Datafile "${{ steps.check-if-data-exists.outputs.common_zip_path }}" -Verbose
     
-    - id: import-common-configuration-migration-data-exists
-      name: import-common-configuration-migration-data-exists
+    - id: import-environment-configuration-migration-data
+      name: import-environment-configuration-migration-data
       if: ${{ steps.check-if-data-exists.outputs.environment_zip_path != '' }}
       shell: powershell
       env:

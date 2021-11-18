@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_dkdt_city" />
+  <EntityRelationship Name="business_unit_dkdt_office" />
+  <EntityRelationship Name="business_unit_dkdt_state" />
+  <EntityRelationship Name="dkdt_City_State_dkdt_State" />
+  <EntityRelationship Name="dkdt_Office_City_dkdt_City" />
+  <EntityRelationship Name="lk_dkdt_city_createdby" />
+  <EntityRelationship Name="lk_dkdt_city_modifiedby" />
+  <EntityRelationship Name="lk_dkdt_office_createdby" />
+  <EntityRelationship Name="lk_dkdt_office_modifiedby" />
+  <EntityRelationship Name="lk_dkdt_state_createdby" />
+  <EntityRelationship Name="lk_dkdt_state_modifiedby" />
+  <EntityRelationship Name="owner_dkdt_city" />
+  <EntityRelationship Name="owner_dkdt_office" />
+  <EntityRelationship Name="owner_dkdt_state" />
+  <EntityRelationship Name="team_dkdt_city" />
+  <EntityRelationship Name="team_dkdt_office" />
+  <EntityRelationship Name="team_dkdt_state" />
+  <EntityRelationship Name="user_dkdt_city" />
+  <EntityRelationship Name="user_dkdt_office" />
+  <EntityRelationship Name="user_dkdt_state" />
+</EntityRelationships>

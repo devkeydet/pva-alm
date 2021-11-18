@@ -1,23 +1,23 @@
 # THIS IS A WINDOWS ONLY ACTION BECAUSE THE POWERSHELL MODULES USED REQUIRE WINDOWS POWERSHELL
-name: 'turn on flows using impersonation'
+name: "turn on flows using impersonation"
 
-description: 'turn on flows using impersonation'
+description: "turn on flows using impersonation"
 
 inputs:
-  environment_url: 
+  environment_url:
     description: 'URL of Power Platform environment to connect with; e.g. "https://test-env.crm.dynamics.com"'
     required: true
   tenant_id:
-    description: 'gets subdomain out of subdomain.domain.com'
+    description: "gets subdomain out of subdomain.domain.com"
     required: true
   app_id:
     description: 'The application id to authenticate with. Setting this input makes app_id, tenant_id and client_secret required; specifying alternate "username" credential set of inputs will result in an error.'
     required: true
-  client_secret: 
-    description: 'gets subdomain out of subdomain.domain.com'
+  client_secret:
+    description: "gets subdomain out of subdomain.domain.com"
     required: true
-  solution_name: 
-    description: 'name of the solution to turn flows on'
+  solution_name:
+    description: "name of the solution to turn flows on"
     required: true
   secrets:
     description: "secrets for replace token to find values to populate deployment settings file."
@@ -28,11 +28,11 @@ runs:
   steps:
     - uses: Firenza/secrets-to-env@v1.1.0
       with:
-          secrets: ${{ inputs.secrets }}
+        secrets: ${{ inputs.secrets }}
 
     - uses: cschleiden/replace-tokens@v1
       with:
-        files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
+        files: '["src/${{ inputs.solution_name }}/config/deploymentSettings.json"]'
 
     - name: Install and cache PowerShell modules
       id: psmodulecache
@@ -54,13 +54,13 @@ runs:
         app_id: ${{ inputs.app_id }}
         client_secret: ${{ inputs.client_secret }}
         solution_name: ${{ inputs.solution_name }}
-        deployment_settings_file: "src/${{ inputs.solution_name }}/deploymentSettings.json"
+        deployment_settings_file: "src/${{ inputs.solution_name }}/config/deploymentSettings.json"
       run: |
         Import-Module Microsoft.Xrm.Data.PowerShell
         Import-Module  Microsoft.PowerApps.Administration.PowerShell
 
         Add-PowerAppsAccount -TenantID "$env:tenant_id" -ApplicationId "$env:app_id" -ClientSecret "$env:client_secret"
-        
+
         $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
         $conn = Get-CrmConnection -ConnectionString $connectionString
         $impersonationConn = Get-CrmConnection -ConnectionString $connectionString

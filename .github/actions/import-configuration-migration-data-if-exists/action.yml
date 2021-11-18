@@ -1,0 +1,111 @@
+# THIS IS A WINDOWS ONLY ACTION BECAUSE THE POWERSHELL MODULE USED REQUIRES WINDOWS POWERSHELL
+name: import-configuration-migration-data-if-exists
+description: import-configuration-migration-data-if-exists
+
+inputs:
+  environment_url:
+    description: 'URL of Power Platform environment to connect with; e.g. "https://test-env.crm.dynamics.com"'
+    required: true
+  solution_name:
+    description: solution_name
+    required: true
+  tenant_id:
+    description: tenant_id
+    required: true
+  app_id:
+    description: app_id
+    required: true
+  client_secret:
+    description: client_secret
+    required: true
+  environment:
+    description: environment
+    required: true
+
+runs:
+  using: "composite"
+  steps: 
+    - id: check-if-data-exists
+      name: check-if-data-exists
+      shell: powershell
+      env:
+        config_path: src/${{ inputs.solution_name }}/config/
+        environment: ${{ inputs.environment }}
+      run: |        
+        $commonFolderName = "CommonConfigurationMigrationData"
+        $commonPath = $env:config_path + $commonFolderName
+
+        if(Test-Path $commonPath)
+        {
+          $destinationPath = '${{ runner.temp }}/ConfigurationMigrationData/' + $commonFolderName + '.zip'
+          $compress = @{
+              Path = $commonPath + '\*.*'
+              CompressionLevel = 'Fastest'
+              DestinationPath = $destinationPath
+          }
+          Compress-Archive @compress
+
+          echo "::set-output name=common_zip_path::$destinationPath"
+        }
+
+        if ($env:environment -notin "pr","uat","prod") {
+          $environment = "dev"
+        }
+        else {
+          $environment = $env:environment
+        }
+
+        $environmentFolderName = "EnvironmentConfigrationMigrationData/$environment"
+        $environmentPath = $env:config_path + $environmentFolderName
+
+        if(Test-Path $environmentPath)
+        {
+          $destinationPath = '${{ runner.temp }}/ConfigurationMigrationData/' + $environmentFolderName + '.zip'
+          $compress = @{
+              Path = $environmentPath + '\*.*'
+              CompressionLevel = 'Fastest'
+              DestinationPath = $destinationPath
+          }
+          Compress-Archive @compress
+
+          echo "::set-output name=environment_zip_path::$destinationPath"
+        }
+    
+    - name: Install and cache PowerShell modules
+      id: psmodulecache
+      if: ${{ steps.check-if-data-exists.outputs.common_zip_path != '' || steps.check-if-data-exists.outputs.environment_zip_path != '' }}
+      uses: potatoqualitee/psmodulecache@v4
+      with:
+        modules-to-cache: Microsoft.Xrm.Tooling.ConfigurationMigration
+        shell: powershell
+      
+    - id: import-common-configuration-migration-data-exists
+      name: import-common-configuration-migration-data-exists
+      if: ${{ steps.check-if-data-exists.outputs.common_zip_path != '' }}
+      shell: powershell
+      env:
+        environment_url: ${{ inputs.environment_url }}
+        app_id: ${{ inputs.app_id }}
+        client_secret: ${{ inputs.client_secret }}
+      run: |
+        Import-Module -Name Microsoft.Xrm.Tooling.ConfigurationMigration
+        $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
+        Import-CrmDataFile -CrmConnection $connectionString -Datafile "${{ steps.check-if-data-exists.outputs.common_zip_path }}" -Verbose
+    
+    - id: import-common-configuration-migration-data-exists
+      name: import-common-configuration-migration-data-exists
+      if: ${{ steps.check-if-data-exists.outputs.environment_zip_path != '' }}
+      shell: powershell
+      env:
+        environment_url: ${{ inputs.environment_url }}
+        app_id: ${{ inputs.app_id }}
+        client_secret: ${{ inputs.client_secret }}
+      run: |
+        Import-Module -Name Microsoft.Xrm.Tooling.ConfigurationMigration
+        $connectionString = "AuthType=ClientSecret;url=$env:environment_url;ClientId=$env:app_id;ClientSecret=$env:client_secret"
+        Import-CrmDataFile -CrmConnection $connectionString -Datafile "${{ steps.check-if-data-exists.outputs.environment_zip_path }}" -Verbose
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+        path: ${{ runner.temp }}/ConfigurationMigrationData

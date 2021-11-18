@@ -75,9 +75,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: import-configuration-migration-data-if-exists
+        name: import-configuration-migration-data-if-exists
         uses: ./.github/actions/import-configuration-migration-data-if-exists
         with:
-          environment_url: ${{ secrets.ENVIRONMENT_URL }}
+          environment_url: ${{ github.event.inputs.environment_url }}
           solution_name: ${{ github.event.inputs.solution_name }}
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}

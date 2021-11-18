@@ -58,6 +58,13 @@ jobs:
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
           unmanaged: true
           secrets: ${{ toJSON(secrets) }}
+      - name: publish-customizations
+        uses: microsoft/powerplatform-actions/publish-solution@v0
+        with:
+          environment-url: ${{ github.event.inputs.environment_url}}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          tenant-id: ${{ secrets.TENANT_ID }}
 
   import-data-turn-on-flows:
     runs-on: windows-latest

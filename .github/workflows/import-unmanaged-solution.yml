@@ -59,7 +59,7 @@ jobs:
           unmanaged: true
           secrets: ${{ toJSON(secrets) }}
 
-  import-data-and-turn-on-flows:
+  import-data-turn-on-flows:
     runs-on: windows-latest
     needs: [get-environment-from-domain, build-deploy-solution]
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
@@ -73,7 +73,7 @@ jobs:
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
-          environment: ${{ github.event.inputs.environment }}
+          environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:

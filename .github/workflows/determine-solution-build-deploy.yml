@@ -13,6 +13,7 @@ on:
       - src/**
 
 env:
+  # TODO: make this more granular
   solution_version_major_minor: "1.0"
 
 jobs:

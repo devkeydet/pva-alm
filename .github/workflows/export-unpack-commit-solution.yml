@@ -57,6 +57,14 @@ jobs:
         run: |
           git checkout -b ${{ github.event.inputs.branch_to_create }} ${{ github.event.inputs.source_branch }}
 
+      - name: publish-customizations
+        uses: microsoft/powerplatform-actions/publish-solution@v0
+        with:
+          environment-url: ${{ github.event.inputs.environment_url}}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          
       # - name: publish customizations
       #   uses: microsoft/powerplatform-actions/publish-solution@v0
       #   with:

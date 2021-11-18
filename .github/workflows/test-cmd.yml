@@ -1,0 +1,20 @@
+name: test-cmd
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: import-configuration-migration-data-if-exists
+        name: import-configuration-migration-data-if-exists
+        uses: ./.github/actions/import-configuration-migration-data-if-exists
+        with:
+          environment_url: https://marcsc-alm-demo-dev2.crm.dynamics.com
+          solution_name: pvaalm
+          tenant_id: ${{ secrets.TENANT_ID }}
+          app_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          environment: marcsc-alm-demo-dev2

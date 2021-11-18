@@ -61,8 +61,8 @@ runs:
           $environment = $env:environment
         }
 
-        $environmentFolderName = "EnvironmentConfigrationMigrationData/$environment"
-        $environmentPath = $env:config_path + $environmentFolderName
+        $environmentFolderName = "EnvironmentConfigrationMigrationData"
+        $environmentPath = $env:config_path + $environmentFolderName + "/$environment"
 
         if(Test-Path $environmentPath)
         {

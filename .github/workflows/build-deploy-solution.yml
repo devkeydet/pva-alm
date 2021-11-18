@@ -78,7 +78,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v2
-      - id: turn-on-flows-impersonation
+      - id: import-configuration-migration-data-if-exists
         uses: ./.github/actions/import-configuration-migration-data-if-exists
         with:
           environment_url: ${{ secrets.ENVIRONMENT_URL }}

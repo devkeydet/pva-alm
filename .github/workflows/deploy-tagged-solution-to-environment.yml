@@ -47,10 +47,11 @@ jobs:
           tag: ${{ github.event.inputs.tag }}
           secrets: ${{ toJSON(secrets) }}
       - id: import-configuration-migration-data-if-exists
+        name: import-configuration-migration-data-if-exists
         uses: ./.github/actions/import-configuration-migration-data-if-exists
         with:
           environment_url: ${{ secrets.ENVIRONMENT_URL }}
-          solution_name: ${{ github.event.inputs.solution_name }}
+          solution_name: ${{ env.solution_name }}
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}

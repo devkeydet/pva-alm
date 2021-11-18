@@ -58,7 +58,7 @@ runs:
       shell: pwsh
       run: |
         pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
-        pac solution delete --solution-name ${{ inputs.solution_name }}
+        pac solution delete --async true --solution-name ${{ inputs.solution_name }}
 
     # - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
     #   uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
@@ -101,7 +101,7 @@ runs:
       shell: pwsh
       run: |
         pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
-        pac solution delete --solution-name ${{ inputs.solution_name }}
+        pac solution delete --async true --solution-name ${{ inputs.solution_name }}
 
   #   - name: delete-managed-solution
   #     uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0

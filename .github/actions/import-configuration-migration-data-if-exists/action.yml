@@ -30,55 +30,15 @@ runs:
       shell: powershell
       env:
         config_path: src/${{ inputs.solution_name }}/config/
-        environment: ${{ inputs.environment }}
-      run: |        
-        $commonFolderName = "CommonConfigurationMigrationData"
-        $commonPath = $env:config_path + $commonFolderName
-        $tempConfigurationMigrationDataFolder = '${{ runner.temp }}/ConfigurationMigrationData/'
-
-        New-Item -Path $tempConfigurationMigrationDataFolder -ItemType Directory
-
-        if(Test-Path $commonPath)
-        {
-          $destinationPath = $tempConfigurationMigrationDataFolder + $commonFolderName + '.zip'
-          $compress = @{
-              Path = $commonPath + '\*.*'
-              CompressionLevel = 'Fastest'
-              DestinationPath = $destinationPath
-          }
-          Compress-Archive @compress
-
-          echo "::set-output name=common_zip_path::$destinationPath"
+        temp_data_folder: ${{ runner.temp }}/ConfigurationMigrationData/
+      run: |
+        . ${{ github.action_path }}/Compress-Data-Files.ps1
+        $params = @{
+            configPath = '${{ env.config_path }}'
+            tempConfigurationMigrationDataFolder = '${{ env.temp_data_folder }}'
+            environment = '${{ inputs.environment }}'
         }
-        else {
-          echo "No $commonFolderName folder found."
-        }
-
-        if ($env:environment -notin "pr","uat","prod") {
-          $environment = "dev"
-        }
-        else {
-          $environment = $env:environment
-        }
-
-        $environmentFolderName = "EnvironmentConfigrationMigrationData"
-        $environmentPath = $env:config_path + $environmentFolderName + "/$environment"
-
-        if(Test-Path $environmentPath)
-        {
-          $destinationPath = $tempConfigurationMigrationDataFolder + $environmentFolderName + '.zip'
-          $compress = @{
-              Path = $environmentPath + '\*.*'
-              CompressionLevel = 'Fastest'
-              DestinationPath = $destinationPath
-          }
-          Compress-Archive @compress
-
-          echo "::set-output name=environment_zip_path::$destinationPath"
-        }
-        else {
-          echo "No $environmentFolderName folder found."
-        }
+        Compress-Data-Files @params      
     
     - name: Install and cache PowerShell modules
       id: psmodulecache

@@ -53,3 +53,4 @@ runs:
             solutionName = '${{ inputs.solution_name }}'
             deploymentSettingsFile = "src/${{ inputs.solution_name }}/config/deploymentSettings.json"
         }
+        Enable-Flows @params

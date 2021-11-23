@@ -8,5 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - shell: pwsh
-        run: |
-          Get-ChildItem   
+        run: |          
+          cd .github/workflows
+          Get-ChildItem

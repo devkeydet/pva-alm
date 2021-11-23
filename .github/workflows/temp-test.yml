@@ -1,0 +1,11 @@
+name: temp-test
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - shell: pwsh
+        run: |
+          Get-ChildItem ${{ github.temp }}    

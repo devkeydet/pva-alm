@@ -1,5 +1,4 @@
 function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha, $prHeadSha, $solutionVersionMajorMinor, $environment) {
-    echo "files: $files"
     $filesArray = $files -split ','
 
     $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
@@ -25,11 +24,6 @@ function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha
         else {
             $ref = $githubRef
         }
-
-        echo "github_ref: $githubRef"
-        echo "ref: $ref"
-        echo "sha: $githubSha"
-        echo "github.event.pull_request.head.sha: $prHeadSha"
 
         gh workflow run build-deploy-solution --ref $ref -f ref=$githubRef -f solution_name=$solutionName -f solution_version_major_minor=$solutionVersionMajorMinor -f environment=$environment -f sha=$prHeadSha
             

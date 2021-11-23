@@ -13,7 +13,7 @@ on:
       - src/**
 
 env:
-  # TODO: make this more granular
+  # TODO: make solution_version_major_minor more granular by allowing different ones per solution
   solution_version_major_minor: "1.0"
   workflow_scripts_path: .github/workflows/scripts
 

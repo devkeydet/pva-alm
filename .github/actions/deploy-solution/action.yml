@@ -52,7 +52,7 @@ runs:
 
     - uses: cschleiden/replace-tokens@v1
       with:
-        files: '["src/${{ inputs.solution_name }}/deploymentSettings.json"]'
+        files: '["src/${{ inputs.solution_name }}/config/deploymentSettings.json"]'
 
     - name: get solution zip
       id: get-solution-zip
@@ -75,7 +75,7 @@ runs:
       shell: pwsh
       run: |
         pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ env.TENANT_ID }} --applicationId ${{ env.CLIENT_ID }} --clientSecret ${{ env.CLIENT_SECRET }}
-        pac solution import --path ${{ steps.get-solution-zip.outputs.solution_zip }} --force-overwrite true --settings-file src/${{ inputs.solution_name }}/deploymentSettings.json
+        pac solution import --async true --path ${{ steps.get-solution-zip.outputs.solution_zip }} --force-overwrite true --settings-file src/${{ inputs.solution_name }}/config/deploymentSettings.json
 
     # - name: import-solution-to-environment
     #   uses: microsoft/powerplatform-actions/import-solution@v0
@@ -87,4 +87,4 @@ runs:
     #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ steps.get-solution-zip.outputs.solution_zip }}
     #     force-overwrite: true
     #     use-deployment-settings-file: true
-    #     deployment-settings-file: src/${{ inputs.solution_name }}/deploymentSettings.json
+    #     deployment-settings-file: src/${{ inputs.solution_name }}/config/deploymentSettings.json

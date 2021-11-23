@@ -27,9 +27,9 @@ runs:
       with:
         solution_name: ${{ github.event.inputs.solution_name }}
         environment_url: ${{ github.event.inputs.environment_url }}
-        tenant_id: ${{ secrets.TENANT_ID }}
-        client_id: ${{ secrets.CLIENT_ID }}
-        client_secret: ${{ secrets.CLIENT_SECRET }}
+        tenant_id: ${{ inputs.tenant_id }}
+        client_id: ${{ inputs.client_id }}
+        client_secret: ${{ inputs.client_id }}
 
     - name: delete-managed-solution
       shell: pwsh

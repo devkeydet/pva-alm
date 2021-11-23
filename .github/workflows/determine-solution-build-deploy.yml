@@ -68,4 +68,5 @@ jobs:
         with:
           script: |
             const createCommitStatuses = require('${{ env.workflow_scripts_path }}/js/createCommitStatuses.js')
-            createCommitStatuses('${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}')
+            const solutionNamesString = '${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}'
+            await createCommitStatuses({ github, context, solutionNamesString })

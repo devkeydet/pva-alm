@@ -50,7 +50,7 @@ jobs:
           . ${{ env.workflow_scripts_path }}/pwsh/Start-Build-Deploy-Solution.ps1
 
           $params = @{
-              files = '${{ env.config_path }}'
+              files = '${{ steps.files.outputs.all }}'
               githubRef = '${{ github.ref }}'
               prHeadRef = '${{ github.event.pull_request.head.ref }}'
               githubSha = '${{ github.sha }}'

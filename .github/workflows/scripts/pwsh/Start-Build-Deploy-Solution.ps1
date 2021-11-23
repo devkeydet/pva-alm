@@ -1,4 +1,5 @@
 function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha, $prHeadSha, $solutionVersionMajorMinor, $environment) {
+    echo "files: $files"
     $filesArray = $files -split ','
 
     $solutionDirectoriesArray = [System.Collections.ArrayList]::new()

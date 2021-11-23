@@ -8,4 +8,4 @@ jobs:
     steps:
       - shell: pwsh
         run: |
-          Get-ChildItem ${{ runner.temp }}    
+          Get-ChildItem "${{ runner.temp }}".Replace("_temp","_workflows")    

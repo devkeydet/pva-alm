@@ -30,7 +30,7 @@ runs:
       shell: pwsh
       run: |
         $versionXmlMatch = '<Version>[\s\S]*?<\/Version>'
-        $solutionXmlPath = "${{ env.solution_package_source }}/SolutionPackage/Other/Solution.xml"
+        $solutionXmlPath = "${{ inputs.solution_package_source }}/Other/Solution.xml"
         
         $solutionXml = Get-Content $solutionXmlPath
         $versionArray = ($solutionXml -match $versionXmlMatch).Trim().Replace('<Version>','').Replace('</Version>','').Split('.') 

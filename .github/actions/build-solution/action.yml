@@ -35,13 +35,13 @@ runs:
         $solutionXml = Get-Content $solutionXmlPath
         $versionArray = ($solutionXml -match $versionXmlMatch).Trim().Replace('<Version>','').Replace('</Version>','').Split('.') 
         $major = $versionArray[0]
-        $minor = $versionArray[1]
-
-        $solutionXml -replace $versionXmlMatch,"<Version>$major.$minor.0.0</Version>" |
-        Out-File $solutionXmlPath
+        $minor = $versionArray[1]        
 
         $dateStamp = Get-Date -Format "yyyyMMdd"
         $buildNumber = "$major.$minor.$dateStamp.${{ github.run_number }}"
+        $solutionXml -replace $versionXmlMatch,"<Version>$buildNumber</Version>" |
+        Out-File $solutionXmlPath
+        
         echo "::set-output name=buildNumber::$buildNumber"
 
     - name: create-tag

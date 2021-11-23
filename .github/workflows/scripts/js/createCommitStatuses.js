@@ -1,4 +1,4 @@
-module.exports = ({ solutionNamesString }) => {
+module.exports = async ({ solutionNamesString }) => {
     console.log(solutionNamesString)
 
     let solutionNamesArray = solutionNamesString.split(",")

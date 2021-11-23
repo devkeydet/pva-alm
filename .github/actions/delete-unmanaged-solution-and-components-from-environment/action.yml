@@ -73,7 +73,7 @@ runs:
       shell: pwsh
       run: |
         pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
-        pac solution import --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip"
+        pac solution import --async true --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip"
 
     # - name: import-managed-solution-to-environment
     #   uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0

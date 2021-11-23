@@ -9,9 +9,6 @@ inputs:
   solution_name:
     required: true
     description: solution_name
-  solution_version_major_minor:
-    required: true
-    description: solution_version_major_minor
   dev_build:
     required: false
     description: dev_build
@@ -27,15 +24,27 @@ runs:
         ref: ${{ inputs.ref }}
 
     # set environment and build number as output variables for further use
-    - id: setOutput
+    - id: set-build-number
+      name: set-build-number
       if: ${{ inputs.dev_build != 'true'}}
       shell: pwsh
       run: |
+        $versionXmlMatch = '<Version>[\s\S]*?<\/Version>'
+        $solutionXmlPath = "${{ env.solution_package_source }}/SolutionPackage/Other/Solution.xml"
+        
+        $solutionXml = Get-Content $solutionXmlPath
+        $versionArray = ($solutionXml -match $versionXmlMatch).Trim().Replace('<Version>','').Replace('</Version>','').Split('.') 
+        $major = $versionArray[0]
+        $minor = $versionArray[1]        
+
         $dateStamp = Get-Date -Format "yyyyMMdd"
-        $buildNumber = "${{ inputs.solution_version_major_minor }}.$dateStamp.${{ github.run_number }}"
+        $buildNumber = "$major.$minor.$dateStamp.${{ github.run_number }}"
+        $solutionXml -replace $versionXmlMatch,"<Version>$buildNumber</Version>" |
+        Out-File $solutionXmlPath
+        
         echo "::set-output name=buildNumber::$buildNumber"
 
-    - name: Create tag
+    - name: create-tag
       uses: actions/github-script@v3
       if: ${{ inputs.ref == 'refs/heads/main' && inputs.dev_build != 'true' }}
       with:
@@ -44,20 +53,9 @@ runs:
           github.git.createRef({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: "refs/tags/${{ inputs.solution_name }}-${{ steps.setOutput.outputs.buildNumber }}",
+            ref: "refs/tags/${{ inputs.solution_name }}-${{ steps.set-build-number.outputs.buildNumber }}",
             sha: context.sha
           })
-
-    - name: update solution version number
-      if: ${{ inputs.dev_build != 'true'}}
-      shell: pwsh
-      run: |
-        Get-ChildItem -Path "${{ inputs.solution_package_source }}/Other/Solution.xml" | 
-        ForEach-Object {
-              (Get-Content $_.FullName) `
-                  -replace '<Version>[\s\S]*?<\/Version>', '<Version>${{ steps.setOutput.outputs.buildNumber }}</Version>' |
-              Out-File $_.FullName
-        }
 
     - name: Flatten JSON files
       shell: pwsh
@@ -86,7 +84,7 @@ runs:
       uses: microsoft/powerplatform-actions/pack-solution@v0
       with:
         solution-folder: ${{ inputs.solution_package_source }}
-        solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_${{ steps.setOutput.outputs.buildNumber }}.zip
+        solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_${{ steps.set-build-number.outputs.buildNumber }}.zip
         solution-type: Both
 
     - uses: actions/upload-artifact@v2

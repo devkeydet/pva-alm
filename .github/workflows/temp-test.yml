@@ -8,4 +8,4 @@ jobs:
     steps:
       - shell: pwsh
         run: |
-          Get-ChildItem ${{ github.temp }}    
+          Get-ChildItem ${{ runner.temp }}    

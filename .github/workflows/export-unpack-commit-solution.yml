@@ -103,14 +103,21 @@ jobs:
           solution-type: "Both"
           overwrite-files: true
 
-      - name: clear out solution version number
+      # A solution’s version has the following format: major.minor.build.revision
+      # We don't want to keep build or revision from dev enironment.  Only major.minor
+      # The build process will automate setting the major.minor version
+      - name: clear out solution build.revision number
         shell: pwsh
         run: |
+          $versionXmlMatch = '<Version>[\s\S]*?<\/Version>'
           Get-ChildItem -Path "${{ env.solution_package_source }}/**/Solution.xml" | 
           ForEach-Object {
-                (Get-Content $_.FullName) `
-                    -replace '<Version>[\s\S]*?<\/Version>', '<Version>0.0.0.0</Version>' |
-                Out-File $_.FullName
+            $solutionXml = Get-Content $_.FullName
+            $versionArray = ($solutionXml -match $versionXmlMatch).Trim().Replace('<Version>','').Replace('</Version>','').Split('.') 
+            $major = $versionArray[0]
+            $minor = $versionArray[1]
+            $solutionXml -replace $versionXmlMatch,"<Version>$major.$minor.0.0</Version>" |
+            Out-File $_.FullName
           }
 
       - name: unpack msapp files

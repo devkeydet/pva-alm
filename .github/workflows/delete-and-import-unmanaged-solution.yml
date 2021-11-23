@@ -57,7 +57,6 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
           solution_name: ${{ github.event.inputs.solution_name }}
           solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-          solution_version_major_minor: "0.0"
           dev_build: true
       - name: deploy-solution
         uses: ./.github/actions/deploy-solution

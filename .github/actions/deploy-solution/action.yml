@@ -36,15 +36,15 @@ runs:
         $commit = git rev-list -n 1 tags/${{ inputs.tag }}
         echo "commit=$commit" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
       shell: pwsh
-      if: ${{ inputs.environment == 'prod' }}
+      if: ${{ inputs.tag != '' }}
 
-    - name: download prod artifact
+    - name: download-artifact
       uses: dawidd6/action-download-artifact@v2
       with:
         workflow: build-deploy-solution.yml
         commit: ${{ env.commit }}
         path: ${{ runner.temp }}/${{ inputs.solution_name }}
-      if: ${{ inputs.environment == 'prod' }}
+      if: ${{ inputs.tag != '' }}
 
     - uses: Firenza/secrets-to-env@v1.1.0
       with:

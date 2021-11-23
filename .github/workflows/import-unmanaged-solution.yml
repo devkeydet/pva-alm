@@ -48,7 +48,6 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
           solution_name: ${{ github.event.inputs.solution_name }}
           solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-          solution_version_major_minor: "0.0"
           dev_build: true
       - name: deploy-solution
         uses: ./.github/actions/deploy-solution
@@ -58,14 +57,32 @@ jobs:
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
           unmanaged: true
           secrets: ${{ toJSON(secrets) }}
+      - name: publish-customizations
+        uses: microsoft/powerplatform-actions/publish-solution@v0
+        with:
+          environment-url: ${{ github.event.inputs.environment_url}}
+          app-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          tenant-id: ${{ secrets.TENANT_ID }}
 
-  turn-on-flows:
+  import-data-turn-on-flows:
     runs-on: windows-latest
     needs: [get-environment-from-domain, build-deploy-solution]
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
-      - id: turn-on-flows-impersonation
+      - id: import-configuration-migration-data-if-exists
+        name: import-configuration-migration-data-if-exists
+        uses: ./.github/actions/import-configuration-migration-data-if-exists
+        with:
+          environment_url: ${{ github.event.inputs.environment_url }}
+          solution_name: ${{ github.event.inputs.solution_name }}
+          tenant_id: ${{ secrets.TENANT_ID }}
+          app_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+      - name: turn-on-flows-impersonation
+        id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
           environment_url: ${{ github.event.inputs.environment_url }}

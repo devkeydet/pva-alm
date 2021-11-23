@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{608ba1ac-15bd-448b-ad15-cd3944a537df}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form headerdensity="HighWithControls">
+      <tabs>
+        <tab verticallayout="true" id="{2f8f05fd-6316-4fb3-85de-b25be40c4b4d}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{f5f3a51e-8829-49a4-9c42-aa808c4d618b}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{cd80cda2-7449-4c8c-ac2d-a171e3aaf0cc}">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="dkdt_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="dkdt_name" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{baff7026-8f33-47bd-a4dd-c712e82c1739}" locklevel="0" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="City" languagecode="1033" />
+                        </labels>
+                        <control id="dkdt_city" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="dkdt_city" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{71e24a9d-e134-4445-84e1-9accd7f03575}" visible="false">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell locklevel="0" id="{b4bdc640-cd5c-4e81-a59d-5bb308ea62b4}" colspan="1" rowspan="1">
+                        <labels>
+                          <label description="New QV control 1637198292822" languagecode="1033" />
+                        </labels>
+                        <control id="QuickviewControl1637198292822" classid="{5C5600E0-1D6E-4205-A272-BE80DA87FD42}" datafieldname="dkdt_city" disabled="false">
+                          <parameters>
+                            <DisplayAsCustomer360Tile>false</DisplayAsCustomer360Tile>
+                            <QuickForms>&lt;QuickFormIds&gt;&lt;QuickFormId entityname="dkdt_city"&gt;e283e83c-5a5c-42b2-86aa-9e84edd7cfca&lt;/QuickFormId&gt;&lt;/QuickFormIds&gt;</QuickForms>
+                          </parameters>
+                        </control>
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <header id="{2f27e309-27f3-4b62-91f2-1d30dcc8463c}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{f021f3be-c8e5-4ad7-ab32-9edda459bbc2}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{270176d7-df05-40d7-a084-4882b86f4238}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{2e453c03-86c8-4300-b3db-724bd3bbcfde}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </header>
+      <footer id="{0dec78cc-d698-45ff-8903-5d0cd295da66}" celllabelposition="Top" columns="111" labelwidth="115" celllabelalignment="Left">
+        <rows>
+          <row>
+            <cell id="{679b3427-7aee-442d-8d06-c65edd72205d}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{e11238f1-a043-45b1-9997-3d1607dcf653}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+            <cell id="{fccb15d6-0855-4cf4-b93d-1baeed461537}" showlabel="false">
+              <labels>
+                <label description="" languagecode="1033" />
+              </labels>
+            </cell>
+          </row>
+        </rows>
+      </footer>
+      <DisplayConditions Order="0" FallbackForm="true">
+        <Everyone />
+      </DisplayConditions>
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

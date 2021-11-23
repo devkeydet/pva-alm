@@ -13,9 +13,6 @@ on:
       solution_name:
         required: true
         description: "solution to build"
-      solution_version_major_minor:
-        required: true
-        description: "version major.minor of solution to build"
       environment:
         required: true
         description: "environment where the build will be deployed"
@@ -63,7 +60,6 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
           solution_name: ${{ github.event.inputs.solution_name }}
           solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-          solution_version_major_minor: ${{ github.event.inputs.solution_version_major_minor }}
       - name: deploy-solution
         uses: ./.github/actions/deploy-solution
         with:
@@ -72,12 +68,21 @@ jobs:
           environment: ${{ needs.get-subdomain.outputs.subdomain }}
           secrets: ${{ toJSON(secrets) }}
 
-  turn-on-flows:
+  import-data-and-turn-on-flows:
     runs-on: windows-latest
     needs: build-deploy-solution
     environment: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v2
+      - id: import-configuration-migration-data-if-exists
+        uses: ./.github/actions/import-configuration-migration-data-if-exists
+        with:
+          environment_url: ${{ secrets.ENVIRONMENT_URL }}
+          solution_name: ${{ github.event.inputs.solution_name }}
+          tenant_id: ${{ secrets.TENANT_ID }}
+          app_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          environment: ${{ github.event.inputs.environment }}      
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:

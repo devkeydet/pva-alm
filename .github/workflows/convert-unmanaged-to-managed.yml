@@ -1,0 +1,37 @@
+# This pipeline gets triggered manually or via an API call.
+# It is a general purpose automation that allows you to convert an unmanaged solution in a Dataverse environment to managed.
+# You can then delete the managed soltuion to "clean" your environment of anything that was in the unmanaged solution.
+# This is an irreversable action without then deleting the managed solution and importing an unmanaged one.
+
+name: convert-unmanaged-to-managed
+
+on:
+  workflow_dispatch:
+    inputs:
+      solution_name:
+        description: "name of the Solution in Dataverse environment"
+        required: true
+        default: yoursolutionname
+      environment_url:
+        description: "http endpoint of your Dataverse environment"
+        required: true
+        default: "https://[your-env].crm[x].dynamics.com"
+
+jobs:
+  convert-unmanaged-to-managed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+      # for certain commands, we need to use it directly.  So we set the path to pac
+      # that ships with the Actions
+      - name: set-pac-path
+        uses: ./.github/actions/set-pac-path
+      - name: convert-unmanaged-to-managed
+        uses: ./.github/actions/convert-unmanaged-to-managed
+        with:
+          solution_name: ${{ github.event.inputs.solution_name }}
+          environment_url: ${{ github.event.inputs.environment_url }}
+          tenant_id: ${{ secrets.TENANT_ID }}
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}

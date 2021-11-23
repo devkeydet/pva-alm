@@ -13,9 +13,6 @@ on:
       solution_name:
         required: true
         description: "solution to build"
-      solution_version_major_minor:
-        required: true
-        description: "version major.minor of solution to build"
       environment:
         required: true
         description: "environment where the build will be deployed"
@@ -63,7 +60,6 @@ jobs:
           ref: ${{ github.event.inputs.ref }}
           solution_name: ${{ github.event.inputs.solution_name }}
           solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-          solution_version_major_minor: ${{ github.event.inputs.solution_version_major_minor }}
       - name: deploy-solution
         uses: ./.github/actions/deploy-solution
         with:

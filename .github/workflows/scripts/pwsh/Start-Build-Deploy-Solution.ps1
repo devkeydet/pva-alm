@@ -1,4 +1,4 @@
-function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha, $prHeadSha, $solutionVersionMajorMinor, $environment) {
+function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha, $prHeadSha, $environment) {
     $filesArray = $files -split ','
 
     $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
@@ -25,7 +25,7 @@ function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha
             $ref = $githubRef
         }
 
-        gh workflow run build-deploy-solution --ref $ref -f ref=$githubRef -f solution_name=$solutionName -f solution_version_major_minor=$solutionVersionMajorMinor -f environment=$environment -f sha=$prHeadSha
+        gh workflow run build-deploy-solution --ref $ref -f ref=$githubRef -f solution_name=$solutionName -f environment=$environment -f sha=$prHeadSha
             
         echo "pipeline queued for $solutionName"           
     }

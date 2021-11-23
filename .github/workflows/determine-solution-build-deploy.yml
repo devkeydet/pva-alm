@@ -13,8 +13,6 @@ on:
       - src/**
 
 env:
-  # TODO: make solution_version_major_minor more granular by allowing different ones per solution
-  solution_version_major_minor: "1.0"
   workflow_scripts_path: .github/workflows/scripts
 
 jobs:
@@ -55,7 +53,6 @@ jobs:
               prHeadRef = '${{ github.event.pull_request.head.ref }}'
               githubSha = '${{ github.sha }}'
               prHeadSha = '${{ github.event.pull_request.head.sha }}'
-              solutionVersionMajorMinor = '${{ env.solution_version_major_minor }}'
               environment = '${{ env.environment }}'
           }
 

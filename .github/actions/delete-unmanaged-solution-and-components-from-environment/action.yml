@@ -22,80 +22,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # We export the unmamanaged solution because you may need to manually import it again if this pipeline fails
-    # after it is deleted from the environment
-    - name: export-unmanaged-solution
-      uses: microsoft/powerplatform-actions/export-solution@v0
+    - name: convert-unmanaged-to-managed
+      uses: ./.github/actions/convert-unmanaged-to-managed
       with:
-        environment-url: ${{ inputs.environment_url}}
-        app-id: ${{ inputs.client_id }}
-        client-secret: ${{ inputs.client_secret }}
-        tenant-id: ${{ inputs.tenant_id }}
-        solution-name: ${{ inputs.solution_name }}
-        solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}.zip
-        managed: false
-
-    - name: export-managed-solution
-      uses: microsoft/powerplatform-actions/export-solution@v0
-      with:
-        environment-url: ${{ inputs.environment_url}}
-        app-id: ${{ inputs.client_id }}
-        client-secret: ${{ inputs.client_secret }}
-        tenant-id: ${{ inputs.tenant_id }}
-        solution-name: ${{ inputs.solution_name }}
-        solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
-        managed: true
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: artifact
-        path: ${{ runner.temp }}/${{ inputs.solution_name }}
-
-    # need to drop to pac because there's a bug in delete-solution
-    # https://github.com/microsoft/powerplatform-actions/issues/141
-    # TODO: use delete-solution whe bug is fixed
-    - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
-      shell: pwsh
-      run: |
-        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
-        pac solution delete --solution-name ${{ inputs.solution_name }}
-
-    # - name: delete-unmanaged-solution (DOES NOT DELETE SOLUTION COMPONENTS)
-    #   uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
-    #   with:
-    #     environment-url: ${{ inputs.environment_url}}
-    #     app-id: ${{ inputs.client_id }}
-    #     client-secret: ${{ inputs.client_secret }}
-    #     tenant-id: ${{ inputs.tenant_id }}
-    #     solution-name: ${{ inputs.solution_name }}
-
-    - name: import-managed-solution-to-environment
-      shell: pwsh
-      run: |
-        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
-        pac solution import --async true --force-overwrite true --convert-to-managed true --path "${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip"
-
-    # - name: import-managed-solution-to-environment
-    #   uses: microsoft/powerplatform-actions/import-solution@main #using @main for now because convert-to-managed isn't officially released, therefore won't be in v0
-    #   with:
-    #     environment-url: ${{ inputs.environment_url}}
-    #     tenant-id: ${{ inputs.tenant_id }}
-    #     app-id: ${{ inputs.client_id }}
-    #     client-secret: ${{ inputs.client_secret }}
-    #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
-    #     force-overwrite: true
-    #     convert-to-managed: true
-
-    - if: ${{ failure() }}
-      name: log-error
-      shell: pwsh
-      run: |
-        $errorMessage = "Since the import failed, your environment is in an unhealthy state. "
-        $errorMessage = $errorMessage + "The unmanaged container is gone, but the unmanaged solution components still exist in the environment. "
-        $errorMessage = $errorMessage + "Fix whatever is causing the import to fail, then you can rerun this workflow."
-        $errorMessage = $errorMessage + "You can download the unmanaged solution as an artifact from this build to get the environment back into the state "
-        $errorMessage = $errorMessage + "it was in before you deleted the unmanaged solution."
-        echo "::error title=Error::$errorMessage"
+        solution_name: ${{ github.event.inputs.solution_name }}
+        environment_url: ${{ github.event.inputs.environment_url }}
+        tenant_id: ${{ inputs.tenant_id }}
+        client_id: ${{ inputs.client_id }}
+        client_secret: ${{ inputs.client_secret }}
 
     - name: delete-managed-solution
       shell: pwsh

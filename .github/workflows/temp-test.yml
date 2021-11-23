@@ -6,6 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - shell: pwsh
         run: |
-          Get-ChildItem "${{ runner.temp }}".Replace("_temp","_workflows")    
+          Get-ChildItem   

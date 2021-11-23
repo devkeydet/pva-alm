@@ -15,12 +15,13 @@ on:
 env:
   # TODO: make this more granular
   solution_version_major_minor: "1.0"
+  workflow_scripts_path: .github/workflows/scripts
 
 jobs:
   determine-solution-build-deploy:
     runs-on: ubuntu-latest
 
-    steps:      
+    steps:
       - uses: actions/checkout@v2
       # determine if the build should go to the PR or UAT environment
       - name: uat env var
@@ -45,50 +46,20 @@ jobs:
         env:
           # Workflows cannot be dispatched with the standard GITHUB_TOKEN, so we use a token that can
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
-          github_ref: ${{ github.ref }}
-          pr_head_ref: ${{ github.event.pull_request.head.ref }}
-          github_sha: ${{ github.sha }}
         run: |
-          $files = "${{ steps.files.outputs.all }}"
-          $filesArray = $files -split ','
+          . ${{ env.workflow_scripts_path }}/pwsh/Start-Build-Deploy-Solution.ps1
 
-          $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
-
-          foreach ($file in $filesArray) {         
-            if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
-              $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
-              $solutionDirectoriesArray.Add($solutionDirectory)
-            }        
+          $params = @{
+              files = '${{ env.config_path }}'
+              githubRef = '${{ github.ref }}'
+              prHeadRef = '${{ github.event.pull_request.head.ref }}'
+              githubSha = '${{ github.sha }}'
+              prHeadSha = '${{ github.event.pull_request.head.sha }}'
+              solutionVersionMajorMinor = '${{ env.solution_version_major_minor }}'
+              environment = '${{ env.environment }}'
           }
 
-          $uniqueSolutionDirectories = $solutionDirectoriesArray | Sort-Object | Get-Unique
-
-          $solutionNameArray = @()
-
-          foreach ($dir in $uniqueSolutionDirectories) {            
-            $solutionName = $dir.Replace("src/","").Replace("/SolutionPackage","")
-            $solutionNameArray = $solutionNameArray + $solutionName
-
-            if ($env:github_ref.Contains("pull")) {
-              $ref = "$env:pr_head_ref"
-            }
-            else {
-              $ref = $env:github_ref
-            }
-
-            echo "github_ref: $env:github_ref"
-            echo "ref: $ref"
-            echo "sha: $env:github_sha"
-            echo "github.event.pull_request.head.sha: ${{ github.event.pull_request.head.sha }}"
-            $prHeadSha = "${{ github.event.pull_request.head.sha }}"
-
-            gh workflow run build-deploy-solution --ref $ref -f ref=$env:github_ref -f solution_name=$solutionName -f solution_version_major_minor=${{ env.solution_version_major_minor }} -f environment=${{ env.environment }} -f sha=$prHeadSha
-            
-            echo "pipeline queued for $solutionName"           
-          }
-
-          $csv = $solutionNameArray -join ","
-          echo "::set-output name=solution_names::$csv"
+          Start-Build-Deploy-Solution @params
 
       - name: create-commit-statuses
         id: create-commit-statuses
@@ -96,21 +67,5 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            let solutionNamesString = "${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}"
-            console.log(solutionNamesString)
-
-            let solutionNamesArray = solutionNamesString.split(",")
-
-            await solutionNamesArray.forEach(createCommitStatus)
-
-            async function createCommitStatus(solutionName) {              
-              let contextToUse = "build-deploy-" + solutionName
-              
-              await github.rest.repos.createCommitStatus({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                sha: context.payload.pull_request.head.sha,
-                context: contextToUse,
-                state: "pending"
-              })     
-            }
+            const createCommitStatuses = require('${{ env.workflow_scripts_path }}/js/createCommitStatuses.js')
+            createCommitStatuses('${{ steps.dispatch-build-deploy-solution.outputs.solution_names }}')

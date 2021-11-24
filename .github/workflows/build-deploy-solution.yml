@@ -46,8 +46,6 @@ jobs:
               target_url: process.env.TARGET_URL
             })
             
-      # Solutions cannot be imported in parallel, so we queue
-      - uses: ahmadnassri/action-workflow-queue@v1
       - uses: actions/checkout@v2
       # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
       # for certain commands, we need to use it directly.  So we set the path to pac

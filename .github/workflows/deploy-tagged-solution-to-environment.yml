@@ -11,11 +11,6 @@ on:
         description: "GitHub environment name to deploy to"
         default: prod
 jobs:
-  queue:
-    runs-on: ubuntu-latest
-    steps:
-      # Solutions cannot be imported in parallel, so we queue
-      - uses: ahmadnassri/action-workflow-queue@v1
   deploy-solution-import-data-turn-on-flows:
     # Using Windows in this case because splitting across jobs targetting the same
     # GitHub Environment causes an approval for each job.  The turn-on-flows-impersonation

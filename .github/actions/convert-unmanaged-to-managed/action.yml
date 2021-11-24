@@ -34,6 +34,7 @@ runs:
         solution-name: ${{ inputs.solution_name }}
         solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}.zip
         managed: false
+        run-asynchronously: true
 
     - name: export-managed-solution
       uses: microsoft/powerplatform-actions/export-solution@v0
@@ -45,6 +46,7 @@ runs:
         solution-name: ${{ inputs.solution_name }}
         solution-output-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
         managed: true
+        run-asynchronously: true
 
     - uses: actions/upload-artifact@v2
       with:
@@ -85,6 +87,7 @@ runs:
     #     solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ env.solution_export_folder }}/${{ inputs.solution_name }}_managed.zip
     #     force-overwrite: true
     #     convert-to-managed: true
+    #     run-asynchronously: true
 
     - if: ${{ failure() }}
       name: log-error

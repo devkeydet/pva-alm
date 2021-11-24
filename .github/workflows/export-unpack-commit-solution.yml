@@ -64,14 +64,6 @@ jobs:
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}
-          
-      # - name: publish customizations
-      #   uses: microsoft/powerplatform-actions/publish-solution@v0
-      #   with:
-      #     environment-url: ${{ github.event.inputs.environment_url}}
-      #     app-id: ${{ secrets.CLIENT_ID }}
-      #     client-secret: ${{ secrets.CLIENT_SECRET }}
-      #     tenant-id: ${{ secrets.TENANT_ID }}
 
       - name: export-unmanaged-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
@@ -83,6 +75,7 @@ jobs:
           solution-name: ${{ github.event.inputs.solution_name }}
           solution-output-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
           managed: false
+          run-asynchronously: true
 
       - name: export-managed-solution
         uses: microsoft/powerplatform-actions/export-solution@v0
@@ -94,6 +87,7 @@ jobs:
           solution-name: ${{ github.event.inputs.solution_name }}
           solution-output-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}_managed.zip
           managed: true
+          run-asynchronously: true
 
       - name: unpack-solution action
         uses: microsoft/powerplatform-actions/unpack-solution@v0

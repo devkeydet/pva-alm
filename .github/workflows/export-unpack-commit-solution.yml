@@ -33,11 +33,9 @@ jobs:
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
 
     steps:
-      # Solutions cannot be exported/imported in parallel, so we queue
+      # Some solution actions in this workflow cannot run async, so we queue
       - uses: ahmadnassri/action-workflow-queue@v1
-      # - shell: pwsh
-      #   run: |
-      #     echo "GITHUB_ACTOR: $env:GITHUB_ACTOR"
+      
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}

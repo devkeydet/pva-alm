@@ -16,7 +16,6 @@ jobs:
     # GitHub Environment causes an approval for each job.  The turn-on-flows-impersonation
     # action uses PowerShell cmdlets that still require Windows.
     runs-on: windows-latest
-    needs: queue
     environment: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v2      

@@ -21,8 +21,6 @@ jobs:
   get-environment-from-domain:
     runs-on: ubuntu-latest
     steps:
-      # Some solution actions in this workflow cannot run async, so we queue
-      - uses: ahmadnassri/action-workflow-queue@v1
       - uses: actions/checkout@v2
       - name: get-subdomain
         id: get-subdomain

@@ -32,10 +32,7 @@ jobs:
       solution_export_folder: solution-export-temp
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
 
-    steps:
-      # Some solution actions in this workflow cannot run async, so we queue
-      - uses: ahmadnassri/action-workflow-queue@v1
-      
+    steps:      
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}

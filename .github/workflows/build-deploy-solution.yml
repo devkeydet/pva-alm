@@ -19,7 +19,7 @@ on:
 
 jobs:
   build-deploy-solution:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: deploy solution to ${{ github.event.inputs.environment }} environment
     environment: ${{ github.event.inputs.environment }}
     steps:
@@ -63,8 +63,14 @@ jobs:
         with:
           environment_url: ${{ secrets.ENVIRONMENT_URL }}
           solution_name: ${{ github.event.inputs.solution_name }}
-          environment: ${{ github.event.inputs.environment }}
+          environment: ${{ needs.get-subdomain.outputs.subdomain }}
           secrets: ${{ toJSON(secrets) }}
+
+  import-data-and-turn-on-flows:
+    runs-on: windows-latest
+    needs: build-deploy-solution
+    environment: ${{ github.event.inputs.environment }}
+    steps:
       - uses: actions/checkout@v2
       - id: import-configuration-migration-data-if-exists
         uses: ./.github/actions/import-configuration-migration-data-if-exists

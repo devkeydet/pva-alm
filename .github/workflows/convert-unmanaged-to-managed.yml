@@ -18,15 +18,37 @@ on:
         default: "https://[your-env].crm[x].dynamics.com"
 
 jobs:
-  convert-unmanaged-to-managed:
+  # Needs it's own job in order for build-deploy-solution->environment value to be used.
+  get-environment-from-domain:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
+      - id: get-subdomain
+        uses: ./.github/actions/get-subdomain
+        with:
+          url: ${{ github.event.inputs.environment_url }}
+    outputs:
+      subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
+
+  convert-unmanaged-to-managed:
+    runs-on: ubuntu-latest
+    needs: get-environment-from-domain
+    environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+    steps:
+      - uses: actions/checkout@v2
+      # Until GitHub Actions for Power Platform doesn't require us to use pac directly
       # for certain commands, we need to use it directly.  So we set the path to pac
       # that ships with the Actions
       - name: set-pac-path
         uses: ./.github/actions/set-pac-path
+      # Some Dataverse calls in this workflow cannot run async.  Therefore, they will fail
+      # If someone runs more than one workflow against the environment at the same time.
+      # To prevent this, wait for other workflows queued up to finish before continuing      
+      - name: queue-environment
+        id: queue-environment
+        uses: devkeydet/action-environment-queue@v1
+        with:
+          environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
       - name: convert-unmanaged-to-managed
         uses: ./.github/actions/convert-unmanaged-to-managed
         with:

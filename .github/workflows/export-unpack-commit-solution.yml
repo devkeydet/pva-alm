@@ -25,13 +25,25 @@ on:
         required: true
 
 jobs:
+  # Needs it's own job in order for build-deploy-solution->environment value to be used.
+  get-environment-from-domain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: get-subdomain
+        uses: ./.github/actions/get-subdomain
+        with:
+          url: ${{ github.event.inputs.environment_url }}
+    outputs:
+      subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
+
   export-from-dev:
     runs-on: ubuntu-latest
-
+    needs: get-environment-from-domain
+    environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     env:
       solution_export_folder: solution-export-temp
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-
     steps:      
       - uses: actions/checkout@v2
         with:

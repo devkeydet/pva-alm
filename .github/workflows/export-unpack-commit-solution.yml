@@ -155,6 +155,7 @@ jobs:
       - name: commit changes
         run: |
           git config --global user.name ${{ github.actor }}   
+          git pull
           git add --all
           git commit -am "${{ github.event.inputs.commit_message }}"
 

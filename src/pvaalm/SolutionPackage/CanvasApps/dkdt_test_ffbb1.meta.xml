@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CanvasApp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>dkdt_test_ffbb1</Name>
-  <AppVersion>2021-11-25T16:02:42Z</AppVersion>
+  <AppVersion>2022-01-08T19:48:37Z</AppVersion>
   <Status>Ready</Status>
-  <CreatedByClientVersion>3.21111.36.0</CreatedByClientVersion>
-  <MinClientVersion>3.21111.36.0</MinClientVersion>
-  <Tags>{"primaryDeviceWidth":"640","primaryDeviceHeight":"1136","sienaVersion":"e1f85002-a39c-4e8e-b030-c8a2340f061a","deviceCapabilities":"","supportsPortrait":"true","supportsLandscape":"true","primaryFormFactor":"Phone","publisherVersion":"3.21111.36","minimumRequiredApiVersion":"2.2.0","hasComponent":"false","hasUnlockedComponent":"false","isUnifiedRootApp":"false"}</Tags>
+  <CreatedByClientVersion>3.21115.37.0</CreatedByClientVersion>
+  <MinClientVersion>3.21115.37.0</MinClientVersion>
+  <Tags>{"primaryDeviceWidth":"640","primaryDeviceHeight":"1136","sienaVersion":"6056d1fc-5485-4c08-86c0-7d3d038957f3","deviceCapabilities":"","supportsPortrait":"true","supportsLandscape":"true","primaryFormFactor":"Phone","publisherVersion":"3.21115.37","minimumRequiredApiVersion":"2.2.0","hasComponent":"false","hasUnlockedComponent":"false","isUnifiedRootApp":"false"}</Tags>
   <IsCdsUpgraded>0</IsCdsUpgraded>
   <GalleryItemId xsi:nil="true"></GalleryItemId>
   <BackgroundColor>RGBA(0,176,240,1)</BackgroundColor>

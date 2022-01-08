@@ -155,7 +155,6 @@ jobs:
       - name: commit changes
         run: |
           git config --global user.name ${{ github.actor }}   
-          git pull
           git add --all
           git commit -am "${{ github.event.inputs.commit_message }}"
 
@@ -166,5 +165,6 @@ jobs:
 
       - name: push to ${{ github.event.inputs.branch_to_create }}
         if: github.event.inputs.branch_to_create != ''
-        run: |
+        run: |          
+          git pull origin ${{ github.event.inputs.branch_to_create }}
           git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}

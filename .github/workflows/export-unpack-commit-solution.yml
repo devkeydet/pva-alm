@@ -44,7 +44,7 @@ jobs:
     env:
       solution_export_folder: solution-export-temp
       solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
-    steps:      
+    steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.source_branch }}
@@ -53,12 +53,6 @@ jobs:
           # will not fire.  Since this workflow pushes code to the remote repo, we use a token that can
           token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}      
 
-      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
-      # for certain commands, we need to use it directly.  So we set the path to pac
-      # that ships with the Actions
-      - name: set-pac-path
-        uses: ./.github/actions/set-pac-path
-
       - name: create new git branch
         if: github.event.inputs.branch_to_create != ''
         run: |
@@ -66,15 +60,15 @@ jobs:
 
       # Some Dataverse calls in this workflow cannot run async.  Therefore, they will fail
       # If someone runs more than one workflow against the environment at the same time.
-      # To prevent this, wait for other workflows queued up to finish before continuing      
+      # To prevent this, wait for other workflows queued up to finish before continuing
       - name: queue-environment
         id: queue-environment
         uses: devkeydet/action-environment-queue@v1
         with:
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
-          
+
       - name: publish-customizations
-        uses: microsoft/powerplatform-actions/publish-solution@v0
+        uses: microsoft/powerplatform-actions/publish-solution@latest
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
           app-id: ${{ secrets.CLIENT_ID }}
@@ -82,7 +76,7 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
 
       - name: export-unmanaged-solution
-        uses: microsoft/powerplatform-actions/export-solution@v0
+        uses: microsoft/powerplatform-actions/export-solution@latest
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
           app-id: ${{ secrets.CLIENT_ID }}
@@ -94,7 +88,7 @@ jobs:
           run-asynchronously: true
 
       - name: export-managed-solution
-        uses: microsoft/powerplatform-actions/export-solution@v0
+        uses: microsoft/powerplatform-actions/export-solution@latest
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
           app-id: ${{ secrets.CLIENT_ID }}
@@ -106,7 +100,7 @@ jobs:
           run-asynchronously: true
 
       - name: unpack-solution action
-        uses: microsoft/powerplatform-actions/unpack-solution@v0
+        uses: microsoft/powerplatform-actions/unpack-solution@latest
         with:
           solution-file: ${{ runner.temp }}/${{ env.solution_export_folder }}/${{ github.event.inputs.solution_name }}.zip
           solution-folder: ${{ env.solution_package_source }}
@@ -129,6 +123,11 @@ jobs:
             $solutionXml -replace $versionXmlMatch,"<Version>$major.$minor.0.0</Version>" |
             Out-File $_.FullName
           }
+
+      # Until canvas unpack is supported through GitHub Actions for Power Platform we need to use pac directly.
+      # So we set the path to pac that ships with the Actions
+      - name: set-pac-path
+        uses: ./.github/actions/set-pac-path
 
       - name: unpack msapp files
         shell: pwsh

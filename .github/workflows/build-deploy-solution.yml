@@ -47,17 +47,14 @@ jobs:
             })
             
       - uses: actions/checkout@v2
-      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
-      # for certain commands, we need to use it directly.  So we set the path to pac
-      # that ships with the Actions
-      - name: set-pac-path
-        uses: ./.github/actions/set-pac-path
+
       - id: build-solution
         uses: ./.github/actions/build-solution
         with:
           ref: ${{ github.event.inputs.ref }}
           solution_name: ${{ github.event.inputs.solution_name }}
           solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
+
       - name: deploy-solution
         uses: ./.github/actions/deploy-solution
         with:
@@ -72,6 +69,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v2
+
       - id: import-configuration-migration-data-if-exists
         uses: ./.github/actions/import-configuration-migration-data-if-exists
         with:
@@ -81,6 +79,7 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           environment: ${{ github.event.inputs.environment }}      
+
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:
@@ -90,6 +89,7 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           secrets: ${{ toJSON(secrets) }}      
+          
       - if: contains(github.event.inputs.ref, 'refs/pull')
         name: update-commit-status
         id: update-commit-status

@@ -69,6 +69,11 @@ runs:
             }
         }
 
+    # Until canvas pack is supported through GitHub Actions for Power Platform we need to use pac directly.
+    # So we set the path to pac that ships with the Actions
+    - name: set-pac-path
+      uses: ./.github/actions/set-pac-path
+
     - name: pack msapp files
       shell: pwsh
       run: |
@@ -81,7 +86,7 @@ runs:
         }
 
     - name: pack solution
-      uses: microsoft/powerplatform-actions/pack-solution@v0
+      uses: microsoft/powerplatform-actions/pack-solution@latest
       with:
         solution-folder: ${{ inputs.solution_package_source }}
         solution-file: ${{ runner.temp }}/${{ inputs.solution_name }}/${{ inputs.solution_name }}_${{ steps.set-build-number.outputs.buildNumber }}.zip

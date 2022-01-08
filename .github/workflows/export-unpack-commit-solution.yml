@@ -166,6 +166,4 @@ jobs:
       - name: push to ${{ github.event.inputs.branch_to_create }}
         if: github.event.inputs.branch_to_create != ''
         run: |
-          git branch          
-          #git pull origin ${{ github.event.inputs.branch_to_create }}
-          #git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}
+          git push --set-upstream origin ${{ github.event.inputs.branch_to_create }}

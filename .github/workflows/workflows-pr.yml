@@ -44,4 +44,4 @@ jobs:
 
           echo $params
 
-          #e2e @params
+          e2e @params

@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - src/**
-      - '!**for-test-automation.txt'
   push:
     branches:
       - main

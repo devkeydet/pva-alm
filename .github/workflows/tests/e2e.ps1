@@ -5,7 +5,8 @@ function e2e ($branchToTest, $solutionName, $environmentUrl, $sourceBranch, $bra
         "environment_url":"$environmentUrl",
         "source_branch":"$sourceBranch",
         "branch_to_create":"$branchToCreate",
-        "commit_message":"$commitMessage"
+        "commit_message":"$commitMessage",
+        "allow_empty_commit":"true"
     }'
     $json = $ExecutionContext.InvokeCommand.ExpandString($jsonTemplate)
     $workflowFile = "export-unpack-commit-solution.yml"
@@ -35,12 +36,13 @@ function e2e ($branchToTest, $solutionName, $environmentUrl, $sourceBranch, $bra
     $tags = git tag --list $tagFilter
     $latestTag = $tags[-1]
     $workflowFile = "deploy-tagged-solution-to-environment.yml"
-
-    # run export-unpack-commit-solution.yml worklow 
     gh workflow run $workflowFile --ref $branchToTest -f tag=$latestTag -f environment=pr
     WaitForWorkflowToComplete $workflowFile $branchToTest 5
 
     # get latest from main into dev environment
+    $workflowFile = "delete-and-import-unmanaged-solution.yml"
+    gh workflow run $workflowFile --ref $branchToTest -f solution_name=$solutionName -f environment_url=$environmentUrl
+    WaitForWorkflowToComplete $workflowFile $branchToTest 5
 }
 
 function WaitForWorkflowToComplete ($workflowFile, $headBranch, $sleepSeconds) {

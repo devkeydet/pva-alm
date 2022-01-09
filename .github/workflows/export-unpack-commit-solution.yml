@@ -161,10 +161,13 @@ jobs:
         run: |
           git config --global user.name ${{ github.actor }}   
           git add --all
+          echo "allow_empty_commit: ${{ github.event.inputs.allow_empty_commit }}"
           if ([System.Convert]::ToBoolean("${{ github.event.inputs.allow_empty_commit }}")){
+            echo "do-not-allow-empty"
             git commit -am "${{ github.event.inputs.commit_message }}"
           }
           else {
+            echo "do-not-allow-empty"
             git commit -am "${{ github.event.inputs.commit_message }}" --allow-empty
           }
           

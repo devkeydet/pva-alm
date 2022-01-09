@@ -18,20 +18,17 @@ jobs:
     runs-on: windows-latest
     environment: ${{ github.event.inputs.environment }}
     steps:
-      - uses: actions/checkout@v2      
-      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
-      # for certain commands, we need to use it directly.  So we set the path to pac
-      # that ships with the Actions
-      - name: set-pac-path
-        uses: ./.github/actions/set-pac-path
+      - uses: actions/checkout@v2    
+      
       - id: setOutput
-        name: get-solution-name-from-tag
+        name: get-solution-name-from-tag        
+        shell: pwsh
         run: |
           $tag = "${{ github.event.inputs.tag }}"
           $splitArray = $tag -split "-"
           $solutionName = $splitArray[0]
           echo "solution_name=$solutionName" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-        shell: pwsh
+
       - name: deploy-solution
         uses: ./.github/actions/deploy-solution
         with:
@@ -40,6 +37,7 @@ jobs:
           environment: ${{ github.event.inputs.environment }}
           tag: ${{ github.event.inputs.tag }}
           secrets: ${{ toJSON(secrets) }}
+
       - id: import-configuration-migration-data-if-exists
         name: import-configuration-migration-data-if-exists
         uses: ./.github/actions/import-configuration-migration-data-if-exists
@@ -50,6 +48,7 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           environment: ${{ github.event.inputs.environment }}
+          
       - name: turn-on-flows-impersonation
         id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation

@@ -36,11 +36,7 @@ jobs:
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
-      # Until GitHub Actions for Power Platform doesn't require us to use pac directly
-      # for certain commands, we need to use it directly.  So we set the path to pac
-      # that ships with the Actions
-      - name: set-pac-path
-        uses: ./.github/actions/set-pac-path
+      
       # Some Dataverse calls in this workflow cannot run async.  Therefore, they will fail
       # If someone runs more than one workflow against the environment at the same time.
       # To prevent this, wait for other workflows queued up to finish before continuing      
@@ -49,6 +45,7 @@ jobs:
         uses: devkeydet/action-environment-queue@v1
         with:
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+          
       - name: convert-unmanaged-to-managed
         uses: ./.github/actions/convert-unmanaged-to-managed
         with:

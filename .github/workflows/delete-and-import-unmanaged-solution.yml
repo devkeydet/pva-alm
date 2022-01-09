@@ -36,19 +36,19 @@ jobs:
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
-      # Until GitHub Actions for Power Platform doesn't require us to use pac direcly
-      # for certain commands, we need to use it directly.  So we set the path to pac
-      # that ships with the Actions
+      
       - name: set-pac-path
         uses: ./.github/actions/set-pac-path
+
       # Some Dataverse calls in this workflow cannot run async.  Therefore, they will fail
       # If someone runs more than one workflow against the environment at the same time.
-      # To prevent this, wait for other workflows queued up to finish before continuing      
+      # To prevent this, wait for other workflows queued up to finish before continuing
       - name: queue-environment
         id: queue-environment
         uses: devkeydet/action-environment-queue@v1
         with:
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+
       - name: delete-unmanaged-solution-and-components-from-environment
         uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment
         with:
@@ -57,6 +57,7 @@ jobs:
           tenant_id: ${{ secrets.TENANT_ID }}
           client_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
+
       - name: build-solution
         uses: ./.github/actions/build-solution
         with:
@@ -64,6 +65,7 @@ jobs:
           solution_name: ${{ github.event.inputs.solution_name }}
           solution_package_source: "src/${{ github.event.inputs.solution_name }}/SolutionPackage"
           dev_build: true
+
       - name: deploy-solution
         uses: ./.github/actions/deploy-solution
         with:
@@ -72,8 +74,9 @@ jobs:
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
           unmanaged: true
           secrets: ${{ toJSON(secrets) }}
+
       - name: publish-customizations
-        uses: microsoft/powerplatform-actions/publish-solution@v0
+        uses: microsoft/powerplatform-actions/publish-solution@latest
         with:
           environment-url: ${{ github.event.inputs.environment_url}}
           app-id: ${{ secrets.CLIENT_ID }}
@@ -86,6 +89,7 @@ jobs:
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
+
       - id: import-configuration-migration-data-if-exists
         name: import-configuration-migration-data-if-exists
         uses: ./.github/actions/import-configuration-migration-data-if-exists
@@ -96,6 +100,7 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+          
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:

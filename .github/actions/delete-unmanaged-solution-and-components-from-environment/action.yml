@@ -32,16 +32,10 @@ runs:
         client_secret: ${{ inputs.client_secret }}
 
     - name: delete-managed-solution
-      shell: pwsh
-      run: |
-        pac auth create --name temp --url ${{ inputs.environment_url}} --tenant ${{ inputs.tenant_id }} --applicationId ${{ inputs.client_id }} --clientSecret ${{ inputs.client_secret }}
-        pac solution delete --solution-name ${{ inputs.solution_name }}
-
-  #   - name: delete-managed-solution
-  #     uses: microsoft/powerplatform-actions/delete-solution@main #using @main for now because delete-solution isn't officially released, therefore won't be in v0
-  #     with:
-  #       environment-url: ${{ inputs.environment_url}}
-  #       app-id: ${{ inputs.client_id }}
-  #       client-secret: ${{ inputs.client_secret }}
-  #       tenant-id: ${{ inputs.tenant_id }}
-  #       solution-name: ${{ inputs.solution_name }}
+      uses: microsoft/powerplatform-actions/delete-solution@latest
+      with:
+        environment-url: ${{ inputs.environment_url}}
+        app-id: ${{ inputs.client_id }}
+        client-secret: ${{ inputs.client_secret }}
+        tenant-id: ${{ inputs.tenant_id }}
+        solution-name: ${{ inputs.solution_name }}

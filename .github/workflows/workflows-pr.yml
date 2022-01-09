@@ -30,11 +30,11 @@ jobs:
         run: |
           . ${{ env.workflow_tests_script_path }}/e2e.ps1
 
-          $prHeadRef = '${{ github.event.pull_request.head.ref }}'
-          $branchToCreate = 'automated-test-' + $prHeadRef.Replace('refs/heads/','')
+          $prHeadRef = '${{ github.event.pull_request.head.ref }}'.Replace('refs/heads/','')
+          $branchToCreate = 'automated-test-' + $prHeadRef
 
           $params = @{
-              branchToTest = '${{ github.event.pull_request.head.ref }}'
+              branchToTest = $prHeadRef
               solutionName = 'pvaalm'
               environmentUrl = '${{ secrets.ENVIRONMENT_URL }}'
               sourceBranch = 'main'

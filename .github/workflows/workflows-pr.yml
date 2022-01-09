@@ -1,0 +1,46 @@
+name: workflows-pr
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/**
+      - .github/actions/**
+
+env:
+  workflow_tests_script_path: .github/workflows/tests
+
+jobs: 
+  workflows-pr:
+    runs-on: ubuntu-latest
+    environment: marcsc-alm-demo-dev
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # run pwsh script to run end to end test of workflows
+      - name: test-workflows
+        id: test-workflows
+        shell: pwsh
+        env:
+          # Workflows cannot be dispatched with the standard GITHUB_TOKEN, so we use a token that can
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
+        run: |
+          . ${{ env.workflow_tests_script_path }}/e2e.ps1
+          
+          $branchToCreate = 'automated-test-' + '${{ github.ref }}'.Replace('refs/heads/','')
+
+          $params = @{
+              branchToTest = '${{ github.ref }}'
+              solutionName = 'pvaalm'
+              environmentUrl = '${{ secrets.ENVIRONMENT_URL }}'
+              sourceBranch = 'main'
+              branchToCreate = $branchToCreate
+              commitMessage = 'automated by workflows-pr.yml'
+          }
+
+          echo $params
+
+          #e2e @params

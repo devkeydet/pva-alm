@@ -9,15 +9,49 @@ function e2e ($branchToTest, $solutionName, $environmentUrl, $sourceBranch, $bra
     }'
     $json = $ExecutionContext.InvokeCommand.ExpandString($jsonTemplate)
     $workflowFile = "export-unpack-commit-solution.yml"
+
+    # run export-unpack-commit-solution.yml worklow 
     echo $json | gh workflow run $workflowFile --ref $branchToTest --json
-    Start-Sleep -s 15
-    $workflowRunsJson = gh run list --workflow=$workflowFile --json databaseId,headBranch,status
+    WaitForWorkflowToComplete $workflowFile $branchToTest 5
+
+    # create a pr from branch with unpacked solution
+    $title = "[automated-test] testing workflow changes in $branchToTest branch"
+    gh pr create --base $sourceBranch --head $branchToCreate --title $title --body $title
+
+    # wait for the pr workflow to run
+    $workflowFile = "build-deploy-solution.yml"
+    WaitForWorkflowToComplete $workflowFile $branchToCreate 30
+
+    gh pr merge $branchToCreate --squash --delete-branch
+
+    # wait for the uat workflow to run
+    $workflowFile = "build-deploy-solution.yml"
+    WaitForWorkflowToComplete $workflowFile $sourceBranch 30
+
+    # deploy tagged solution    
+    $dateFormat = Get-Date -Format "yyyyMMdd"
+    $tagFilter = "*$dateFormat*"
+    git fetch
+    $tags = git tag --list $tagFilter
+    $latestTag = $tags[-1]
+    $workflowFile = "deploy-tagged-solution-to-environment.yml"
+
+    # run export-unpack-commit-solution.yml worklow 
+    gh workflow run $workflowFile --ref $branchToTest -f tag=$latestTag -f environment=pr
+    WaitForWorkflowToComplete $workflowFile $branchToTest 5
+
+    # get latest from main into dev environment
+}
+
+function WaitForWorkflowToComplete ($workflowFile, $headBranch, $sleepSeconds) {
+    Start-Sleep -s $sleepSeconds
+    $workflowRunsJson = gh run list --workflow $workflowFile --json databaseId,headBranch,status
     $workflowRunsArray = ConvertFrom-Json $workflowRunsJson
-    $testRun = $workflowRunsArray.Where({$_.headBranch -eq $branchToTest -and $_.status -in "in_progress","queued"})[0]
+    $testRun = $workflowRunsArray.Where({$_.headBranch -eq $headBranch -and $_.status -in "in_progress","queued"})[0]
     gh run watch $testRun.databaseId
     $status = gh run view $testRun.databaseId --exit-status
-    echo ($status -join '').Contains('exit code 1')
-    if ($status.Contains('exit code 1')) {
-        return false
+    $hasExitCode1 = ($status -join '').Contains('exit code 1') 
+    if ($hasExitCode1) {
+        throw "$workflowFile run failed: see run logs for details"
     }
 }

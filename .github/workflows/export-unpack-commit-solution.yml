@@ -23,6 +23,10 @@ on:
       commit_message:
         description: "message to provide for the commit"
         required: true
+      allow_empty_commit:
+        description: "allow an empty commit"
+        required: true
+        default: 'false'
 
 jobs:
   # Needs it's own job in order for build-deploy-solution->environment value to be used.
@@ -153,10 +157,17 @@ jobs:
           }
 
       - name: commit changes
+        shell: pwsh
         run: |
           git config --global user.name ${{ github.actor }}   
           git add --all
-          git commit -am "${{ github.event.inputs.commit_message }}"
+          if ([System.Convert]::ToBoolean("${{ github.event.inputs.allow_empty_commit }}")){
+            git commit -am "${{ github.event.inputs.commit_message }}"
+          }
+          else {
+            git commit -am "${{ github.event.inputs.commit_message }}" --allow-empty
+          }
+          
 
       - name: push to ${{ github.event.inputs.source_branch }}
         if: github.event.inputs.branch_to_create == ''

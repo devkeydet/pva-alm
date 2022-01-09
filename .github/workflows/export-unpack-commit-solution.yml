@@ -167,7 +167,7 @@ jobs:
             git commit -am "${{ github.event.inputs.commit_message }}"
           }
           else {
-            echo "do-not-allow-empty"
+            echo "--allow-empty"
             git commit -am "${{ github.event.inputs.commit_message }}" --allow-empty
           }
           

@@ -6,7 +6,7 @@ function e2e ($branchToTest, $solutionName, $environmentUrl, $sourceBranch, $bra
         "source_branch":"$sourceBranch",
         "branch_to_create":"$branchToCreate",
         "commit_message":"$commitMessage",
-        "allow_empty_commit":"true"
+        "force_file_change":"true"
     }'
     $json = $ExecutionContext.InvokeCommand.ExpandString($jsonTemplate)
     $workflowFile = "export-unpack-commit-solution.yml"
@@ -39,7 +39,17 @@ function e2e ($branchToTest, $solutionName, $environmentUrl, $sourceBranch, $bra
     gh workflow run $workflowFile --ref $branchToTest -f tag=$latestTag -f environment=pr
     WaitForWorkflowToComplete $workflowFile $branchToTest 5
 
-    # get latest from main into dev environment
+    # delete unmanaged solution from environment
+    $workflowFile = "delete-unmanaged-solution-and-components-from-environment.yml"
+    gh workflow run $workflowFile --ref $branchToTest -f solution_name=$solutionName -f environment_url=$environmentUrl
+    WaitForWorkflowToComplete $workflowFile $branchToTest 5
+
+    # import unmanaged solution from branch into dev environment
+    $workflowFile = "import-unmanaged-solution.yml"
+    gh workflow run $workflowFile --ref $branchToTest -f solution_name=$solutionName -f environment_url=$environmentUrl
+    WaitForWorkflowToComplete $workflowFile $branchToTest 5
+
+    # delete unmanaged solution from environment and import unmanaged solution from branch into dev environment
     $workflowFile = "delete-and-import-unmanaged-solution.yml"
     gh workflow run $workflowFile --ref $branchToTest -f solution_name=$solutionName -f environment_url=$environmentUrl
     WaitForWorkflowToComplete $workflowFile $branchToTest 5

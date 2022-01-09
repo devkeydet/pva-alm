@@ -27,6 +27,10 @@ on:
         description: "allow an empty commit"
         required: true
         default: 'false'
+      force_file_change:
+        description: "FOR_TESTING_ONLY"
+        required: true
+        default: 'false'
 
 jobs:
   # Needs it's own job in order for build-deploy-solution->environment value to be used.
@@ -156,21 +160,25 @@ jobs:
             $formatted | Out-File $_.FullName -Encoding UTF8
           }
 
+      - name: force-file-change
+        shell: pwsh
+        if: github.event.inputs.force_file_change == 'true'
+        run: |
+          $guid = New-Guid
+          New-Item -Path "src/${{ github.event.inputs.solution_name }}/SolutionPackage" -Name "for-test-automation.txt" -ItemType File -Value $guid -Force
+
       - name: commit changes
         shell: pwsh
         run: |
           git config --global user.name ${{ github.actor }}   
           git add --all
-          echo "allow_empty_commit: ${{ github.event.inputs.allow_empty_commit }}"
-          if ([System.Convert]::ToBoolean("${{ github.event.inputs.allow_empty_commit }}")){   
-            echo "--allow-empty"
+          $allowEmptyCommit = [System.Convert]::ToBoolean("${{ github.event.inputs.allow_empty_commit }}")
+          if ($allowEmptyCommit) {
             git commit -am "${{ github.event.inputs.commit_message }}" --allow-empty
           }
           else {
-            echo "do-not-allow-empty"
             git commit -am "${{ github.event.inputs.commit_message }}"
-          }
-          
+          }          
 
       - name: push to ${{ github.event.inputs.source_branch }}
         if: github.event.inputs.branch_to_create == ''

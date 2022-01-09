@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CanvasApp xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>dkdt_test_ffbb1</Name>
-  <AppVersion>2022-01-09T13:36:48Z</AppVersion>
+  <AppVersion>2022-01-09T14:49:26Z</AppVersion>
   <Status>Ready</Status>
   <CreatedByClientVersion>3.21115.37.0</CreatedByClientVersion>
   <MinClientVersion>3.21115.37.0</MinClientVersion>
@@ -10,17 +10,14 @@
   <GalleryItemId xsi:nil="true"></GalleryItemId>
   <BackgroundColor>RGBA(0,176,240,1)</BackgroundColor>
   <DisplayName>test</DisplayName>
-  <Description xsi:nil="true"></Description>
-  <CommitMessage xsi:nil="true"></CommitMessage>
+  <Description></Description>
+  <CommitMessage></CommitMessage>
   <Publisher></Publisher>
   <AuthorizationReferences>[]</AuthorizationReferences>
   <ConnectionReferences>{}</ConnectionReferences>
   <DatabaseReferences>{}</DatabaseReferences>
-  <AppComponents>[]</AppComponents>
-  <AppComponentDependencies>[]</AppComponentDependencies>
   <CanvasAppType>0</CanvasAppType>
   <BypassConsent>0</BypassConsent>
-  <AdminControlBypassConsent>0</AdminControlBypassConsent>
   <EmbeddedApp xsi:nil="true"></EmbeddedApp>
   <IntroducedVersion>1.0</IntroducedVersion>
   <CdsDependencies>{"cdsdependencies":[]}</CdsDependencies>

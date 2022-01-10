@@ -32,7 +32,7 @@ function e2e ($branchToTest, $solutionName, $environmentUrl, $sourceBranch, $bra
     # deploy tagged solution    
     $dateFormat = Get-Date -Format "yyyyMMdd"
     $tagFilter = "*$dateFormat*"
-    git fetch
+    git fetch --all --tags
     $tags = git tag --list $tagFilter
     $latestTag = $tags[-1]
     $workflowFile = "deploy-tagged-solution-to-environment.yml"

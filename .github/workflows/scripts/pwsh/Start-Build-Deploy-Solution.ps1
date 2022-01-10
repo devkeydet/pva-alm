@@ -1,9 +1,15 @@
-function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha, $prHeadSha, $environment) {
+function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha, $prHeadSha, $environment) { 
+    if ($files.Contains("for-test-automation.txt")){
+        echo "contains changes to a for-test-automation.txt file"
+        echo "skipping build-deploy-solution"
+        return
+    }
+
     $filesArray = $files -split ','
 
     $solutionDirectoriesArray = [System.Collections.ArrayList]::new()
 
-    foreach ($file in $filesArray) {         
+    foreach ($file in $filesArray) {
         if ($file.StartsWith("src/") -And $file.Contains("SolutionPackage")) {
             $solutionDirectory = "{0}/{1}/{2}" -f $file.Split('/')
             $solutionDirectoriesArray.Add($solutionDirectory)

@@ -31,7 +31,7 @@ jobs:
           . ${{ env.workflow_tests_script_path }}/e2e.ps1
 
           $prHeadRef = '${{ github.event.pull_request.head.ref }}'.Replace('refs/heads/','')
-          $branchToCreate = 'automated-test-' + $prHeadRef
+          $branchToCreate = 'wf-e2e-test-' + $prHeadRef
 
           $params = @{
               branchToTest = $prHeadRef

@@ -1,22 +1,19 @@
 function e2e ($branchToTest, $solutionName, $environmentUrl, $sourceBranch, $branchToCreate, $commitMessage) {
-    $jsonTemplate = '
-    {
-        "solution_name":"$solutionName", 
-        "environment_url":"$environmentUrl",
-        "source_branch":"$sourceBranch",
-        "branch_to_create":"$branchToCreate",
-        "commit_message":"$commitMessage",
-        "force_file_change":"true"
-    }'
-    $json = $ExecutionContext.InvokeCommand.ExpandString($jsonTemplate)
     $workflowFile = "export-unpack-commit-solution.yml"
 
     # run export-unpack-commit-solution.yml worklow 
-    echo $json | gh workflow run $workflowFile --ref $branchToTest --json
-    WaitForWorkflowToComplete $workflowFile $branchToTest 5
+    gh workflow run $workflowFile --ref $branchToTest `
+    -f solution_name=$solutionName `
+    -f environment_url=$environmentUrl `
+    -f source_branch=$sourceBranch `
+    -f branch_to_create=$branchToCreate `
+    -f commit_message=$commitMessage `
+    -f force_file_change=true 
+    
+     WaitForWorkflowToComplete $workflowFile $branchToTest 5
 
     # create a pr from branch with unpacked solution
-    $title = "[automated-test] testing workflow changes in $branchToTest branch"
+    $title = "[wf-e2e-test] testing workflow changes in $branchToTest branch"
     gh pr create --base $sourceBranch --head $branchToCreate --title $title --body $title
 
     # wait for the pr workflow to run

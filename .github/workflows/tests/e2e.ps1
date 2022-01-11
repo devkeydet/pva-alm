@@ -57,7 +57,7 @@ function WaitForWorkflowToComplete ($workflowFile, $headBranch, $sleepSeconds) {
     $workflowRunsJson = gh run list --workflow $workflowFile --json databaseId,headBranch,status
     $workflowRunsArray = ConvertFrom-Json $workflowRunsJson
     $testRun = $workflowRunsArray.Where({$_.headBranch -eq $headBranch -and $_.status -in "in_progress","queued"})[0]
-    gh run watch $testRun.databaseId
+    gh run watch $testRun.databaseId --interval 30
     $status = gh run view $testRun.databaseId --exit-status
     $hasExitCode1 = ($status -join '').Contains('exit code 1') 
     if ($hasExitCode1) {

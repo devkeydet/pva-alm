@@ -36,7 +36,7 @@ jobs:
             console.log(process.env.CONTEXT_TO_USE)
             console.log(process.env.SHA)
             console.log(process.env.TARGET_URL)
-            
+
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -45,7 +45,7 @@ jobs:
               state: "pending",
               target_url: process.env.TARGET_URL
             })
-            
+
       - uses: actions/checkout@v2
 
       - id: build-solution
@@ -64,7 +64,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
 
   import-data-and-turn-on-flows:
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: build-deploy-solution
     environment: ${{ github.event.inputs.environment }}
     steps:
@@ -78,7 +78,7 @@ jobs:
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
-          environment: ${{ github.event.inputs.environment }}      
+          environment: ${{ github.event.inputs.environment }}
 
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
@@ -88,8 +88,8 @@ jobs:
           tenant_id: ${{ secrets.TENANT_ID }}
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
-          secrets: ${{ toJSON(secrets) }}      
-          
+          secrets: ${{ toJSON(secrets) }}
+
       - if: contains(github.event.inputs.ref, 'refs/pull')
         name: update-commit-status
         id: update-commit-status
@@ -100,7 +100,7 @@ jobs:
           TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           JOB_STATUS: ${{ job.status }}
         with:
-          script: |            
+          script: |
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,

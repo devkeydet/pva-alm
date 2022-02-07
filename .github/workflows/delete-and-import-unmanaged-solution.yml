@@ -36,7 +36,7 @@ jobs:
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: set-pac-path
         uses: ./.github/actions/set-pac-path
 
@@ -84,7 +84,7 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
 
   import-data-and-turn-on-flows:
-    runs-on: windows-latest
+    runs-on: windows-2022
     needs: [get-environment-from-domain, delete-build-deploy-solution]
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
@@ -100,7 +100,7 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
-          
+
       - id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation
         with:

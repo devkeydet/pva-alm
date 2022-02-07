@@ -15,13 +15,13 @@ jobs:
     # Using Windows in this case because splitting across jobs targetting the same
     # GitHub Environment causes an approval for each job.  The turn-on-flows-impersonation
     # action uses PowerShell cmdlets that still require Windows.
-    runs-on: windows-latest
+    runs-on: windows-2022
     environment: ${{ github.event.inputs.environment }}
     steps:
-      - uses: actions/checkout@v2    
-      
+      - uses: actions/checkout@v2
+
       - id: setOutput
-        name: get-solution-name-from-tag        
+        name: get-solution-name-from-tag
         shell: pwsh
         run: |
           $tag = "${{ github.event.inputs.tag }}"
@@ -48,7 +48,7 @@ jobs:
           app_id: ${{ secrets.CLIENT_ID }}
           client_secret: ${{ secrets.CLIENT_SECRET }}
           environment: ${{ github.event.inputs.environment }}
-          
+
       - name: turn-on-flows-impersonation
         id: turn-on-flows-impersonation
         uses: ./.github/actions/turn-on-flows-impersonation

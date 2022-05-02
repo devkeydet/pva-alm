@@ -30,7 +30,7 @@ jobs:
       - if: contains(github.event.inputs.ref, 'refs/pull')
         name: update-commit-status
         id: update-commit-status
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         env:
           CONTEXT_TO_USE: build-deploy-${{ github.event.inputs.solution_name }}
           SHA: ${{ github.event.inputs.sha }}
@@ -98,7 +98,7 @@ jobs:
       - if: contains(github.event.inputs.ref, 'refs/pull')
         name: update-commit-status
         id: update-commit-status
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         env:
           CONTEXT_TO_USE: build-deploy-${{ github.event.inputs.solution_name }}
           SHA: ${{ github.event.inputs.sha }}

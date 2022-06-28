@@ -75,7 +75,7 @@ runs:
     - name: import-solution-to-environment
       uses: microsoft/powerplatform-actions/import-solution@latest
       env:
-        import_as_holding: "${{ inputs.solution_action == 'upgrade' && 'true' || 'false' }}"
+        import_as_holding: "${{ inputs.solution_action == 'upgrade' }}"
       with:
         environment-url: ${{ inputs.environment_url }}
         tenant-id: ${{ env.TENANT_ID }}
@@ -89,7 +89,7 @@ runs:
         import-as-holding: ${{ env.import_as_holding }}
 
     - name: upgrade-solution
-      uses: microsoft/powerplatform-actions/upgrade-solution@main
+      uses: microsoft/powerplatform-actions/upgrade-solution@latest
       with:
         environment-url: ${{ inputs.environment_url }}
         tenant-id: ${{ env.TENANT_ID }}
@@ -97,4 +97,4 @@ runs:
         client-secret: ${{ env.CLIENT_SECRET }}
         solution-name: ${{ inputs.solution_name }}
         async: true
-      if: ${{ inputs.solution_action == 'upgrade'}}
+      if: ${{ inputs.solution_action == 'upgrade' }}

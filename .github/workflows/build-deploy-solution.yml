@@ -19,11 +19,29 @@ on:
       solution_action:
         description: "update or upgrade the solution"
         required: true
-        default: "update"
+        default: "upgrade"
 
 jobs:
+  check-solution-existence:
+    runs-on: windows-2022
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: check-solution
+        uses: ./.github/actions/check-solution-existence
+        with:
+          solution_name: ${{ secrets.SOLUTION_NAME }}
+          environment_url: ${{ secrets.ENVIRONMENT_URL }}
+          tenant_id: ${{ secrets.TENANT_ID }}
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          secrets: ${{ toJSON(secrets) }}
+    outputs:
+      solution_exists: ${{ steps.check-solution.outputs.solution_exists }}
+
   build-deploy-solution:
     runs-on: ubuntu-latest
+    needs: check-solution-existence
     name: deploy solution to ${{ github.event.inputs.environment }} environment
     environment: ${{ github.event.inputs.environment }}
     steps:
@@ -67,6 +85,7 @@ jobs:
           environment: ${{ needs.get-subdomain.outputs.subdomain }}
           secrets: ${{ toJSON(secrets) }}
           solution_action: ${{ github.event.inputs.solution_action }}
+          solution_exists: ${{ needs.check-solution-existence.outputs.solution_exists }}
 
   import-data-and-turn-on-flows:
     runs-on: windows-2022

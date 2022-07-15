@@ -1,0 +1,72 @@
+name: check-solution-existence
+
+description: check-solution-existence
+
+inputs:
+  solution_name:
+    description: solution_name
+    required: true
+  environment_url:
+    description: environment_url
+    required: true
+  tenant_id:
+    description: tenant_id
+    required: true
+  client_id:
+    description: client_id
+    required: true
+  client_secret:
+    description: client_secret
+    required: true
+  secrets:
+    description: "environment secrets"
+    required: true
+
+outputs:
+  solution_exists:
+    description: "solution existence flag"
+    value: ${{ steps.get-solutions-from-env.outputs.solution_exists }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: Firenza/secrets-to-env@v1.1.0
+      with:
+        secrets: ${{ inputs.secrets }}
+
+    - name: set-pac-path
+      uses: ./.github/actions/set-pac-path
+
+    # Use pac cli command to get the solutions list.
+    # This action is not implemented in GitHub Actions for Power Platform
+    - name: get-solutions-from-env
+      id: get-solutions-from-env
+      run: |
+        # Create a connection to the environment
+        $environment_url = "${{ inputs.environment_url }}"
+        $tenant_id = "${{ inputs.tenant_id }}"
+        $client_id = "${{ inputs.client_id }}"
+        $client_secret = "${{ inputs.client_secret }}"
+        pac auth create --url $environment_url --tenant $tenant_id --applicationId $client_id --clientSecret $client_secret
+
+        # List all the solutions on the environment
+        $result = pac solution list
+        $lines = $result | where{$_ -ne ""} | Select-Object -Skip 3
+        $solution_exists = $false
+
+        # Check if the solution unique name exists in the solution list
+        for ($i=0; $i -lt $lines.Length; $i++) {
+          while($lines[$i].Contains("  ")) {
+            $lines[$i] = $lines[$i].Replace("  ", " ")
+          }
+
+          $columns = $lines[$i] -split " "
+          if ($columns[2] -eq "${{ inputs.solution_name }}") {
+            $solution_exists = $true
+            break
+          }
+        }
+
+        # Return the flag
+        echo "::set-output name=solution_exists::$solution_exists"
+      shell: pwsh

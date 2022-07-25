@@ -16,6 +16,10 @@ on:
       environment:
         required: true
         description: "environment where the build will be deployed"
+      solution_action:
+        description: "update or upgrade the solution"
+        required: true
+        default: "update"
 
 jobs:
   build-deploy-solution:
@@ -62,6 +66,7 @@ jobs:
           solution_name: ${{ github.event.inputs.solution_name }}
           environment: ${{ needs.get-subdomain.outputs.subdomain }}
           secrets: ${{ toJSON(secrets) }}
+          solution_action: ${{ github.event.inputs.solution_action }}
 
   import-data-and-turn-on-flows:
     runs-on: windows-2022

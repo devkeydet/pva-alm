@@ -14,7 +14,7 @@ env:
 
 jobs: 
   workflows-pr:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment: marcsc-alm-demo-dev
 
     steps:
@@ -28,10 +28,13 @@ jobs:
           # Workflows cannot be dispatched with the standard GITHUB_TOKEN, so we use a token that can
           GITHUB_TOKEN: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}
         run: |
+          # runner doesn't have 2.4.0 yet, so forcing
+          choco upgrade gh
+          
           . ${{ env.workflow_tests_script_path }}/e2e.ps1
 
           $prHeadRef = '${{ github.event.pull_request.head.ref }}'.Replace('refs/heads/','')
-          $branchToCreate = 'automated-test-' + $prHeadRef
+          $branchToCreate = 'wf-e2e-test-' + $prHeadRef
 
           $params = @{
               branchToTest = $prHeadRef

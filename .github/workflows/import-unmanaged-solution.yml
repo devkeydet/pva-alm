@@ -36,15 +36,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Some Dataverse calls in this workflow cannot run async.  Therefore, they will fail
-      # If someone runs more than one workflow against the environment at the same time.
-      # To prevent this, wait for other workflows queued up to finish before continuing
-      - name: queue-environment
-        id: queue-environment
-        uses: devkeydet/action-environment-queue@v1
-        with:
-          environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
-
       - name: build-solution
         uses: ./.github/actions/build-solution
         with:
@@ -69,6 +60,7 @@ jobs:
           app-id: ${{ secrets.CLIENT_ID }}
           client-secret: ${{ secrets.CLIENT_SECRET }}
           tenant-id: ${{ secrets.TENANT_ID }}
+          run-asynchronously: true
 
   import-data-turn-on-flows:
     runs-on: windows-2022

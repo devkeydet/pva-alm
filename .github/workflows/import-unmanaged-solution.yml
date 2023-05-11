@@ -41,7 +41,7 @@ jobs:
       # To prevent this, wait for other workflows queued up to finish before continuing
     #  - name: queue-environment
     #    id: queue-environment
-    #    uses: devkeydet/action-environment-queue@v1
+    #    uses: victorjohnson/action-environment-queue@v1
     #   with:
     #      environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
 

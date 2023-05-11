@@ -19,7 +19,7 @@ on:
 jobs:
   # Needs it's own job in order for build-deploy-solution->environment value to be used.
   get-environment-from-domain:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - id: get-subdomain
@@ -30,7 +30,7 @@ jobs:
       subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
 
   build-deploy-solution:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: get-environment-from-domain
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:

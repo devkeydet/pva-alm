@@ -20,18 +20,18 @@ on:
 
 jobs:
   delete-unmanaged-solution-and-components-from-environment:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       
       # Some Dataverse calls in this workflow cannot run async.  Therefore, they will fail
       # If someone runs more than one workflow against the environment at the same time.
       # To prevent this, wait for other workflows queued up to finish before continuing      
-      - name: queue-environment
-        id: queue-environment
-        uses: devkeydet/action-environment-queue@v1
-        with:
-          environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+      #- name: queue-environment
+      #  id: queue-environment
+      #  uses: victorjohnson-usda/action-environment-queue@v1
+      #  with:
+      #   environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
           
       - name: delete-unmanaged-solution-and-components-from-environment
         uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment

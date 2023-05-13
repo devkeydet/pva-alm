@@ -19,7 +19,7 @@ on:
 jobs:
   # Needs it's own job in order for delete-build-deploy-solution->environment value to be used.
   get-environment-from-domain:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - name: get-subdomain
@@ -31,7 +31,7 @@ jobs:
       subdomain: ${{ steps.get-subdomain.outputs.subdomain }}
 
   delete-build-deploy-solution:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: get-environment-from-domain
     environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
     steps:
@@ -43,11 +43,11 @@ jobs:
       # Some Dataverse calls in this workflow cannot run async.  Therefore, they will fail
       # If someone runs more than one workflow against the environment at the same time.
       # To prevent this, wait for other workflows queued up to finish before continuing
-      - name: queue-environment
-        id: queue-environment
-        uses: devkeydet/action-environment-queue@v1
-        with:
-          environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
+      #- name: queue-environment
+      #  id: queue-environment
+      #  uses: victorjohnson-usda/action-environment-queue@v1
+      #  with:
+      #    environment: ${{ needs.get-environment-from-domain.outputs.subdomain }}
 
       - name: delete-unmanaged-solution-and-components-from-environment
         uses: ./.github/actions/delete-unmanaged-solution-and-components-from-environment

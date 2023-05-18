@@ -59,7 +59,7 @@ jobs:
           # Workflows cannot cause another workflow event to fire with the standard GITHUB_TOKEN.
           # By default, any event that would fire as a reult of logic in a GitHub workflow
           # will not fire.  Since this workflow pushes code to the remote repo, we use a token that can
-     #     token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}      
+          token: ${{ secrets.WORKFLOW_DISPATCH_TOKEN }}      
 
       - name: create new git branch
         if: github.event.inputs.branch_to_create != ''

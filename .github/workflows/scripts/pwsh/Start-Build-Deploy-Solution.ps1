@@ -31,5 +31,6 @@ function Start-Build-Deploy-Solution ($files, $githubRef, $prHeadRef, $githubSha
     }
 
     $csv = $solutionNameArray -join ","
-    echo "::set-output name=solution_names::$csv"
+    #echo "::set-output name=solution_names::$csv"
+    echo "solution_names=$csv" >>$GITHUB_OUTPUT"
 }

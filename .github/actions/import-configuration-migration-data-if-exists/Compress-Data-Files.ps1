@@ -13,7 +13,8 @@ function Compress-Data-Files ($configPath, $tempConfigurationMigrationDataFolder
         }
         Compress-Archive @compress
 
-        echo "::set-output name=common_zip_path::$destinationPath"
+        #echo "::set-output name=common_zip_path::$destinationPath"
+        echo "common_zip_path=$destinationPath" >>$GITHUB_OUTPUT 
     }
     else {
         echo "No $commonFolderName folder found."

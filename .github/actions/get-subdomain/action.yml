@@ -21,4 +21,5 @@ runs:
         url: ${{ inputs.url }}
       run: |
         $subdomain = $env:url.Replace("https://","").Replace("http://","").Split(".")[0]
-        echo "::set-output name=subdomain::$subdomain"
+        # echo "::set-output name=subdomain::$subdomain"
+        echo "subdomain=$subdomain" >>$GITHUB_OUTPUT

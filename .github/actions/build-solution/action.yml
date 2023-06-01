@@ -42,7 +42,8 @@ runs:
         $solutionXml -replace $versionXmlMatch,"<Version>$buildNumber</Version>" |
         Out-File $solutionXmlPath
         
-        echo "::set-output name=buildNumber::$buildNumber"
+        #echo "::set-output name=buildNumber::$buildNumber"
+        echo "buildNumber=$buildNumber" >>$GITHUB_OUTPUT
 
     - name: create-tag
       uses: actions/github-script@v3

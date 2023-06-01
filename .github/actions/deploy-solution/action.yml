@@ -70,7 +70,8 @@ runs:
         }
 
         $solutionZip = $files[0].FullName
-        echo "::set-output name=solution_zip::$solutionZip"
+        # echo "::set-output name=solution_zip::$solutionZip"
+        echo "solution_zip=$solutionZip" >>$GITHUB_OUTPUT
 
     - name: import-solution-to-environment
       uses: microsoft/powerplatform-actions/import-solution@latest

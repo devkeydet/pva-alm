@@ -35,7 +35,8 @@ jobs:
 
           $params = @{
               branchToTest = $prHeadRef
-              solutionName = 'pvaalm'
+              solutionName = $solution_name
+            # solutionName = 'pvaalm'
               environmentUrl = '${{ secrets.ENVIRONMENT_URL }}'
               sourceBranch = 'main'
               branchToCreate = $branchToCreate

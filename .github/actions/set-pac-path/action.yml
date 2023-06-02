@@ -31,8 +31,7 @@ runs:
         $pacPath = $array[0].Directory.FullName
         echo "pacPath: $pacPath"
 
-        #echo "::set-output name=pac_path::$pacPath"
-        echo "pac_path=$pacPath" >> $GITHUB_OUTPUT
+        echo "::set-output name=pac_path::$pacPath"
 
     - if: ${{ always() }}
       id: set-pac-path
